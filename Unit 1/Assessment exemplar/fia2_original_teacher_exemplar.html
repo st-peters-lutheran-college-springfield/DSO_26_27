@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIA2 Original Teacher Exemplar | St Peters Lutheran College</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:1000px;margin:0 auto;padding:2rem;line-height:1.6;color:#222;background:#fafafa}
+header{background:#1C2341;color:#fff;padding:1.5rem;border-radius:8px}
+h1,h2,h3{color:#1C2341}
+header h1, header p{color:#fff;margin:0}
+section{background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.25rem;margin:1.25rem 0}
+.badge{display:inline-block;background:#C8102E;color:#fff;padding:.25rem .6rem;border-radius:999px;font-size:.8rem;margin-bottom:.75rem}
+table{width:100%;border-collapse:collapse;margin:1rem 0}
+th,td{border:1px solid #ddd;padding:.6rem;vertical-align:top} th{background:#1C2341;color:#fff}
+.callout{background:#FDF6E3;border-left:4px solid #B8902A;padding:.8rem 1rem;border-radius:4px}
+.note{background:#EEF0F5;border-left:4px solid #1C2341;padding:.8rem 1rem;border-radius:4px}
+code,pre{font-family:'Courier New',monospace}
+pre{background:#111827;color:#e5e7eb;padding:1rem;border-radius:6px;overflow:auto}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">Teacher Resource</div>
+  <h1>Original FIA2 Exemplar — Unit 1 Creating with Code</h1>
+  <p>Designed using the QCAA Digital Solutions 2025 v1.4 syllabus and informed by the uploaded exemplar, but substantially reworded and restructured for originality.</p>
+</header>
+
+<section>
+  <h2>Purpose of this resource</h2>
+  <p>This exemplar is intended to model strong analytical and evaluative thinking without being copied directly by students. It keeps the strongest features of the uploaded exemplar — measurable criteria, clear justification, purposeful pseudocode, testing evidence and justified refinements — while changing the scenario, structure, phrasing and examples.</p>
+</section>
+
+<section>
+  <h2>Scenario</h2>
+  <p><strong>User:</strong> A Year 11 student-athlete, Amira, needs a bedroom environment monitor that helps her prepare for recovery after training. She needs a simple display showing whether her room conditions are appropriate for rest and study recovery. The system should reduce cognitive load, avoid depending only on colour, and notify her if sensor data is no longer current.</p>
+</section>
+
+<section>
+  <h2>Problem framing and decomposition</h2>
+  <ul>
+    <li><strong>Input:</strong> temperature, light and motion readings from sensors</li>
+    <li><strong>Processing:</strong> data must be classified into meaningful room-state categories</li>
+    <li><strong>Output:</strong> a browser-based dashboard with a symbol and label</li>
+    <li><strong>Transmission:</strong> wireless sending from sensor node to display server</li>
+    <li><strong>Reliability:</strong> stale data must trigger an explicit warning</li>
+  </ul>
+  <div class="note"><strong>Why this is strong:</strong> Rather than retelling the whole story, this section breaks the problem into computable parts and shows systems thinking.</div>
+</section>
+
+<section>
+  <h2>Success criteria</h2>
+  <table>
+    <tr><th>Criterion</th><th>Requirement</th><th>Why it matters</th><th>How it will be measured</th></tr>
+    <tr><td>SC1</td><td>Status uses both text and symbol</td><td>Supports accessibility and fast interpretation</td><td>All dashboard states remain understandable in greyscale mode</td></tr>
+    <tr><td>SC2</td><td>Dashboard refreshes automatically</td><td>User should not need to manually reload data</td><td>Browser refresh occurs every 5 seconds ± 1 second</td></tr>
+    <tr><td>SC3</td><td>No raw sensor values in main display area</td><td>Reduces cognitive load for a tired user</td><td>Visual inspection confirms only simplified status is above the fold</td></tr>
+    <tr><td>SC4</td><td>Primary label is readable at distance</td><td>Supports passive viewing from across the room</td><td>Font size at least 48px and contrast ratio at least 4.5:1</td></tr>
+    <tr><td>SC5</td><td>Classification logic correctly identifies suitable and unsuitable states</td><td>Core system purpose depends on correct algorithmic judgement</td><td>Desk check plus live sensor tests match expected outputs</td></tr>
+    <tr><td>SC6</td><td>Stale data triggers a warning</td><td>Prevents users acting on outdated information</td><td>Offline warning appears within acceptable delay threshold</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Solution concept and architecture</h2>
+  <p>The prototype uses a distributed design. An ESP8266 collects environmental data and applies classification rules. An ESP32 hosts the web interface and receives data via HTTP. This separation improves maintainability because the sensing logic and display logic can be refined independently.</p>
+</section>
+
+<section>
+  <h2>Annotated pseudocode</h2>
+  <pre>FUNCTION classifyEnvironment(temp, light, motion)
+  DECLARE temp_ok, light_ok, motion_ok AS BOOLEAN
+
+  temp_ok = temp &gt;= 18 AND temp &lt;= 22
+  light_ok = light &lt; 200
+  motion_ok = motion = 0
+
+  IF temp_ok AND light_ok AND motion_ok THEN
+    RETURN "READY"
+  ELSE IF NOT temp_ok OR NOT light_ok THEN
+    RETURN "NOT_READY"
+  ELSE
+    RETURN "CAUTION"
+  END IF
+END FUNCTION
+
+FUNCTION main()
+  connectWiFi()
+  WHILE TRUE
+    temp, light, motion = readSensors()
+    status = classifyEnvironment(temp, light, motion)
+    sendData(status)
+    wait(5)
+  END WHILE
+END FUNCTION</pre>
+  <div class="callout"><strong>Teacher note:</strong> This keeps explicit algorithmic logic, but is presented more compactly than the uploaded exemplar so it reads as a different model rather than a close paraphrase.</div>
+</section>
+
+<section>
+  <h2>Testing and evaluation</h2>
+  <table>
+    <tr><th>Test</th><th>Input</th><th>Expected</th><th>Actual</th><th>Judgement</th></tr>
+    <tr><td>Baseline suitable state</td><td>20°C, low light, no motion</td><td>READY</td><td>READY</td><td>Pass</td></tr>
+    <tr><td>High light disruption</td><td>20°C, bright light, no motion</td><td>NOT_READY</td><td>NOT_READY</td><td>Pass</td></tr>
+    <tr><td>Motion only</td><td>21°C, dim light, motion</td><td>CAUTION</td><td>CAUTION</td><td>Pass</td></tr>
+    <tr><td>Offline timeout</td><td>No data received</td><td>Warning displayed</td><td>Displayed after 16 seconds</td><td>Partial</td></tr>
+  </table>
+  <p>A meaningful refinement followed the partial result in the offline test. The stale-data constant was reduced to account for network delay, then the system was retested. The second trial produced the warning in 13 seconds, which better aligned with the criterion.</p>
+</section>
+
+<section>
+  <h2>Impacts and recommendations</h2>
+  <p><strong>Personal:</strong> reduces effort needed to judge room readiness.</p>
+  <p><strong>Social:</strong> accessible design principles support broader usability.</p>
+  <p><strong>Economic:</strong> the prototype uses low-cost hardware compared with commercial systems.</p>
+  <p><strong>Recommendation:</strong> extend the system to include humidity because live testing may show conditions that feel uncomfortable even when temperature alone is acceptable.</p>
+</section>
+
+<section>
+  <h2>How teachers can use this</h2>
+  <ul>
+    <li>Model how to justify success criteria with measurable thresholds</li>
+    <li>Show how evaluation should include partial failures and refinements</li>
+    <li>Demonstrate that strong responses explain <em>why</em> a design choice was made</li>
+    <li>Use as a quality reference, not as a script for student copying</li>
+  </ul>
+</section>
+</body>
+</html>
