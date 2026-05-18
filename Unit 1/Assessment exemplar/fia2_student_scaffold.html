@@ -5,174 +5,192 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FIA2 Student Scaffold | St Peters Lutheran College</title>
 <style>
-body{font-family:Arial,sans-serif;max-width:1000px;margin:0 auto;padding:2rem;line-height:1.6;color:#222;background:#fafafa}
-header{background:#1C2341;color:#fff;padding:1.5rem;border-radius:8px}
-h1,h2,h3{color:#1C2341}
-header h1, header p{color:#fff;margin:0}
-section{background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.25rem;margin:1.25rem 0}
-.badge{display:inline-block;background:#C8102E;color:#fff;padding:.25rem .6rem;border-radius:999px;font-size:.8rem;margin-bottom:.75rem}
-table{width:100%;border-collapse:collapse;margin:1rem 0}
-th,td{border:1px solid #ddd;padding:.6rem;vertical-align:top} th{background:#1C2341;color:#fff}
-.prompt{background:#EEF0F5;border-left:4px solid #1C2341;padding:.8rem 1rem;border-radius:4px;margin:.75rem 0}
-.tip{background:#ECFDF5;border-left:4px solid #047857;padding:.8rem 1rem;border-radius:4px;margin:.75rem 0}
-.warn{background:#FBEAED;border-left:4px solid #C8102E;padding:.8rem 1rem;border-radius:4px;margin:.75rem 0}
-ul{padding-left:1.2rem}
-.checklist li{margin:.35rem 0}
+:root{
+  --bg:#f4f7fb;--surface:#ffffff;--primary:#1d4ed8;--primary-dark:#1e3a8a;
+  --accent:#c8102e;--text:#1f2937;--muted:#6b7280;--border:#dbe2f0;
+  --success-bg:#ecfdf5;--success-border:#a7f3d0;--success-text:#047857;
+  --warn-bg:#fef2f2;--warn-border:#fecaca;--warn-text:#b91c1c;
+  --note-bg:#eef4ff;--note-border:#c7d2fe;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1100px;margin:0 auto;padding:2rem 1rem 3rem}
+.top-nav{margin-bottom:1.25rem}.top-nav a{color:var(--primary);text-decoration:none;font-weight:700}
+header{background:linear-gradient(135deg,var(--surface),#eef4ff);border:1px solid var(--border);border-radius:16px;padding:1.75rem;box-shadow:0 8px 24px rgba(29,78,216,.06)}
+.badge{display:inline-block;background:var(--accent);color:#fff;padding:.25rem .6rem;border-radius:999px;font-size:.8rem;font-weight:700;margin-bottom:.75rem}
+h1{margin:0;color:var(--primary);font-size:clamp(1.6rem,3vw,2.4rem)}
+header p{margin:.5rem 0 0;color:var(--muted);max-width:75ch}
+section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin:1.25rem 0;box-shadow:0 4px 14px rgba(15,23,42,.04)}
+h2{color:var(--primary-dark)}
+table{width:100%;border-collapse:collapse;margin:1rem 0}th,td{border:1px solid var(--border);padding:.6rem;vertical-align:top}th{background:var(--primary-dark);color:#fff}
+.prompt{background:var(--note-bg);border:1px solid var(--note-border);border-left:5px solid var(--primary);padding:.9rem 1rem;border-radius:12px;margin:.75rem 0}
+.tip{background:var(--success-bg);border:1px solid var(--success-border);border-left:5px solid var(--success-text);padding:.9rem 1rem;border-radius:12px;margin:.75rem 0;color:var(--success-text)}
+.warn{background:var(--warn-bg);border:1px solid var(--warn-border);border-left:5px solid var(--warn-text);padding:.9rem 1rem;border-radius:12px;margin:.75rem 0;color:var(--warn-text)}
+ul{padding-left:1.2rem}.checklist li{margin:.35rem 0}
+footer{margin-top:2rem;text-align:center;color:var(--muted);font-size:.92rem}
 </style>
 </head>
 <body>
-<header>
-  <div class="badge">Student Scaffold</div>
-  <h1>FIA2 Scaffold — Unit 1 Creating with Code</h1>
-  <p>A student-friendly planning and writing tool aligned to the Digital Solutions syllabus and task expectations.</p>
-</header>
+<div class="container">
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <a href="../../unit1-creating-with-code.html">← Back to Unit 1 page</a>
+  </nav>
 
-<section>
-  <h2>How to use this scaffold</h2>
-  <p>This scaffold helps you build your own original FIA2 response. It is not a script to copy. Use it to plan what to write, what evidence to include, and how to explain your decisions clearly.</p>
-  <div class="warn"><strong>Important:</strong> Do not copy from exemplars. Your goal is to create an original response using your own system, your own wording and your own testing evidence.</div>
-</section>
+  <header>
+    <div class="badge">Student support</div>
+    <h1>FIA2 Student Scaffold — Unit 1 Creating with Code</h1>
+    <p>Use this scaffold to plan, draft and improve your own original FIA2 response. It is designed to help you organise your thinking, explain your choices clearly and stay aligned to the task requirements.</p>
+  </header>
 
-<section>
-  <h2>Part A — Understand the problem</h2>
-  <div class="prompt">
-    <strong>Answer these questions:</strong>
-    <ul>
-      <li>Who is the user?</li>
-      <li>What problem are they experiencing?</li>
-      <li>Why does the problem matter?</li>
-      <li>What inputs, processes and outputs will the system need?</li>
-      <li>What constraints must you consider?</li>
+  <section>
+    <h2>How to use this scaffold</h2>
+    <p>This scaffold is a planning and writing support tool. It is not a script to copy. Use it to decide what evidence to include, how to explain your decisions and how to organise your response logically.</p>
+    <div class="warn"><strong>Important:</strong> Your final work must use your own system, your own wording and your own testing evidence.</div>
+  </section>
+
+  <section>
+    <h2>Part A — Understand the problem</h2>
+    <div class="prompt">
+      <strong>Answer these questions:</strong>
+      <ul>
+        <li>Who is the user?</li>
+        <li>What problem are they experiencing?</li>
+        <li>Why does the problem matter?</li>
+        <li>What inputs, processes and outputs will the system need?</li>
+        <li>What constraints must you consider?</li>
+      </ul>
+    </div>
+    <p><strong>Sentence starter:</strong> “The user needs a digital solution because … This problem is significant because …”</p>
+    <p><strong>Sentence starter:</strong> “The problem can be decomposed into sensing, processing, communication, output and reliability.”</p>
+  </section>
+
+  <section>
+    <h2>Part B — Explore and justify design ideas</h2>
+    <p>Briefly compare existing products, interfaces or design patterns. Explain how they influenced your own design decisions.</p>
+    <table>
+      <tr><th>Example prompt</th><th>What to write</th></tr>
+      <tr><td>Existing solution</td><td>What it does well and what it does poorly for your user</td></tr>
+      <tr><td>Design implication</td><td>What you will copy, avoid or improve in your own solution</td></tr>
+      <tr><td>Emerging technology</td><td>A future technology and how it could improve the system</td></tr>
+    </table>
+    <div class="tip"><strong>Tip:</strong> Strong responses explain why an idea matters for the user, not just whether the product looks good.</div>
+  </section>
+
+  <section>
+    <h2>Part C — Write strong success criteria</h2>
+    <p>Your success criteria should be specific, measurable and clearly connected to the user’s needs.</p>
+    <table>
+      <tr><th>Criterion</th><th>Why it matters</th><th>How you will test it</th></tr>
+      <tr><td>Status uses text and symbol</td><td>Improves accessibility</td><td>Check dashboard in greyscale mode</td></tr>
+      <tr><td>Dashboard refreshes automatically</td><td>Supports passive use</td><td>Measure refresh timing with stopwatch</td></tr>
+      <tr><td>No raw values in main display</td><td>Reduces cognitive load</td><td>Visually inspect the screen</td></tr>
+    </table>
+    <div class="prompt"><strong>Sentence starter:</strong> “A successful solution must … because the user … This will be verified by …”</div>
+    <div class="warn"><strong>Avoid:</strong> vague criteria such as “The solution should work well” or “The display should be easy to use.”</div>
+  </section>
+
+  <section>
+    <h2>Part D — Explain your solution architecture</h2>
+    <p>Describe how your system is organised and why this structure is suitable.</p>
+    <div class="prompt">
+      <strong>Include:</strong>
+      <ul>
+        <li>what each device or component does</li>
+        <li>how data moves through the system</li>
+        <li>why the design supports maintainability, usability or reliability</li>
+      </ul>
+    </div>
+    <p><strong>Sentence starter:</strong> “The solution uses a two-part architecture. The first component is responsible for … while the second component …”</p>
+  </section>
+
+  <section>
+    <h2>Part E — Pseudocode and algorithm thinking</h2>
+    <p>Your pseudocode should show the logic clearly and your explanation should justify the structure of the algorithm.</p>
+    <div class="prompt">
+      <strong>Make sure you show:</strong>
+      <ul>
+        <li>assignment</li>
+        <li>sequence</li>
+        <li>selection</li>
+        <li>iteration</li>
+        <li>modularisation</li>
+        <li>conditions</li>
+      </ul>
+    </div>
+    <p><strong>Sentence starter:</strong> “The classification function is modularised so that …”</p>
+    <p><strong>Sentence starter:</strong> “The selection logic gives priority to … because …”</p>
+  </section>
+
+  <section>
+    <h2>Part F — Code explanation</h2>
+    <p>When you include prototype code, explain why the important parts matter.</p>
+    <div class="prompt">
+      <strong>Useful things to explain:</strong>
+      <ul>
+        <li>constants and thresholds</li>
+        <li>functions and their purpose</li>
+        <li>how classification works</li>
+        <li>how data is transmitted</li>
+        <li>how offline or error states are handled</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Part G — Testing and evaluation</h2>
+    <p>Strong evaluation includes both successes and problems. A partial failure can strengthen your response when you explain the refinement clearly.</p>
+    <table>
+      <tr><th>Test</th><th>Expected result</th><th>Actual result</th><th>What this tells you</th></tr>
+      <tr><td>Boundary value test</td><td>Exact threshold behaves correctly</td><td>Record your result</td><td>Does your logic handle edge cases?</td></tr>
+      <tr><td>Live hardware test</td><td>Device responds as planned</td><td>Record your result</td><td>Does the real system match the design?</td></tr>
+      <tr><td>Offline or error test</td><td>Warning appears in time</td><td>Record your result</td><td>Is the system reliable?</td></tr>
+    </table>
+    <div class="prompt"><strong>Sentence starter:</strong> “This criterion was only partially met because … To improve this, I refined … and retested by …”</div>
+  </section>
+
+  <section>
+    <h2>Part H — Impacts and recommendations</h2>
+    <p>Evaluate the wider effects of your solution, not just whether the code works.</p>
+    <div class="prompt">
+      <strong>Consider:</strong>
+      <ul>
+        <li><strong>Personal:</strong> How does the solution affect the user directly?</li>
+        <li><strong>Social:</strong> Are there privacy, accessibility or safety issues?</li>
+        <li><strong>Economic:</strong> Is the system affordable, efficient or scalable?</li>
+      </ul>
+    </div>
+    <p><strong>Sentence starter:</strong> “A positive personal impact is … However, a possible risk is …”</p>
+    <p><strong>Sentence starter:</strong> “A justified recommendation for future improvement is … because testing showed …”</p>
+  </section>
+
+  <section>
+    <h2>Rubric-aligned checklist</h2>
+    <ul class="checklist">
+      <li>I explained the user and the problem clearly.</li>
+      <li>I decomposed the problem into smaller parts.</li>
+      <li>I wrote measurable success criteria.</li>
+      <li>I justified my architecture and algorithm choices.</li>
+      <li>I showed the required pseudocode constructs.</li>
+      <li>I explained important code sections.</li>
+      <li>I used testing evidence, not just opinions.</li>
+      <li>I included at least one meaningful refinement.</li>
+      <li>I discussed personal, social and economic impacts.</li>
+      <li>I used clear, formal and original communication.</li>
     </ul>
-  </div>
-  <p><strong>Sentence starter:</strong> “The user needs a digital solution because … This problem is significant because …”</p>
-  <p><strong>Sentence starter:</strong> “The problem can be decomposed into sensing, processing, communication, output and reliability.”</p>
-</section>
+  </section>
 
-<section>
-  <h2>Part B — Explore and justify design ideas</h2>
-  <p>Briefly compare existing products, interfaces or design patterns. You are not just listing them — you are showing how they influenced your design.</p>
-  <table>
-    <tr><th>Example prompt</th><th>What to write</th></tr>
-    <tr><td>Existing solution</td><td>What it does well and what it does poorly for your user</td></tr>
-    <tr><td>Design implication</td><td>What you will copy, avoid or improve in your own solution</td></tr>
-    <tr><td>Emerging technology</td><td>A relevant future technology and how it could improve the system</td></tr>
-  </table>
-  <div class="tip"><strong>Tip:</strong> Strong responses explain why each explored idea matters for the user, not just whether the product is “good” or “bad”.</div>
-</section>
-
-<section>
-  <h2>Part C — Write strong success criteria</h2>
-  <p>Your success criteria should be specific, measurable and directly connected to the user’s needs.</p>
-  <table>
-    <tr><th>Criterion</th><th>Why it matters</th><th>How you will test it</th></tr>
-    <tr><td>Status is shown with text and symbol</td><td>Improves accessibility</td><td>Check dashboard in greyscale mode</td></tr>
-    <tr><td>Dashboard refreshes automatically</td><td>Supports passive use</td><td>Measure refresh timing with stopwatch</td></tr>
-    <tr><td>No raw values in main display</td><td>Reduces cognitive load</td><td>Visual inspection of screen</td></tr>
-  </table>
-  <div class="prompt"><strong>Sentence starter:</strong> “A successful solution must … because the user … This will be verified by …”</div>
-  <div class="warn"><strong>Avoid:</strong> vague statements like “The solution should work well” or “The display should be easy to use.” Be precise.</div>
-</section>
-
-<section>
-  <h2>Part D — Explain your solution architecture</h2>
-  <p>Describe how your system is organised. Explain what each component does and why this structure is suitable.</p>
-  <div class="prompt">
-    <strong>Include:</strong>
+  <section>
+    <h2>Common mistakes to avoid</h2>
     <ul>
-      <li>What each device/component does</li>
-      <li>How data moves through the system</li>
-      <li>Why the design supports maintainability, usability or reliability</li>
+      <li>Writing criteria that are too vague to test</li>
+      <li>Describing code without explaining design choices</li>
+      <li>Only including passing tests and no reflection</li>
+      <li>Giving recommendations that are not linked to evidence</li>
+      <li>Copying exemplar wording too closely</li>
     </ul>
-  </div>
-  <p><strong>Sentence starter:</strong> “The solution uses a two-part architecture. The first component is responsible for … while the second component …”</p>
-</section>
+  </section>
 
-<section>
-  <h2>Part E — Pseudocode and algorithm thinking</h2>
-  <p>Your pseudocode should show the key logic clearly. It should not just exist — you should also explain why the logic is structured that way.</p>
-  <div class="prompt">
-    <strong>Make sure you show:</strong>
-    <ul>
-      <li>assignment</li>
-      <li>sequence</li>
-      <li>selection</li>
-      <li>iteration</li>
-      <li>modularisation</li>
-      <li>conditions</li>
-    </ul>
-  </div>
-  <p><strong>Sentence starter:</strong> “The classification function is modularised so that …”</p>
-  <p><strong>Sentence starter:</strong> “The selection logic gives priority to … because …”</p>
-</section>
-
-<section>
-  <h2>Part F — Code explanation</h2>
-  <p>When you include prototype code, explain what the important parts do. Focus on why the code matters, not just what line comes next.</p>
-  <div class="prompt">
-    <strong>Useful things to explain:</strong>
-    <ul>
-      <li>constants and thresholds</li>
-      <li>functions and their purpose</li>
-      <li>how classification works</li>
-      <li>how data is transmitted</li>
-      <li>how offline or error states are handled</li>
-    </ul>
-  </div>
-</section>
-
-<section>
-  <h2>Part G — Testing and evaluation</h2>
-  <p>Strong evaluation includes both success and problems. If something partially fails, that can actually strengthen your response if you explain the refinement clearly.</p>
-  <table>
-    <tr><th>Test</th><th>Expected result</th><th>Actual result</th><th>What this tells you</th></tr>
-    <tr><td>Boundary value test</td><td>Exact threshold behaves correctly</td><td>Record your result</td><td>Does your logic handle edge cases?</td></tr>
-    <tr><td>Live hardware test</td><td>Device responds as planned</td><td>Record your result</td><td>Does the real system match the design?</td></tr>
-    <tr><td>Offline/error test</td><td>Warning appears in time</td><td>Record your result</td><td>Is the system reliable?</td></tr>
-  </table>
-  <div class="prompt"><strong>Sentence starter:</strong> “This criterion was only partially met because … To improve this, I refined … and retested by …”</div>
-</section>
-
-<section>
-  <h2>Part H — Impacts and recommendations</h2>
-  <p>Evaluate the wider effects of your solution, not just whether the code works.</p>
-  <div class="prompt">
-    <strong>Consider:</strong>
-    <ul>
-      <li><strong>Personal:</strong> How does the solution affect the user directly?</li>
-      <li><strong>Social:</strong> Are there privacy, accessibility or safety issues?</li>
-      <li><strong>Economic:</strong> Is the system affordable, efficient or scalable?</li>
-    </ul>
-  </div>
-  <p><strong>Sentence starter:</strong> “A positive personal impact is … However, a possible risk is …”</p>
-  <p><strong>Sentence starter:</strong> “A justified recommendation for future improvement is … because testing showed …”</p>
-</section>
-
-<section>
-  <h2>Rubric-aligned checklist</h2>
-  <ul class="checklist">
-    <li>I explained the user and the problem clearly.</li>
-    <li>I decomposed the problem into smaller parts.</li>
-    <li>I wrote measurable success criteria.</li>
-    <li>I justified my architecture and algorithm choices.</li>
-    <li>I showed the required pseudocode constructs.</li>
-    <li>I explained important code sections.</li>
-    <li>I used testing evidence, not just opinions.</li>
-    <li>I included at least one meaningful refinement.</li>
-    <li>I discussed personal, social and economic impacts.</li>
-    <li>I used clear, formal and original communication.</li>
-  </ul>
-</section>
-
-<section>
-  <h2>Common mistakes to avoid</h2>
-  <ul>
-    <li>Writing criteria that are too vague to test</li>
-    <li>Describing code without explaining design choices</li>
-    <li>Only including passing tests and no reflection</li>
-    <li>Giving recommendations that are not linked to evidence</li>
-    <li>Copying exemplar wording too closely</li>
-  </ul>
-</section>
+  <footer>St Peters Lutheran College Springfield · Digital Solutions Unit 1</footer>
+</div>
 </body>
 </html>
