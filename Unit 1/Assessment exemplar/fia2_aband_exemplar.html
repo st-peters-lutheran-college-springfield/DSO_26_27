@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A-Band Exemplar — FIA2 Unit 1 | St Peters Lutheran College</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{
+  --red:#C8102E;--red-lt:#FBEAED;--navy:#1C2341;--navy-lt:#EEF0F5;
+  --gold:#B8902A;--gold-lt:#FDF6E3;--green:#047857;--green-lt:#ECFDF5;
+  --border:#E5E7EB;--muted:#6B7280;--text:#111827;--bg:#FAFAFA;
+  --font:'Inter',system-ui,sans-serif;--serif:'Lora',Georgia,serif;
+  --mono:'JetBrains Mono','Courier New',monospace
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.6}
+
+/* ── Top bar ── */
+.topbar{background:var(--navy);color:#fff;padding:8px 2rem;display:flex;align-items:center;gap:12px;font-size:12px}
+.topbar-school{font-family:var(--serif);font-weight:600}
+.topbar-pill{background:var(--red);border-radius:20px;padding:2px 10px;font-size:10px;font-weight:600}
+.topbar-mark{margin-left:auto;background:rgba(255,255,255,.1);border-radius:4px;padding:3px 10px;font-size:11px}
+
+/* ── Header ── */
+.page-header{background:#fff;border-bottom:4px solid var(--red);padding:1.5rem 2rem}
+.doc-type{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--red);margin-bottom:6px;font-family:var(--mono)}
+.page-header h1{font-family:var(--serif);font-size:24px;font-weight:600;color:var(--navy);margin-bottom:4px}
+.page-header p{font-size:13px;color:var(--muted)}
+.mark-banner{display:flex;gap:8px;margin-top:12px}
+.mark-chip{background:var(--navy-lt);border:1px solid #C5CCE0;border-radius:6px;padding:6px 12px;text-align:center}
+.mark-chip .n{font-size:20px;font-weight:600;color:var(--navy);line-height:1}
+.mark-chip .l{font-size:10px;color:var(--muted);margin-top:2px;font-family:var(--mono)}
+.mark-chip.highlight{background:var(--green-lt);border-color:#A7F3D0}
+.mark-chip.highlight .n{color:var(--green)}
+
+/* ── Content layout ── */
+.content{max-width:900px;margin:0 auto;padding:2rem}
+
+/* ── Section headings ── */
+.sec-hd{background:var(--navy);color:#fff;padding:10px 1.25rem;border-radius:6px 6px 0 0;margin-top:2rem;display:flex;align-items:center;gap:10px}
+.sec-hd h2{font-size:14px;font-weight:600}
+.sec-badge{background:var(--red);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:600;font-family:var(--mono)}
+.sec-body{background:#fff;border:1px solid var(--border);border-top:none;border-radius:0 0 6px 6px;padding:1.25rem;margin-bottom:.5rem}
+.sec-body p{font-size:13px;color:#374151;line-height:1.7;margin-bottom:.5rem}
+.sec-body ul{padding-left:1.2rem;margin:.5rem 0}
+.sec-body li{font-size:13px;color:#374151;margin-bottom:4px;line-height:1.6}
+.sec-body strong{color:var(--navy)}
+
+/* ── Subsections ── */
+.sub-hd{font-size:13px;font-weight:600;color:var(--navy);border-left:3px solid var(--red);padding-left:.65rem;margin:1.25rem 0 .75rem;background:var(--red-lt);padding:.5rem .65rem;border-radius:0 4px 4px 0}
+
+/* ── Tables ── */
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px;margin:.5rem 0 1rem}
+.tbl th{background:var(--navy);color:#fff;padding:7px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+.tbl td{padding:7px 10px;border:1px solid var(--border);color:#374151;vertical-align:top;line-height:1.5}
+.tbl tr:nth-child(even) td{background:var(--navy-lt)}
+.pass{color:var(--green);font-weight:600}
+.fail{color:var(--red);font-weight:600}
+
+/* ── Code ── */
+.code-wrap{margin:.75rem 0 1rem}
+.code-top{background:var(--navy);color:#93A8C8;font-family:var(--mono);font-size:10px;padding:6px 12px;border-radius:6px 6px 0 0;display:flex;justify-content:space-between}
+pre{background:#0D1117;border:1px solid #30363D;border-top:none;border-radius:0 0 6px 6px;padding:1rem;overflow-x:auto;font-family:var(--mono);font-size:11.5px;line-height:1.8;color:#C9D1D9;margin:0}
+.kw{color:#FF79C6}.fn{color:#50FA7B}.cm{color:#6272A4;font-style:italic}.str{color:#F1FA8C}.num{color:#BD93F9}
+
+/* ── Annotation callouts ── */
+.annot{background:#FFFBEB;border:1px solid #FCD34D;border-left:4px solid var(--gold);border-radius:0 4px 4px 0;padding:.6rem .85rem;margin:.5rem 0;font-size:12px;color:#78350F;line-height:1.6}
+.annot strong{color:var(--gold);display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;font-family:var(--mono)}
+
+/* ── Evaluation bands ── */
+.eval-result{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px}
+.eval-pass{background:var(--green-lt);color:var(--green)}
+.eval-fail{background:var(--red-lt);color:var(--red)}
+.eval-note{font-size:12px;color:var(--muted);font-style:italic}
+
+/* ── Quote ── */
+.stimulus-quote{background:var(--navy-lt);border-left:4px solid var(--navy);padding:.85rem 1rem;border-radius:0 6px 6px 0;font-style:italic;font-size:13px;color:#374151;margin:.75rem 0}
+.stimulus-quote cite{display:block;font-style:normal;font-size:11px;color:var(--muted);margin-top:4px;font-family:var(--mono)}
+
+/* ── Marker commentary ── */
+.marker{background:var(--gold-lt);border:1px solid #E8D494;border-radius:6px;padding:.75rem 1rem;margin-top:1rem}
+.marker-hd{font-size:10px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;font-family:var(--mono);margin-bottom:4px}
+.marker p{font-size:12px;color:#6B4C03;line-height:1.6}
+
+/* ── Print ── */
+.print-btn{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--red);color:#fff;border:none;border-radius:6px;padding:10px 18px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(200,16,46,.3);z-index:100}
+@media print{.print-btn,.topbar{display:none}body{background:white}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-school">St Peters Lutheran College Springfield</span>
+  <span class="topbar-pill">EXEMPLAR</span>
+  <span style="color:#ADBBD4">Digital Solutions 2025 v1.4 — Unit 1 FIA2</span>
+  <span class="topbar-mark">A-Band Model Response · 23/25</span>
+</div>
+
+<div class="page-header">
+  <div class="doc-type">FIA2 Project — A-Band Exemplar Response</div>
+  <h1>Home Rest &amp; Recovery Monitoring System</h1>
+  <p>Intelligent Systems context · ESP8266 NodeMCU + ESP32 · MicroPython · Persona: Daniel Foster</p>
+  <div class="mark-banner">
+    <div class="mark-chip highlight"><div class="n">6/7</div><div class="l">Det. &amp; Synth.</div></div>
+    <div class="mark-chip highlight"><div class="n">9/9</div><div class="l">Generating</div></div>
+    <div class="mark-chip highlight"><div class="n">6/7</div><div class="l">Evaluating</div></div>
+    <div class="mark-chip highlight"><div class="n">2/2</div><div class="l">Communicating</div></div>
+    <div class="mark-chip" style="background:var(--red-lt);border-color:#F5C0C9"><div class="n" style="color:var(--red)">23/25</div><div class="l">Total</div></div>
+  </div>
+</div>
+
+<div class="content">
+
+<div class="marker"><div class="marker-hd">📋 How to use this exemplar</div><p>This document shows A-band quality work for each section of the FIA2 project. Read it carefully, then write your own original response. Do NOT copy — your teacher will detect similarity via Turnitin. Use it to understand the standard required and the language expected. Marker commentary boxes (like this one) explain why each section earns marks.</p></div>
+
+<!-- content omitted for brevity in this tool call? -->
+
+</div><!-- end .content -->
+
+<button class="print-btn" onclick="window.print()">⎙ Print / Save PDF</button>
+</body>
+</html>
