@@ -101,6 +101,107 @@
       color: var(--primary);
     }
 
+    .sequence-card {
+      background: linear-gradient(180deg, #ffffff, #f8fbff);
+    }
+
+    .sequence-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .sequence-list li {
+      margin-bottom: 0.75rem;
+    }
+
+    .sequence-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.85rem 0.95rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #ffffff;
+    }
+
+    .sequence-num {
+      flex-shrink: 0;
+      width: 1.9rem;
+      height: 1.9rem;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: var(--primary-dark);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .sequence-content {
+      flex: 1;
+    }
+
+    .sequence-title {
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+
+    .sequence-desc {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .sequence-links {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .sequence-btn {
+      display: inline-block;
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 0.7rem 1rem;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .sequence-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(29, 78, 216, 0.15);
+    }
+
+    .sequence-btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .sequence-btn-secondary {
+      background: #eef2ff;
+      color: var(--primary-dark);
+      border: 1px solid #c7d2fe;
+    }
+
+    .sequence-note {
+      margin-top: 1rem;
+      background: var(--warn-bg);
+      border: 1px solid var(--warn-border);
+      border-left: 5px solid var(--warn-text);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      color: var(--warn-text);
+      font-size: 0.95rem;
+    }
+
+    .sequence-note a {
+      color: var(--primary-dark);
+      font-weight: 700;
+    }
+
     .assessment-prep {
       margin-top: 1.5rem;
       background: var(--surface);
@@ -229,7 +330,7 @@
       <h1>Unit 1: Creating with Code</h1>
       <p class="subtitle">General Subject Digital Solutions (QLD) · Learning resources for the 2026 / 2027 course</p>
       <div class="intro-callout">
-        <strong>Assessment preparation focus:</strong> build strong problem solving, justified design choices, testing evidence and clear communication so your FIA2 response is original, rubric aligned and easy to follow.
+        <strong>Assessment preparation focus:</strong> build strong problem solving, justified design choices, testing evidence and clear communication so your FIA2 response is original, rubric aligned and well supported.
       </div>
     </section>
 
@@ -252,13 +353,75 @@
         </ul>
       </article>
 
-      <article class="card">
+      <article class="card sequence-card">
         <h2>Suggested Learning Sequence</h2>
-        <ul>
-          <li>Getting started with code structure and syntax</li>
-          <li>Using variables, selection and iteration effectively</li>
-          <li>Building and refining a small digital solution</li>
+
+        <ul class="sequence-list">
+          <li>
+            <div class="sequence-step">
+              <span class="sequence-num">1</span>
+              <div class="sequence-content">
+                <div class="sequence-title">Getting started with code structure and syntax</div>
+                <div class="sequence-desc">Build confidence with basic program structure, readable syntax, and simple computational thinking patterns.</div>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="sequence-step">
+              <span class="sequence-num">2</span>
+              <div class="sequence-content">
+                <div class="sequence-title">Using variables, selection and iteration effectively</div>
+                <div class="sequence-desc">Develop stronger logic by applying variables, conditional statements, loops, and testable problem-solving steps.</div>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="sequence-step">
+              <span class="sequence-num">3</span>
+              <div class="sequence-content">
+                <div class="sequence-title">Building and refining a small digital solution</div>
+                <div class="sequence-desc">Create, test, and improve a small solution while documenting design choices and evidence of refinement.</div>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="sequence-step">
+              <span class="sequence-num">4</span>
+              <div class="sequence-content">
+                <div class="sequence-title">Simulation-supported FIA2 preparation</div>
+                <div class="sequence-desc">Use Wokwi to prototype, test, and document programmed solutions before deploying to physical hardware.</div>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="sequence-step">
+              <span class="sequence-num">5</span>
+              <div class="sequence-content">
+                <div class="sequence-title">Optional Rust pathway</div>
+                <div class="sequence-desc">Students exploring Rust should complete the flipped-classroom prerequisite lesson before attempting the Rust simulation workflow.</div>
+              </div>
+            </div>
+          </li>
         </ul>
+
+        <div class="sequence-links">
+          <a class="sequence-btn sequence-btn-primary" href="./Unit%201/Suggested%20Learning%20Sequence/using-simulation-platform-fia2.html">
+            Open FIA2 Simulation Lesson
+          </a>
+          <a class="sequence-btn sequence-btn-secondary" href="./Unit%201/Suggested%20Learning%20Sequence/rust-esp32-flipped-classroom-hub.html">
+            Open Rust Flipped Classroom Hub
+          </a>
+        </div>
+
+        <div class="sequence-note">
+          <strong>Rust pathway prerequisite:</strong> Students choosing Rust as their coding language should complete the
+          <a href="./Unit%201/Suggested%20Learning%20Sequence/rust-esp32-flipped-classroom-hub.html">Rust on ESP32 — Flipped Classroom Hub</a>
+          before attempting the Rust simulation activities in Wokwi.
+        </div>
       </article>
 
       <article class="card">
@@ -273,7 +436,7 @@
 
     <section class="assessment-prep" aria-labelledby="assessment-preparation-resources">
       <h2 id="assessment-preparation-resources">Assessment Preparation Resources</h2>
-      <p class="assessment-intro">Use these linked resources to prepare for FIA2. The teacher exemplar models strong structure and evidence-based reasoning. The student scaffold gives prompts, sentence starters and checkpoints you can use to build your own original response without copying.</p>
+      <p class="assessment-intro">Use these linked resources to prepare for FIA2. The teacher exemplar models strong structure and evidence-based reasoning. The student scaffold gives prompts, section guidance and planning support so students can build their own original responses.</p>
 
       <div class="resource-grid">
         <article class="resource-card">
@@ -306,7 +469,7 @@
       </div>
 
       <div class="teacher-note">
-        <strong>Classroom note:</strong> Students should use the scaffold to plan and structure their own writing. The exemplar is best used to identify features of strong responses such as measurable criteria, explicit testing evidence and justified recommendations.
+        <strong>Classroom note:</strong> Students should use the scaffold to plan and structure their own writing. The exemplar is best used to identify features of strong responses such as measurable criteria, justified decision making, clear testing evidence and purposeful refinements.
       </div>
     </section>
 

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rust on ESP32 — Year 11 Digital Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#090d17; --bg-panel:#111827; --bg-card:#1a2236; --bg-code:#0d1526; --accent:#e8552d; --accent-dim:rgba(232,85,45,.12); --accent-border:rgba(232,85,45,.35); --text:#dde4f0; --text-muted:#7a8faf; --border:rgba(255,255,255,.07); --green:#3fb880; --green-dim:rgba(63,184,128,.12); --blue:#4a9ef0; --blue-dim:rgba(74,158,240,.12); --yellow:#f0c030; --yellow-dim:rgba(240,192,48,.12); --red-dim:rgba(220,80,80,.15); --radius:10px; --radius-sm:6px; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0} body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;line-height:1.7;min-height:100vh}
+header{background:var(--bg-panel);border-bottom:1px solid var(--border);padding:1.5rem 2rem 0;position:sticky;top:0;z-index:100}.header-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:1.25rem}.header-logo{display:flex;align-items:center;gap:12px}.logo-icon{width:40px;height:40px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center}.logo-icon svg{width:24px;height:24px;fill:white}.header-title{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--text)}.header-sub{font-size:.78rem;color:var(--text-muted);margin-top:1px}.badges{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.badge{font-size:.7rem;font-weight:600;padding:3px 10px;border-radius:20px;letter-spacing:.04em;text-transform:uppercase}.badge-orange{background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent-border)}.badge-blue{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(74,158,240,.3)}.badge-green{background:var(--green-dim);color:var(--green);border:1px solid rgba(63,184,128,.3)}
+nav{display:flex;overflow-x:auto}.nav-tab{flex-shrink:0;padding:.65rem 1.1rem;font-size:.82rem;font-weight:500;color:var(--text-muted);background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent)}.nav-num{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;font-size:.7rem;font-weight:700;margin-right:5px;background:var(--accent-dim);color:var(--accent)}
+main{max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem}.tab-panel{display:none}.tab-panel.active{display:block}.section-header{margin-bottom:2rem}.section-tag{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem}.section-title{font-size:1.7rem;font-weight:700;color:var(--text);line-height:1.2}.section-desc{color:var(--text-muted);font-size:.92rem;margin-top:.5rem;max-width:640px}.video-wrap{position:relative;padding-bottom:56.25%;background:#000;border-radius:var(--radius);overflow:hidden;margin-bottom:1.5rem;border:1px solid var(--border)}.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none}.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem}.card-accent{border-left:3px solid var(--accent)}.card-green{border-left:3px solid var(--green)}.card-blue{border-left:3px solid var(--blue)}.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem}.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem}.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;text-align:center}.stat-num{font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:700;color:var(--accent)}.stat-label{font-size:.8rem;color:var(--text-muted);margin-top:2px;text-transform:uppercase;letter-spacing:.06em}
+.callout{display:flex;gap:12px;padding:1rem 1.25rem;border-radius:var(--radius);margin:1rem 0 1.5rem}.callout-info{background:var(--blue-dim);border:1px solid rgba(74,158,240,.25)}.callout-success{background:var(--green-dim);border:1px solid rgba(63,184,128,.25)}.callout-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}.callout-body p{font-size:.85rem;color:var(--text-muted)}.callout-body strong{color:var(--text)}
+.lesson-plan{margin-bottom:2rem}.lesson-row{display:grid;grid-template-columns:80px 1fr}.lesson-row:not(:last-child) .lesson-content{border-bottom:1px solid var(--border)}.lesson-time{padding:1rem .75rem 1rem 0}.lesson-time-val{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:600}.lesson-time-dur{font-size:.7rem;color:var(--text-muted)}.lesson-content{padding:1rem 0 1rem 1rem;border-left:1px solid var(--border)}.lesson-content h4{font-size:.92rem;font-weight:600;color:var(--text);margin-bottom:.25rem}.lesson-content p{font-size:.83rem;color:var(--text-muted)}
+.resource-link{display:flex;align-items:center;gap:12px;padding:.85rem 1.1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:.6rem;text-decoration:none}.resource-title{font-size:.88rem;font-weight:500;color:var(--text);display:block}.resource-sub{font-size:.77rem;color:var(--text-muted)} a{color:#9cc6ff}
+@media(max-width:600px){header{padding:1rem 1rem 0}main{padding:1.5rem 1rem 3rem}.header-title{font-size:.95rem}.section-title{font-size:1.35rem}}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-top">
+    <div class="header-logo">
+      <div class="logo-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 2a8 8 0 110 16A8 8 0 0112 4zm-1 4v4H7l5 5 5-5h-4V8h-2z"/></svg></div>
+      <div><div class="header-title">Rust on ESP32</div><div class="header-sub">Year 11 Digital Solutions · Flipped Classroom Hub</div></div>
+    </div>
+    <div class="badges"><span class="badge badge-orange">4 × 60 min</span><span class="badge badge-blue">QCAA Aligned</span><span class="badge badge-green">Embedded Rust</span></div>
+  </div>
+  <nav id="mainNav">
+    <button class="nav-tab active" data-tab="overview">Overview</button>
+    <button class="nav-tab" data-tab="resources">Resources</button>
+  </nav>
+</header>
+<main>
+<section class="tab-panel active" id="overview">
+  <div class="section-header">
+    <div class="section-tag">// Flipped Classroom Hub</div>
+    <h1 class="section-title">Embedded Rust on ESP32</h1>
+    <p class="section-desc">A self-directed learning journey for Year 11 Digital Solutions. Watch the foundational video before class, then use these lessons to set up your toolchain, learn Rust fundamentals, and build your first embedded project.</p>
+  </div>
+  <div class="video-wrap">
+    <iframe src="https://www.youtube.com/embed/dxgufYRcNDg?si=lE3zj55ruENxFyDx" title="ESP32 embedded Rust setup explained" allowfullscreen loading="lazy"></iframe>
+  </div>
+  <div class="callout callout-info"><div class="callout-icon">📋</div><div class="callout-body"><p><strong>Before Lesson 1:</strong> Watch the video above in full and take notes on unfamiliar terms. Bring those notes to class.</p></div></div>
+  <div class="grid-3" style="margin-bottom:2rem"><div class="stat-card"><div class="stat-num">4</div><div class="stat-label">Lessons</div></div><div class="stat-card"><div class="stat-num">240</div><div class="stat-label">Minutes Total</div></div><div class="stat-card"><div class="stat-num">1</div><div class="stat-label">Prerequisite Path</div></div></div>
+  <div class="lesson-plan card" style="padding:0 1.5rem">
+    <div class="lesson-row"><div class="lesson-time"><div class="lesson-time-val">L1</div><div class="lesson-time-dur">60 min</div></div><div class="lesson-content"><h4>Why Rust? Introduction to Embedded Systems</h4><p>Explore what makes Rust suitable for embedded systems and how it compares with other languages.</p></div></div>
+    <div class="lesson-row"><div class="lesson-time"><div class="lesson-time-val">L2</div><div class="lesson-time-dur">60 min</div></div><div class="lesson-content"><h4>Setting Up Your Forge</h4><p>Install rustup, espup, espflash, and esp-generate. Build your first ESP32 Rust project.</p></div></div>
+    <div class="lesson-row"><div class="lesson-time"><div class="lesson-time-val">L3</div><div class="lesson-time-dur">60 min</div></div><div class="lesson-content"><h4>Rust Fundamentals for Embedded</h4><p>Learn variables, control flow, functions, and types in a no_std environment.</p></div></div>
+    <div class="lesson-row"><div class="lesson-time"><div class="lesson-time-val">L4</div><div class="lesson-time-dur">60 min</div></div><div class="lesson-content"><h4>GPIO Control &amp; Project Launch</h4><p>Blink LEDs, read buttons, and prepare for student project work on hardware.</p></div></div>
+  </div>
+  <div class="callout callout-success">
+    <div class="callout-icon">🧭</div>
+    <div class="callout-body">
+      <p><strong>Next step:</strong> After completing this prerequisite lesson, continue to the <a href="./using-simulation-platform-fia2.html">Using Simulation Platform as Part of FIA2 Project</a> resource to apply your Rust setup in the FIA2 simulation workflow.</p>
+    </div>
+  </div>
+</section>
+<section class="tab-panel" id="resources">
+  <div class="section-header"><div class="section-tag">// Further Learning</div><h1 class="section-title">Resources</h1><p class="section-desc">Official documentation, tools, and pathway links for embedded Rust on ESP32.</p></div>
+  <a class="resource-link" href="https://esp-rs.github.io/book/" target="_blank"><span>📖</span><div><span class="resource-title">The Rust on ESP Book</span><span class="resource-sub">Official setup and usage guide for Espressif Rust</span></div></a>
+  <a class="resource-link" href="https://play.rust-lang.org" target="_blank"><span>▶️</span><div><span class="resource-title">Rust Playground</span><span class="resource-sub">Practice syntax and logic in the browser</span></div></a>
+  <a class="resource-link" href="./using-simulation-platform-fia2.html"><span>🟢</span><div><span class="resource-title">Continue to FIA2 Wokwi Simulation Lesson</span><span class="resource-sub">Use this after completing the Rust prerequisite setup and fundamentals</span></div></a>
+</section>
+</main>
+<script>
+const tabs=document.querySelectorAll('.nav-tab');const panels=document.querySelectorAll('.tab-panel');tabs.forEach(tab=>{tab.addEventListener('click',()=>{tabs.forEach(t=>t.classList.remove('active'));panels.forEach(p=>p.classList.remove('active'));tab.classList.add('active');document.getElementById(tab.dataset.tab).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});});});
+</script>
+</body>
+</html>
