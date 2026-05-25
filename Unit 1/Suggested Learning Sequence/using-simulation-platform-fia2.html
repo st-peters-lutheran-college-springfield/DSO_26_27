@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Using simulation platform as part of FIA2 project — St Peters Lutheran College Springfield Digital Solutions Unit 1">
+<title>Using Simulation Platform — FIA2 Project | St Peters Lutheran College Springfield</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Karma:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --maroon:#730D28; --maroon-dk:#4A0819; --gold:#FDBB30; --gold-dk:#C9930A;
+  --steel:#41748D; --teal:#006C5B; --charcoal:#1D252D;
+  --g50:#FAFAFA; --g100:#F4F4F5; --g200:#E4E4E7; --g500:#71717A; --g800:#27272A; --g900:#18181B;
+  --bg:var(--g50); --surface:#fff; --border:var(--g200); --tint:var(--g100);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--g800);line-height:1.7}
+a{color:var(--steel);text-decoration:underline} a:hover{color:var(--maroon)}
+.skip-nav{position:absolute;top:-999px;left:8px;background:var(--maroon);color:#fff;padding:10px 18px;border-radius:0 0 6px 6px;text-decoration:none;font-weight:700}.skip-nav:focus{top:0}
+.site-header{background:var(--maroon);color:#fff}.header-top{background:var(--maroon-dk);padding:.5rem 2rem;display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;font-size:.75rem}.badge{display:inline-block;padding:.15rem .65rem;border-radius:3px;font-size:.6875rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}.b-school{background:rgba(255,255,255,.18);color:#fff}.b-unit{background:var(--gold);color:var(--maroon-dk)}.b-wokwi{background:#1A7A4A;color:#fff}
+.hero-grid{display:grid;grid-template-columns:1fr 320px;min-height:175px}.hero-left{padding:2rem 2.5rem}.hero-left h1{font-family:'Karma',Georgia,serif;font-size:clamp(1.25rem,2.5vw,1.75rem);font-weight:700;line-height:1.25;margin-bottom:.5rem}.hero-left h1 .unit-line{display:block;font-size:clamp(.8125rem,1.3vw,.9375rem);font-weight:400;color:var(--gold);margin-top:.375rem}.hero-left p{color:rgba(255,255,255,.82);font-size:.9375rem;max-width:520px;line-height:1.65;margin-bottom:1.25rem}.hero-cta{display:flex;gap:.75rem;flex-wrap:wrap}.cta-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.625rem 1.25rem;border-radius:6px;font-weight:700;font-size:.875rem;text-decoration:none;border:2px solid transparent;min-height:44px}.cta-py{background:var(--steel);color:#fff}.cta-rs{background:var(--maroon-dk);color:#fff}
+.hero-right{background:var(--charcoal);display:flex;align-items:center;justify-content:center;padding:1.25rem}.code-preview{background:#0D1117;border-radius:8px;padding:1rem;width:100%;max-width:268px;border:1px solid rgba(255,255,255,.1);font-family:'JetBrains Mono',monospace;font-size:.6875rem;line-height:1.65;color:#94A3B8}.cp-bar{background:#21262D;border-radius:4px 4px 0 0;padding:.375rem .75rem;margin:-1rem -1rem .75rem;display:flex;gap:5px;align-items:center;font-size:.625rem;color:#8B949E}.cp-dot{width:9px;height:9px;border-radius:50%}.cp-dot:nth-child(1){background:#6B6B6B}.cp-dot:nth-child(2){background:#8B8B8B}.cp-dot:nth-child(3){background:#ABABAB}
+.lesson-nav{background:var(--charcoal);display:flex;overflow-x:auto;padding:0 2rem;position:sticky;top:0;z-index:100;border-bottom:2px solid #3F3F46}.nav-btn{background:none;border:none;color:rgba(255,255,255,.55);padding:.8rem 1.1rem;font-size:.8125rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;min-height:44px}.nav-btn[aria-current="page"]{color:var(--gold);border-bottom-color:var(--gold)}
+.sec{display:none}.sec.active{display:block}.page{max-width:1080px;margin:0 auto;padding:2.5rem 2rem 4rem}h2{font-family:'Karma',Georgia,serif;font-size:1.5rem;font-weight:700;color:var(--maroon);padding-bottom:.625rem;border-bottom:2px solid var(--g200);margin-bottom:.625rem}h2 .accent-bar{display:block;width:3rem;height:3px;background:var(--gold);margin-top:6px;border-radius:2px}h3{font-family:'Karma',Georgia,serif;font-size:1.125rem;font-weight:600;color:var(--g800);margin:1.75rem 0 .625rem}h4{font-size:.8125rem;font-weight:700;color:#3F3F46;text-transform:uppercase;letter-spacing:.07em;margin:1.25rem 0 .5rem}p{margin-bottom:.75rem}ul,ol{margin:0 0 .75rem 1.25rem}li{margin-bottom:.3rem}code{font-family:'JetBrains Mono',monospace;font-size:.8125rem;background:var(--tint);color:var(--maroon-dk);padding:1px 5px;border-radius:4px;border:1px solid var(--border)}
+.box{border-radius:6px;padding:.9375rem 1.125rem;margin:.875rem 0;font-size:.9375rem}.box .bl{font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.375rem;display:block}.box-gold{background:#FFF8E6;border:1px solid #EDD080;border-left:4px solid var(--gold-dk)}.box-warn{background:#FFFBEB;border:1px solid #EDD280;border-left:4px solid #B45309}.box-grey{background:var(--tint);border:1px solid var(--border);border-left:4px solid var(--g500)}.box-green{background:#E6F4F1;border:1px solid #A0D4CC;border-left:4px solid var(--teal)}.box-py{background:#EBF4FA;border:1px solid #C0D8E8;border-left:4px solid var(--steel)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}.pathway-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:1.25rem 0}.pathway-card{border-radius:10px;padding:1.5rem;border:2px solid var(--border);background:var(--surface)}.pathway-py{border-top:4px solid var(--steel)}.pathway-rs{border-top:4px solid var(--maroon)}.pill{display:inline-block;padding:.15rem .625rem;border-radius:12px;font-size:.6875rem;font-weight:700;margin:.15rem .15rem 0 0}.pill-steel{background:var(--steel);color:#fff}.pill-teal{background:var(--teal);color:#fff}.pill-amber{background:#7C4A00;color:#fff}.pill-maroon{background:var(--maroon);color:#fff}.pill-charcoal{background:var(--charcoal);color:#fff}
+footer{background:var(--charcoal);color:rgba(255,255,255,.65);text-align:center;padding:1.5rem;font-size:.75rem;line-height:1.9;border-top:3px solid #3F3F46}footer a{color:var(--gold)}
+@media (max-width:768px){.hero-grid{grid-template-columns:1fr}.hero-right{display:none}.hero-left{padding:1.5rem 1rem}.lesson-nav{padding:0 .5rem}.page{padding:1.5rem 1rem 3rem}.g2,.pathway-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-nav">Skip to main content</a>
+<header class="site-header" role="banner">
+  <div class="header-top">
+    <span class="badge b-school">St Peters Lutheran College Springfield</span>
+    <span class="badge b-unit">FIA2 · Unit 1</span>
+    <span class="badge b-wokwi">🟢 Wokwi Online Simulator</span>
+    <span style="margin-left:auto;font-size:.6875rem">Digital Solutions · Year 11 · Term 2, 2026</span>
+  </div>
+  <div class="hero-grid">
+    <div class="hero-left">
+      <h1>Using Simulation Platform as Part of FIA2 Project
+        <span class="unit-line">Unit 1: Creating with Code — Topic 4: Programmed Solutions</span>
+      </h1>
+      <p>Develop and test your programmed solution for the <strong>Home Rest &amp; Recovery Monitor</strong> using Wokwi's online ESP32 simulator — <strong>no hardware required.</strong> Use this resource to build FIA2 journal evidence through guided simulation tasks.</p>
+      <div class="hero-cta">
+        <a href="https://wokwi.com/projects/new/micropython-esp32" target="_blank" rel="noopener noreferrer" class="cta-btn cta-py">🐍 Open MicroPython Starter</a>
+        <a href="./rust-esp32-flipped-classroom-hub.html" class="cta-btn cta-rs">🦀 Rust Pathway Prerequisite</a>
+      </div>
+    </div>
+    <div class="hero-right" aria-hidden="true">
+      <div class="code-preview">
+        <div class="cp-bar"><div class="cp-dot"></div><div class="cp-dot"></div><div class="cp-dot"></div><span style="margin-left:6px">wokwi.com — ESP32</span></div>
+        <div>from machine import Pin</div><div>import dht, time</div><div>&nbsp;</div><div>sensor = dht.DHT22(Pin(14))</div><div>pir = Pin(13, Pin.IN)</div><div>&nbsp;</div><div>while True:</div><div>&nbsp;&nbsp;sensor.measure()</div><div>&nbsp;&nbsp;temp = sensor.temperature()</div><div>&nbsp;&nbsp;if 18 &lt;= temp &lt;= 22:</div><div>&nbsp;&nbsp;&nbsp;&nbsp;# suitable for rest</div>
+      </div>
+    </div>
+  </div>
+</header>
+<nav class="lesson-nav" role="navigation" aria-label="Lesson sections">
+  <button class="nav-btn" aria-current="page" onclick="showSec('overview',this)">Overview</button>
+  <button class="nav-btn" onclick="showSec('rust',this)">Rust Pathway</button>
+  <button class="nav-btn" onclick="showSec('journal',this)">Journal Links</button>
+</nav>
+<main id="main-content">
+<section id="overview" class="sec active" aria-labelledby="h-overview">
+  <div class="page">
+    <h2 id="h-overview">Why Simulate First?<span class="accent-bar" aria-hidden="true"></span></h2>
+    <p>The EEDU Kit uses real hardware that can be damaged, misconfigured, or unavailable before a class session. Wokwi lets you write and test the same logic before connecting physical components. By the time students move to the FireBeetle 2, their control flow and testing evidence are already developed.</p>
+    <div class="g2">
+      <div class="box box-green"><span class="bl">What Wokwi Gives You</span><ul><li>Virtual ESP32 simulation in-browser</li><li>Sensor interaction without hardware setup delays</li><li>MicroPython serial output for testing and screenshots</li><li>Shareable project links for FIA2 journal evidence</li></ul></div>
+      <div class="box box-warn"><span class="bl">Simulation Limitations</span><ul><li>Wokwi uses a generic ESP32 board, not the exact classroom board</li><li>Sensor values are simulated, not real-world readings</li><li>Some hardware-specific protocols need substitution or explanation in the journal</li></ul></div>
+    </div>
+    <div class="pathway-grid">
+      <div class="pathway-card pathway-py">
+        <h3>MicroPython Pathway</h3>
+        <p>Recommended starting point for most students. Browser-based, quick to test, and ideal for FIA2 logic validation.</p>
+        <div style="margin-top:.875rem"><span class="pill pill-steel">Browser only</span><span class="pill pill-teal">No install</span><span class="pill pill-amber">Recommended first</span></div>
+      </div>
+      <div class="pathway-card pathway-rs">
+        <h3>Rust Pathway</h3>
+        <p>For students extending into embedded Rust. This pathway now depends on the flipped-classroom prerequisite before attempting Rust simulation tasks.</p>
+        <div style="margin-top:.875rem"><span class="pill pill-maroon">Prerequisite required</span><span class="pill pill-charcoal">VS Code + toolchain</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="rust" class="sec" aria-labelledby="h-rust">
+  <div class="page">
+    <h2 id="h-rust">Rust Pathway Prerequisite<span class="accent-bar" aria-hidden="true"></span></h2>
+    <div class="box box-warn">
+      <span class="bl">Rust pathway prerequisite</span>
+      Before using the Rust simulation pathway in Wokwi, complete the
+      <a href="./rust-esp32-flipped-classroom-hub.html">Rust on ESP32 — Flipped Classroom Hub</a>.
+      This lesson covers the Rust toolchain, ESP32 project structure, core syntax, GPIO basics, and the setup required before Rust simulation will work successfully.
+    </div>
+    <div class="box box-grey">
+      <span class="bl">Suggested sequence</span>
+      <ol>
+        <li>Complete the <a href="./rust-esp32-flipped-classroom-hub.html">Rust on ESP32 — Flipped Classroom Hub</a>.</li>
+        <li>Set up the Rust toolchain and build a simple project locally.</li>
+        <li>Return to this simulation lesson to apply the FIA2 workflow in Wokwi.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+<section id="journal" class="sec" aria-labelledby="h-journal">
+  <div class="page">
+    <h2 id="h-journal">Journal and Submission Use<span class="accent-bar" aria-hidden="true"></span></h2>
+    <div class="box box-gold"><span class="bl">Suggested journal evidence</span>Record screenshots, project links, testing observations, and adaptation justifications from the simulation environment. If students use Rust, note that the prerequisite flipped-classroom lesson was completed first.</div>
+  </div>
+</section>
+</main>
+<footer role="contentinfo">
+  <div>St Peters Lutheran College Springfield · Digital Solutions Unit 1 FIA2 · Wokwi Simulation Lesson</div>
+  <div><a href="./rust-esp32-flipped-classroom-hub.html">Rust prerequisite lesson</a> · <a href="../../unit1-creating-with-code.html">Back to Unit 1</a></div>
+</footer>
+<script>
+function showSec(id, btn){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.removeAttribute('aria-current'));document.getElementById(id).classList.add('active');btn.setAttribute('aria-current','page');window.scrollTo({top:0,behavior:'smooth'});}
+</script>
+</body>
+</html>
