@@ -79,6 +79,33 @@
       padding: 1rem 1.1rem;
     }
 
+    .pathways {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .pathway-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+    }
+
+    .pathway-card h2 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: var(--primary-dark);
+    }
+
+    .pathway-card p {
+      margin: 0 0 1rem;
+      color: var(--muted);
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -190,6 +217,11 @@
       color: white;
     }
 
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
     .teacher-note {
       margin-top: 1rem;
       background: var(--warn-bg);
@@ -223,8 +255,21 @@
       <h1>Unit 1: Creating with Code</h1>
       <p class="subtitle">General Subject Digital Solutions (QLD) · Learning resources for the 2026 / 2027 course</p>
       <div class="intro-callout">
-        <strong>Assessment preparation focus:</strong> build strong problem solving, justified design choices, testing evidence and clear communication so your FIA2 response is original, rubric aligned and easy to follow.
+        <strong>Start here:</strong> begin with the Suggested Learning Sequence to build your understanding step by step, then use the assessment resources when preparing FIA2.
       </div>
+    </section>
+
+    <section class="pathways" aria-label="Unit 1 student pathways">
+      <article class="pathway-card">
+        <h2>Suggested Learning Sequence</h2>
+        <p>Follow the recommended order of lessons and resources to build core knowledge before you begin FIA2 writing.</p>
+        <a class="btn btn-primary" href="./Unit%201/Suggested%20Learning%20Sequence/index.html">Start Suggested Learning Sequence</a>
+      </article>
+      <article class="pathway-card">
+        <h2>Assessment Preparation Resources</h2>
+        <p>When you are preparing FIA2, use exemplar and scaffold resources to support planning, evidence and response structure.</p>
+        <a class="btn btn-secondary" href="#assessment-preparation-resources">Open Assessment Preparation Resources</a>
+      </article>
     </section>
 
     <section class="grid" aria-label="Unit 1 resource sections">
