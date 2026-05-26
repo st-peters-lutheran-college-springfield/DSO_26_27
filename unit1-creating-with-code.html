@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -47,6 +47,11 @@
       color: var(--primary);
       text-decoration: none;
       font-weight: 700;
+    }
+
+    .crumb-current {
+      color: var(--muted);
+      font-weight: 600;
     }
 
     .hero {
@@ -111,6 +116,20 @@
     }
 
     .assessment-prep h2 {
+      margin-top: 0;
+      color: var(--primary-dark);
+    }
+
+    .learning-path {
+      margin-top: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.25rem;
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+    }
+
+    .learning-path h2 {
       margin-top: 0;
       color: var(--primary-dark);
     }
@@ -216,7 +235,7 @@
 <body>
   <main class="container">
     <nav class="top-nav" aria-label="Breadcrumb">
-      <a href="./index.html">← Back to course landing page</a>
+      <a href="./index.html">Home</a> <span aria-hidden="true">→</span> <span class="crumb-current">Unit 1: Creating with Code</span>
     </nav>
 
     <section class="hero">
@@ -292,6 +311,29 @@
 
       <div class="teacher-note">
         <strong>Classroom note:</strong> Students should use the scaffold to plan and structure their own writing. The exemplar is best used to identify features of strong responses such as measurable criteria, explained testing and justified improvements.
+      </div>
+    </section>
+
+    <section class="learning-path" aria-labelledby="suggested-learning-sequence">
+      <h2 id="suggested-learning-sequence">Suggested Learning Sequence</h2>
+      <p class="assessment-intro">Follow this sequence for a clear learning pathway from prerequisite knowledge to FIA2 simulation and evidence collection.</p>
+      <div class="resource-grid">
+        <article class="resource-card">
+          <div class="resource-tag">Start here</div>
+          <h3>Suggested Learning Sequence Hub</h3>
+          <p>Use the hub page to view the full sequence and move through each step in order.</p>
+          <div class="resource-actions">
+            <a class="btn btn-primary" href="./Unit%201/Suggested%20Learning%20Sequence/index.html">Open sequence hub</a>
+          </div>
+        </article>
+        <article class="resource-card">
+          <div class="resource-tag">Key steps</div>
+          <h3>Step Resources</h3>
+          <ul>
+            <li><a href="./Unit%201/Suggested%20Learning%20Sequence/rust-esp32-flipped-classroom-hub.html">Step 1: Rust on ESP32 Flipped Classroom Hub</a></li>
+            <li><a href="./Unit%201/Suggested%20Learning%20Sequence/using-simulation-platform-fia2.html">Step 3: Using the Simulation Platform for FIA2</a></li>
+          </ul>
+        </article>
       </div>
     </section>
 
