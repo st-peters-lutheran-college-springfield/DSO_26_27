@@ -200,6 +200,66 @@
       color: var(--warn-text);
     }
 
+    .pathway-section {
+      margin-top: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.25rem;
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+    }
+
+    .pathway-section h2 {
+      margin-top: 0;
+      color: var(--primary-dark);
+    }
+
+    .pathway-intro {
+      color: var(--muted);
+      margin-bottom: 1rem;
+      max-width: 75ch;
+    }
+
+    .pathway-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .pathway-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      background: linear-gradient(180deg, #ffffff, #f8fbff);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pathway-tag {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: white;
+      border-radius: 999px;
+      padding: 0.25rem 0.6rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .pathway-tag-blue { background: var(--primary); }
+    .pathway-tag-teal { background: #0d9488; }
+
+    .pathway-card h3 {
+      margin: 0 0 0.5rem;
+      color: var(--primary-dark);
+      font-size: 1.08rem;
+    }
+
+    .pathway-card p {
+      margin: 0 0 0.9rem;
+      color: var(--muted);
+      flex: 1;
+    }
+
     ul {
       margin: 0;
       padding-left: 1.15rem;
@@ -223,7 +283,7 @@
       <h1>Unit 1: Creating with Code</h1>
       <p class="subtitle">General Subject Digital Solutions (QLD) · Learning resources for the 2026 / 2027 course</p>
       <div class="intro-callout">
-        <strong>Assessment preparation focus:</strong> build strong problem solving, justified design choices, testing evidence and clear communication so your FIA2 response is original, rubric aligned and easy to follow.
+        <strong>Two learning pathways:</strong> follow the <strong>Suggested Learning Sequence</strong> to build skills step by step, or jump straight to <strong>Assessment Preparation Resources</strong> to prepare your FIA2 response with exemplars and scaffolds.
       </div>
     </section>
 
@@ -292,6 +352,40 @@
 
       <div class="teacher-note">
         <strong>Classroom note:</strong> Students should use the scaffold to plan and structure their own writing. The exemplar is best used to identify features of strong responses such as measurable criteria, explained testing and justified improvements.
+      </div>
+    </section>
+
+    <section class="pathway-section" aria-labelledby="suggested-learning-sequence">
+      <h2 id="suggested-learning-sequence">Suggested Learning Sequence</h2>
+      <p class="pathway-intro">Follow this step-by-step sequence to build the practical skills and knowledge needed for Unit 1. Each step is clearly ordered and linked, supporting both classroom and independent learning.</p>
+
+      <div class="pathway-grid">
+        <article class="pathway-card">
+          <div class="pathway-tag pathway-tag-teal">Step-by-step sequence</div>
+          <h3>Unit 1 Suggested Learning Sequence</h3>
+          <p>A structured pathway from prerequisite Rust knowledge through to FIA2 simulation work. Includes three clearly ordered steps with quick access to all core resources.</p>
+          <div class="resource-actions">
+            <a class="btn btn-primary" href="./Unit%201/Suggested%20Learning%20Sequence/index.html" style="background:#0d9488">Start the sequence →</a>
+          </div>
+        </article>
+
+        <article class="pathway-card">
+          <div class="pathway-tag pathway-tag-blue">Prerequisite learning</div>
+          <h3>Rust on ESP32 — Flipped Classroom Hub</h3>
+          <p>Build foundational understanding of embedded Rust, ESP32 concepts, basic syntax and GPIO readiness before attempting simulation tasks. Four self-paced lessons to complete before class.</p>
+          <div class="resource-actions">
+            <a class="btn btn-primary" href="./Unit%201/Suggested%20Learning%20Sequence/rust-esp32-flipped-classroom-hub.html">Open Step 1</a>
+          </div>
+        </article>
+
+        <article class="pathway-card">
+          <div class="pathway-tag pathway-tag-blue">FIA2 simulation</div>
+          <h3>Using the Simulation Platform for FIA2</h3>
+          <p>Apply your learning in Wokwi, test solution logic, capture journal evidence and prepare your work for submission and reflection.</p>
+          <div class="resource-actions">
+            <a class="btn btn-primary" href="./Unit%201/Suggested%20Learning%20Sequence/using-simulation-platform-fia2.html">Open Step 3</a>
+          </div>
+        </article>
       </div>
     </section>
 
