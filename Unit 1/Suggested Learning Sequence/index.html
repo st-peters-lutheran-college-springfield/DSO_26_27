@@ -20,6 +20,9 @@
     header{padding:2rem 1.25rem 1rem;border-bottom:1px solid var(--border);background:rgba(9,16,28,.88);backdrop-filter:blur(10px);position:sticky;top:0;z-index:100}
     .wrap{max-width:1080px;margin:0 auto}
     .eyebrow{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent-2);margin-bottom:.65rem}
+    .breadcrumbs{font-size:.82rem;color:var(--muted)}
+    .breadcrumbs a{text-decoration:none;color:#9ddfff}
+    .breadcrumbs a:hover{text-decoration:underline}
     .hero{display:grid;grid-template-columns:1.35fr .95fr;gap:1.25rem;align-items:stretch;padding:2rem 1.25rem 2.5rem}
     .hero-card,.info-card,.step-card,.resource-card,.journal-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
     .hero-card{padding:2rem}
@@ -54,6 +57,11 @@
   <header>
     <div class="wrap">
       <div class="eyebrow">Unit 1 · Suggested Learning Sequence</div>
+      <div class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a> <span aria-hidden="true">→</span>
+        <a href="../../unit1-creating-with-code.html">Unit 1: Creating with Code</a> <span aria-hidden="true">→</span>
+        <span>Suggested Learning Sequence</span>
+      </div>
       <h1 style="font-size:1.2rem;margin:0">Digital Solutions Learning Hub</h1>
     </div>
   </header>

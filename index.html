@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -74,6 +74,27 @@
       font-size: 0.95rem;
     }
 
+    .unit-sub-links {
+      margin: 0.65rem 0 0;
+      padding-left: 1.1rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .unit-sub-links li {
+      margin-top: 0.35rem;
+    }
+
+    .unit-sub-links a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .unit-sub-links a:hover {
+      text-decoration: underline;
+    }
+
     .unit-link {
       display: inline-block;
       margin-top: 0.85rem;
@@ -98,7 +119,7 @@
   <main class="container">
     <header>
       <h1>General Subject Digital Solutions (QLD)</h1>
-      <p class="subtitle">Learning platform landing page for Units 1-4 · Course years 2026 / 2027</p>
+      <p class="subtitle">Learning platform landing page for Units 1–4 · Course years 2026 / 2027</p>
     </header>
 
     <section class="unit-grid" aria-label="Digital Solutions Units">
@@ -106,6 +127,11 @@
         <h2>Unit 1</h2>
         <p>Explore data and create digital solutions using foundational computational thinking.</p>
         <a class="unit-link" href="./unit1-creating-with-code.html">Open Unit 1 resources →</a>
+        <ul class="unit-sub-links" aria-label="Unit 1 learning pathway links">
+          <li><a href="./Unit%201/Suggested%20Learning%20Sequence/index.html">Suggested Learning Sequence</a></li>
+          <li><a href="./Unit%201/Suggested%20Learning%20Sequence/rust-esp32-flipped-classroom-hub.html">Step 1: Rust on ESP32 Flipped Classroom Hub</a></li>
+          <li><a href="./Unit%201/Suggested%20Learning%20Sequence/using-simulation-platform-fia2.html">Step 3: Using the Simulation Platform for FIA2</a></li>
+        </ul>
       </article>
       <article class="unit-card">
         <h2>Unit 2</h2>
