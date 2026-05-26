@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -85,7 +85,8 @@ pre{background:#0D1117;border:1px solid #30363D;border-top:none;border-radius:0 
 
 /* ── Print ── */
 .print-btn{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--red);color:#fff;border:none;border-radius:6px;padding:10px 18px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(200,16,46,.3);z-index:100}
-@media print{.print-btn,.topbar{display:none}body{background:white}}
+@media print{.print-btn,.topbar,.breadcrumb-bar{display:none}body{background:white}}
+.breadcrumb-bar{background:var(--navy-lt);border-bottom:1px solid var(--border);padding:7px 2rem;font-size:12px;color:var(--muted)}.breadcrumb-bar a{color:var(--navy);text-decoration:none;font-weight:600}.breadcrumb-bar a:hover{text-decoration:underline}.crumb-current{color:var(--muted);font-weight:600}
 </style>
 </head>
 <body>
@@ -96,6 +97,10 @@ pre{background:#0D1117;border:1px solid #30363D;border-top:none;border-radius:0 
   <span style="color:#ADBBD4">Digital Solutions 2025 v1.4 — Unit 1 FIA2</span>
   <span class="topbar-mark">A-Band Model Response · 23/25</span>
 </div>
+
+<nav class="breadcrumb-bar" aria-label="Breadcrumb">
+  <a href="../../index.html">Home</a> <span aria-hidden="true">→</span> <a href="../../unit1-creating-with-code.html">Unit 1: Creating with Code</a> <span aria-hidden="true">→</span> <span class="crumb-current">A-Band Exemplar</span>
+</nav>
 
 <div class="page-header">
   <div class="doc-type">FIA2 Project — A-Band Exemplar Response</div>

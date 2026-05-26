@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +15,7 @@
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
 .container{max-width:1100px;margin:0 auto;padding:2rem 1rem 3rem}
-.top-nav{margin-bottom:1.25rem}.top-nav a{color:var(--primary);text-decoration:none;font-weight:700}
+.top-nav{margin-bottom:1.25rem}.top-nav a{color:var(--primary);text-decoration:none;font-weight:700}.crumb-current{color:var(--muted);font-weight:600}
 header{background:linear-gradient(135deg,var(--surface),#eef4ff);border:1px solid var(--border);border-radius:16px;padding:1.75rem;box-shadow:0 8px 24px rgba(29,78,216,.06)}
 .badge{display:inline-block;background:var(--accent);color:#fff;padding:.25rem .6rem;border-radius:999px;font-size:.8rem;font-weight:700;margin-bottom:.75rem}
 h1{margin:0;color:var(--primary);font-size:clamp(1.6rem,3vw,2.4rem)}
@@ -33,7 +33,7 @@ footer{margin-top:2rem;text-align:center;color:var(--muted);font-size:.92rem}
 <body>
 <div class="container">
   <nav class="top-nav" aria-label="Breadcrumb">
-    <a href="../../unit1-creating-with-code.html">← Back to Unit 1 page</a>
+    <a href="../../index.html">Home</a> <span aria-hidden="true">→</span> <a href="../../unit1-creating-with-code.html">Unit 1: Creating with Code</a> <span aria-hidden="true">→</span> <span class="crumb-current">FIA2 Student Scaffold</span>
   </nav>
 
   <header>
