@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Suggested learning sequence for Unit 1 Digital Solutions — clear, accessible progression through Rust prerequisite learning and FIA2 simulation work.">
+  <title>Suggested Learning Sequence | Unit 1 Digital Solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b1220; --panel:#121a2b; --panel-2:#1a2338; --text:#e6edf7; --muted:#9eb0ca;
+      --accent:#f59e0b; --accent-2:#38bdf8; --success:#22c55e; --border:#2a3550;
+      --shadow:0 20px 40px rgba(0,0,0,.25); --radius:18px; --radius-sm:12px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Outfit',sans-serif;background:linear-gradient(180deg,#09101c,#0b1220 220px,#0d1525);color:var(--text);line-height:1.7}
+    a{color:inherit}
+    .skip-link{position:absolute;left:12px;top:-100px;background:#fff;color:#000;padding:.7rem 1rem;border-radius:10px;z-index:999}.skip-link:focus{top:12px}
+    header{padding:2rem 1.25rem 1rem;border-bottom:1px solid var(--border);background:rgba(9,16,28,.88);backdrop-filter:blur(10px);position:sticky;top:0;z-index:100}
+    .wrap{max-width:1080px;margin:0 auto}
+    .eyebrow{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent-2);margin-bottom:.65rem}
+    .hero{display:grid;grid-template-columns:1.35fr .95fr;gap:1.25rem;align-items:stretch;padding:2rem 1.25rem 2.5rem}
+    .hero-card,.info-card,.step-card,.resource-card,.journal-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .hero-card{padding:2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);line-height:1.12;margin-bottom:.9rem}
+    .lead{font-size:1.02rem;color:var(--muted);max-width:60ch}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.35rem}
+    .btn{display:inline-flex;align-items:center;gap:.55rem;padding:.9rem 1.1rem;border-radius:999px;text-decoration:none;font-weight:700;border:1px solid transparent}
+    .btn-primary{background:var(--accent);color:#241400}
+    .btn-secondary{background:transparent;border-color:var(--border);color:var(--text)}
+    .info-card{padding:1.4rem}
+    .badge-row{display:flex;flex-wrap:wrap;gap:.55rem;margin-bottom:1rem}.badge{padding:.35rem .65rem;border-radius:999px;font-size:.78rem;font-weight:600}.badge-a{background:rgba(245,158,11,.15);color:#ffd58a}.badge-b{background:rgba(56,189,248,.15);color:#9ddfff}.badge-c{background:rgba(34,197,94,.14);color:#9be8b0}
+    .checklist{list-style:none}.checklist li{padding:.55rem 0;border-top:1px solid var(--border);color:var(--muted)}.checklist li:first-child{border-top:none;padding-top:0}
+    main{padding:0 1.25rem 3rem}.section{max-width:1080px;margin:0 auto 2rem}
+    .section-head{margin-bottom:1rem}.section-head h2{font-size:1.5rem;margin-bottom:.35rem}.section-head p{color:var(--muted)}
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    .step-card{padding:1.25rem;position:relative}
+    .step-no{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--panel-2);color:var(--accent);font-weight:800;margin-bottom:.9rem}
+    .step-card h3{margin-bottom:.45rem;font-size:1.08rem}.step-card p{color:var(--muted);margin-bottom:.9rem}
+    .step-meta{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.9rem}.pill{font-size:.74rem;padding:.28rem .55rem;border-radius:999px;background:var(--panel-2);color:var(--muted);border:1px solid var(--border)}
+    .step-card a{display:inline-flex;text-decoration:none;font-weight:700;color:#fff}
+    .resource-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+    .resource-card{padding:1rem}.resource-card h3{font-size:1rem;margin-bottom:.3rem}.resource-card p{color:var(--muted);font-size:.94rem;margin-bottom:.7rem}
+    .resource-link{display:inline-flex;text-decoration:none;font-weight:700;color:#9ddfff}
+    .journal-card{padding:1.25rem}.journal-card ul{padding-left:1.1rem;color:var(--muted)}
+    .flow{margin-top:1rem;padding:1rem 1.1rem;border:1px dashed var(--border);border-radius:var(--radius-sm);background:rgba(255,255,255,.02);color:var(--muted)}
+    footer{max-width:1080px;margin:0 auto;padding:1rem 1.25rem 3rem;color:var(--muted);font-size:.9rem}
+    @media (max-width:900px){.hero,.steps,.resource-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">Unit 1 · Suggested Learning Sequence</div>
+      <h1 style="font-size:1.2rem;margin:0">Digital Solutions Learning Hub</h1>
+    </div>
+  </header>
+
+  <section class="hero wrap">
+    <div class="hero-card">
+      <div class="eyebrow">Start here</div>
+      <h1>Easy access to learning resources with a clear, logical flow</h1>
+      <p class="lead">This sequence guides students from prerequisite Rust knowledge into practical FIA2 simulation work. Each step is ordered, clearly labelled, and linked for quick access.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="./rust-esp32-flipped-classroom-hub.html">Start Step 1</a>
+        <a class="btn btn-secondary" href="./using-simulation-platform-fia2.html">Jump to Step 3</a>
+      </div>
+      <div class="flow"><strong>Learning flow:</strong> Rust prerequisite → local setup and understanding → Wokwi simulation for FIA2 evidence and testing.</div>
+    </div>
+    <aside class="info-card" aria-label="Learning sequence summary">
+      <div class="badge-row">
+        <span class="badge badge-a">Accessible</span>
+        <span class="badge badge-b">Logical sequence</span>
+        <span class="badge badge-c">Student-ready</span>
+      </div>
+      <ul class="checklist">
+        <li>One obvious starting point</li>
+        <li>Clear step-by-step progression</li>
+        <li>Quick links to core resources</li>
+        <li>Supports classroom and independent learning</li>
+        <li>Improved orientation for FIA2 work</li>
+      </ul>
+    </aside>
+  </section>
+
+  <main id="main-content">
+    <section class="section">
+      <div class="section-head">
+        <h2>Suggested sequence</h2>
+        <p>Students should complete these steps in order for the best learning experience.</p>
+      </div>
+      <div class="steps">
+        <article class="step-card">
+          <div class="step-no">1</div>
+          <h3>Rust on ESP32 — Flipped Classroom Hub</h3>
+          <div class="step-meta"><span class="pill">4 lessons</span><span class="pill">Prerequisite</span><span class="pill">Before class</span></div>
+          <p>Build foundational understanding of embedded Rust, ESP32 concepts, basic syntax, and GPIO readiness before attempting simulation tasks.</p>
+          <a href="./rust-esp32-flipped-classroom-hub.html">Open Step 1 →</a>
+        </article>
+        <article class="step-card">
+          <div class="step-no">2</div>
+          <h3>Set up and test locally</h3>
+          <div class="step-meta"><span class="pill">Toolchain</span><span class="pill">Local build</span><span class="pill">Readiness check</span></div>
+          <p>Install the Rust toolchain, confirm a successful build, and make sure students can work confidently before moving into project simulation.</p>
+          <a href="./rust-esp32-flipped-classroom-hub.html#resources">Use Step 1 resources →</a>
+        </article>
+        <article class="step-card">
+          <div class="step-no">3</div>
+          <h3>Using Simulation Platform as Part of FIA2 Project</h3>
+          <div class="step-meta"><span class="pill">Wokwi</span><span class="pill">FIA2</span><span class="pill">Evidence</span></div>
+          <p>Apply the learning in Wokwi, test solution logic, capture journal evidence, and prepare work for submission and reflection.</p>
+          <a href="./using-simulation-platform-fia2.html">Open Step 3 →</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Quick access resources</h2>
+        <p>Grouped by purpose so students can find what they need quickly.</p>
+      </div>
+      <div class="resource-grid">
+        <article class="resource-card">
+          <h3>Watch</h3>
+          <p>Begin with the prerequisite guided lesson and embedded Rust introduction.</p>
+          <a class="resource-link" href="./rust-esp32-flipped-classroom-hub.html">Open Rust learning hub</a>
+        </article>
+        <article class="resource-card">
+          <h3>Build</h3>
+          <p>Use the setup and support resources for toolchain preparation and practice.</p>
+          <a class="resource-link" href="https://esp-rs.github.io/book/" target="_blank" rel="noopener noreferrer">Rust on ESP Book</a>
+        </article>
+        <article class="resource-card">
+          <h3>Practice</h3>
+          <p>Try small Rust examples and experiment with syntax before local builds.</p>
+          <a class="resource-link" href="https://play.rust-lang.org" target="_blank" rel="noopener noreferrer">Rust Playground</a>
+        </article>
+        <article class="resource-card">
+          <h3>Simulate</h3>
+          <p>Move into Wokwi to develop and test FIA2 solution logic without hardware.</p>
+          <a class="resource-link" href="./using-simulation-platform-fia2.html">Open simulation lesson</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section journal-card">
+      <div class="section-head">
+        <h2>Journal evidence reminders</h2>
+        <p>Keep students focused on what to capture as they move through the sequence.</p>
+      </div>
+      <ul>
+        <li>Record screenshots of progress and successful testing.</li>
+        <li>Keep links to simulation projects and working examples.</li>
+        <li>Note key design decisions, changes, and improvements.</li>
+        <li>Explain how the simulation supports FIA2 problem-solving and refinement.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    Suggested Learning Sequence · St Peters Lutheran College Springfield · Digital Solutions Unit 1
+  </footer>
+</body>
+</html>
