@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson Today — PIR Motion Sensor Rest Monitor</title>
+<style>
+  /* ── provided style.css ── */
+  :root {
+    color-scheme: light;
+    --bg: #f4f7fb; --surface: #ffffff; --primary: #1d4ed8; --primary-dark: #1e3a8a;
+    --accent: #c8102e; --text: #1f2937; --muted: #6b7280; --border: #dbe2f0;
+    --success-bg: #ecfdf5; --success-border: #a7f3d0; --success-text: #047857;
+    --warn-bg: #fef3c7; --warn-border: #fcd34d; --warn-text: #92400e;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+  .top-nav { margin-bottom: 1.25rem; }
+  .top-nav a { color: var(--primary); text-decoration: none; font-weight: 700; }
+  .crumb-current { color: var(--muted); font-weight: 600; }
+  .hero { background: linear-gradient(135deg, var(--surface), #eef4ff); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1rem; box-shadow: 0 8px 24px rgba(29,78,216,0.06); }
+  h1 { margin: 0; color: var(--primary); font-size: clamp(1.6rem,3vw,2.4rem); }
+  .subtitle { margin-top: 0.5rem; color: var(--muted); max-width: 70ch; }
+  .intro-callout { margin-top: 1rem; background: var(--success-bg); border: 1px solid var(--success-border); border-left: 5px solid var(--success-text); border-radius: 12px; padding: 1rem 1.1rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1rem; box-shadow: 0 4px 14px rgba(15,23,42,0.04); }
+  .card h2 { margin-top: 0; margin-bottom: 0.5rem; font-size: 1.05rem; color: var(--primary); }
+  .assessment-prep { margin-top: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; box-shadow: 0 6px 20px rgba(15,23,42,0.05); }
+  .assessment-prep h2 { margin-top: 0; color: var(--primary-dark); }
+  .learning-path { margin-top: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; box-shadow: 0 6px 20px rgba(15,23,42,0.05); }
+  .learning-path h2 { margin-top: 0; color: var(--primary-dark); }
+  .assessment-intro { color: var(--muted); margin-bottom: 1rem; max-width: 75ch; }
+  .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+  .resource-card { border: 1px solid var(--border); border-radius: 14px; padding: 1rem; background: linear-gradient(180deg, #ffffff, #f8fbff); }
+  .resource-tag { display: inline-block; font-size: 0.78rem; font-weight: 700; color: white; background: var(--accent); border-radius: 999px; padding: 0.25rem 0.6rem; margin-bottom: 0.75rem; }
+  .resource-card h3 { margin: 0 0 0.5rem; color: var(--primary-dark); font-size: 1.08rem; }
+  .resource-card p { margin: 0 0 0.9rem; color: var(--muted); }
+  .resource-card ul { margin: 0 0 1rem; padding-left: 1.15rem; }
+  .resource-card li { margin-bottom: 0.35rem; }
+  .resource-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .btn { display: inline-block; text-decoration: none; font-weight: 700; border-radius: 10px; padding: 0.65rem 0.95rem; transition: transform 0.15s ease, box-shadow 0.15s ease; font-size: 0.9rem; }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(29,78,216,0.15); }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-secondary { background: var(--bg); color: var(--primary); border: 2px solid var(--primary); }
+  .teacher-note { margin-top: 1rem; background: var(--warn-bg); border: 1px solid var(--warn-border); border-left: 5px solid var(--warn-text); border-radius: 12px; padding: 0.9rem 1rem; color: var(--warn-text); }
+  ul { margin: 0; padding-left: 1.15rem; }
+  footer { margin-top: 2rem; text-align: center; color: var(--muted); font-size: 0.92rem; }
+
+  /* ── supplemental ── */
+
+  /* LESSON TODAY banner */
+  .lesson-today-bar {
+    background: var(--primary-dark);
+    color: #fff;
+    padding: 0;
+  }
+  .lesson-today-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0.55rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.82rem;
+  }
+  .lesson-today-inner span { opacity: 0.55; }
+
+  .lesson-banner {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, #1d4ed8 100%);
+    color: #fff;
+    padding: 2.4rem 1rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .lesson-banner::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .lesson-banner::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -30px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+  }
+  .lesson-banner-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .lesson-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 999px;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.9rem;
+  }
+  .lesson-banner h1 {
+    color: #fff;
+    font-size: clamp(1.7rem, 4vw, 2.8rem);
+    line-height: 1.15;
+    margin: 0 0 0.6rem;
+    font-weight: 700;
+  }
+  .lesson-banner h1 span { opacity: 0.7; font-weight: 400; }
+  .lesson-banner p {
+    color: rgba(255,255,255,0.72);
+    font-size: 0.96rem;
+    max-width: 58ch;
+    margin: 0 0 1.1rem;
+    line-height: 1.6;
+  }
+  .lesson-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.3rem;
+  }
+  .lmeta {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* Step cards */
+  .step-list { display: flex; flex-direction: column; gap: 0; margin-top: 0.5rem; }
+  .step-item {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    border: 1px solid var(--border);
+    border-top: none;
+    background: var(--surface);
+  }
+  .step-item:first-child { border-top: 1px solid var(--border); border-radius: 12px 12px 0 0; }
+  .step-item:last-child { border-radius: 0 0 12px 12px; }
+  .step-num-col {
+    background: var(--bg);
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 1.1rem;
+  }
+  .step-circle {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .step-body { padding: 1rem 1.1rem; }
+  .step-body h3 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--primary-dark); }
+  .step-body p { margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--muted); }
+  .step-body ol, .step-body ul { font-size: 0.88rem; color: var(--text); padding-left: 1.15rem; margin: 0.3rem 0; }
+  .step-body li { margin-bottom: 0.3rem; }
+  .step-time { display: inline-block; font-size: 0.72rem; font-weight: 700; background: #eff6ff; color: var(--primary); border: 1px solid #bfdbfe; border-radius: 999px; padding: 0.1rem 0.6rem; margin-bottom: 0.5rem; }
+
+  /* Code blocks */
+  .code-block {
+    background: #0f172a;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0.75rem 0;
+    border: 1px solid #1e293b;
+  }
+  .code-header {
+    background: #1e293b;
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #334155;
+  }
+  .code-fname { font-family: 'Courier New', monospace; font-size: 0.75rem; color: #94a3b8; }
+  .code-lang { font-family: 'Courier New', monospace; font-size: 0.65rem; color: #475569; text-transform: uppercase; letter-spacing: 1px; }
+  .code-body { padding: 1rem 1.1rem; overflow-x: auto; }
+  .code-body pre { font-family: 'Courier New', monospace; font-size: 0.82rem; color: #cbd5e1; white-space: pre; line-height: 1.75; margin: 0; }
+  .kw { color: #93c5fd; font-weight: 600; }
+  .cm { color: #475569; font-style: italic; }
+  .st { color: #86efac; }
+  .fn { color: #e2e8f0; }
+  .nm { color: #fbbf24; }
+
+  /* section divider */
+  .section-label {
+    font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--muted);
+    margin: 2rem 0 0.75rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* Daniel UX preview */
+  .ux-preview {
+    background: #0d0d0d;
+    border: 2px solid #252525;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 0.75rem 0 1rem;
+  }
+  .ux-chrome {
+    background: #181818;
+    border-bottom: 1px solid #252525;
+    padding: 7px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ux-dot { width: 9px; height: 9px; border-radius: 50%; background: #2e2e2e; }
+  .ux-url { font-family: 'Courier New', monospace; font-size: 0.68rem; color: #333; margin-left: 8px; }
+  .ux-badge { font-family: 'Courier New', monospace; font-size: 0.62rem; color: #2a2a2a; margin-left: auto; text-transform: uppercase; letter-spacing: 1px; }
+  .ux-states { display: grid; grid-template-columns: 1fr 1fr; }
+  .ux-state {
+    padding: 22px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Courier New', monospace;
+    border-right: 1px solid #1a1a1a;
+  }
+  .ux-state:last-child { border-right: none; }
+  .ux-tiny { font-size: 0.58rem; color: #343434; letter-spacing: 2px; text-transform: uppercase; }
+  .ux-sym { font-size: 3.2rem; line-height: 1; color: #d8d8d8; }
+  .ux-status { font-size: 0.92rem; font-weight: bold; color: #d0d0d0; letter-spacing: 0.5px; text-align: center; }
+  .ux-msg { font-size: 0.65rem; color: #484848; text-align: center; line-height: 1.5; max-width: 160px; }
+  .ux-bar-wrap { width: 100%; background: #141414; border: 1px solid #1e1e1e; border-radius: 6px; padding: 7px 9px; }
+  .ux-bar-l { font-size: 0.52rem; color: #2e2e2e; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 3px; }
+  .ux-bar { font-size: 0.85rem; letter-spacing: 3px; }
+  .ux-bar-s { font-size: 0.55rem; color: #282828; margin-top: 2px; }
+  .ux-foot { font-size: 0.54rem; color: #222; text-align: center; }
+  .ux-state-label {
+    font-size: 0.6rem; color: #2a2a2a; letter-spacing: 1.5px; text-transform: uppercase;
+    text-align: center; width: 100%;
+    border-top: 1px solid #1a1a1a;
+    padding-top: 8px; margin-top: 4px;
+  }
+
+  /* wiring table */
+  .wire-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  .wire-table th { background: var(--bg); color: var(--primary-dark); text-align: left; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border); }
+  .wire-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--bg); color: var(--text); }
+  .wire-table tr:hover td { background: var(--bg); }
+  .pin-tag { display: inline-block; background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 1px 7px; font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--primary-dark); font-weight: 700; }
+
+  /* sc chips */
+  .sc-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+  .sc-chip { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.35rem 0.75rem; font-size: 0.82rem; color: var(--primary-dark); display: flex; align-items: center; gap: 0.4rem; }
+  .sc-chip strong { color: var(--primary); }
+
+  /* concept tags */
+  .concept-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.5rem; }
+  .ctag { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.15rem 0.55rem; font-size: 0.76rem; color: var(--muted); font-weight: 600; }
+
+  /* starting-point callout */
+  .starting-point-box {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-left: 5px solid var(--primary);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    margin: 1rem 0;
+  }
+  .starting-point-box h3 { margin: 0 0 0.4rem; color: var(--primary-dark); font-size: 0.96rem; }
+  .starting-point-box p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+
+  @media (max-width: 600px) {
+    .ux-states { grid-template-columns: 1fr; }
+    .step-item { grid-template-columns: 40px 1fr; }
+  }
+  @media print { .lesson-banner { -webkit-print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+
+<!-- Site bar -->
+<div class="lesson-today-bar">
+  <div class="lesson-today-inner">
+    <strong>St Peters Lutheran College</strong>
+    <span>·</span><span>Digital Solutions — Unit 1</span>
+    <span>·</span><span>Ms Baessler</span>
+    <span style="margin-left:auto;opacity:1;font-weight:700">
+      <a href="student_hub.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.8rem">← Back to Hub</a>
+    </span>
+  </div>
+</div>
+
+<!-- LESSON TODAY banner -->
+<div class="lesson-banner">
+  <div class="lesson-banner-inner">
+    <div class="lesson-eyebrow">📅 Lesson Today &nbsp;·&nbsp; 60 minutes &nbsp;·&nbsp; Lesson 1 of 4</div>
+    <h1>PIR Motion Sensor <span>Rest Monitor</span></h1>
+    <p>Connect a motion sensor to the FireBeetle 2 ESP32-E and write a MicroPython program that serves a live web dashboard — designed for <strong style="color:#fff">Daniel Foster</strong>, a shift worker who needs to know if his room is calm enough to rest.</p>
+    <div class="lesson-meta-row">
+      <span class="lmeta">🧰 EEDU IoT Kit</span>
+      <span class="lmeta">🐍 MicroPython + Thonny</span>
+      <span class="lmeta">📡 PIR → D3 / GPIO26</span>
+      <span class="lmeta">✓ / ~ / ● 3-state algorithm</span>
+      <span class="lmeta">🌐 Live web dashboard</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- breadcrumb -->
+  <nav class="top-nav">
+    <a href="student_hub.html">FIA2 Project Hub</a> &rsaquo;
+    <span class="crumb-current">Lesson 1 — PIR Motion Sensor</span>
+  </nav>
+
+  <!-- STARTING POINT callout -->
+  <div class="starting-point-box">
+    <h3>🚀 This is your starting point</h3>
+    <p>The code in this lesson is <strong>deliberately simple</strong> — it meets the basic requirements and gives you something working to build on. Once it's running, you'll extend it by adjusting thresholds, adding sensors, and improving the dashboard design to make it your own solution for Daniel.</p>
+  </div>
+
+  <!-- OVERVIEW CARDS -->
+  <div class="grid">
+    <div class="card">
+      <h2>🎯 What you will build</h2>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.5rem">A MicroPython program that:</p>
+      <ul style="font-size:0.87rem;color:var(--text)">
+        <li>Reads the PIR motion sensor every time a browser connects</li>
+        <li>Tracks <em>how long ago</em> motion was last detected</li>
+        <li>Decides one of three states: CALM / SETTLING / DETECTED</li>
+        <li>Serves a high-contrast dashboard — no interaction needed</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>👤 Daniel's requirement</h2>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.5rem">He glances at a mounted tablet. He needs:</p>
+      <ul style="font-size:0.87rem;color:var(--text)">
+        <li>A clear YES/NO answer — not raw sensor data</li>
+        <li>High contrast — mild colour-vision deficiency</li>
+        <li>No interaction — passive display, always live</li>
+        <li>Plain English — "Room is calm" not "0 counts"</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>🧰 What you need</h2>
+      <ul style="font-size:0.87rem;color:var(--text)">
+        <li>FireBeetle 2 ESP32-E (MicroPython flashed)</li>
+        <li>Gravity IO Shield (on top of board)</li>
+        <li>Gravity PIR Motion Sensor + 3-pin cable</li>
+        <li>USB-C data cable</li>
+        <li>Computer with Thonny IDE installed</li>
+        <li>WiFi network (2.4 GHz)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>💡 Programming concepts</h2>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.5rem">Identify these in your journal after the lesson:</p>
+      <div class="concept-tags">
+        <span class="ctag">Selection (if/elif/else)</span>
+        <span class="ctag">Iteration (while True)</span>
+        <span class="ctag">Functions</span>
+        <span class="ctag">Data output (HTML)</span>
+        <span class="ctag">User input (HTTP GET)</span>
+        <span class="ctag">Error handling</span>
+        <span class="ctag">ticks_ms() timer</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS CRITERIA -->
+  <p class="section-label">Success criteria — what a working solution does</p>
+  <div class="sc-chips">
+    <div class="sc-chip"><strong>SC1</strong> PIR detects real movement in real time</div>
+    <div class="sc-chip"><strong>SC2</strong> Status shown as text + symbol, no colour dependency</div>
+    <div class="sc-chip"><strong>SC3</strong> Page auto-refreshes — Daniel never clicks anything</div>
+    <div class="sc-chip"><strong>SC4</strong> Plain-English message — not raw sensor numbers</div>
+  </div>
+
+  <!-- TEACHER NOTES -->
+  <p class="section-label">Teacher notes</p>
+  <div class="teacher-note">
+    <strong>👩‍🏫 Before the lesson — checklist</strong>
+    <ul style="margin-top:0.5rem;padding-left:1.1rem;color:var(--warn-text)">
+      <li>MicroPython (ESP32) firmware already flashed on all FireBeetle 2 boards</li>
+      <li>IO Shields pre-mounted on boards — saves ~5 min per student</li>
+      <li>WiFi credentials written on the board (2.4 GHz network only)</li>
+      <li>Thonny IDE installed on all classroom computers</li>
+    </ul>
+    <strong style="display:block;margin-top:0.7rem">⚠️ Three things to watch for</strong>
+    <ul style="margin-top:0.3rem;padding-left:1.1rem;color:var(--warn-text)">
+      <li><strong>PIR warm-up (~30 s):</strong> sensor fires false readings on first power-on — tell students this is normal, just wait 30 seconds</li>
+      <li><strong>File save location:</strong> students must choose "MicroPython device" in the save dialog, not "This computer" — demonstrate on projector before they attempt it</li>
+      <li><strong>WiFi 2.4 GHz:</strong> FireBeetle 2 does not support 5 GHz — use a known 2.4 GHz network or phone hotspot as fallback</li>
+    </ul>
+    <strong style="display:block;margin-top:0.7rem">🔑 Key teaching pause — at <code style="background:rgba(0,0,0,0.1);padding:1px 5px;border-radius:3px">get_status()</code></strong>
+    <p style="margin-top:0.3rem;color:var(--warn-text)">Ask: <em>"Why do we check <code>ticks_ms()</code> instead of just checking <code>pir.value()</code>?"</em> The answer — we're asking "how long ago was motion?" not "is there motion right now?" — connects directly to Daniel's need for a calm environment over time, not just an instant snapshot.</p>
+  </div>
+
+  <!-- DANIEL'S UX PREVIEW -->
+  <p class="section-label">What Daniel sees — your dashboard goal</p>
+  <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.5rem">This is the dashboard your code will serve. Show this on the projector before students start so they understand what they're building.</p>
+
+  <div class="ux-preview">
+    <div class="ux-chrome">
+      <div class="ux-dot"></div><div class="ux-dot"></div><div class="ux-dot"></div>
+      <span class="ux-url">http://192.168.1.55/ — Rest Monitor</span>
+      <span class="ux-badge">Daniel's tablet view</span>
+    </div>
+    <div class="ux-states">
+
+      <!-- State: CALM -->
+      <div class="ux-state" style="border-top:3px solid #555">
+        <div class="ux-tiny">■ REST ENVIRONMENT MONITOR</div>
+        <div class="ux-sym" style="color:#d8d8d8">✓</div>
+        <div class="ux-status">CALM</div>
+        <div class="ux-msg">No movement for 4m 12s.<br>Room is ready for rest.</div>
+        <div class="ux-bar-wrap">
+          <div class="ux-bar-l">CALM DURATION</div>
+          <div class="ux-bar" style="color:#888;letter-spacing:3px">██████████</div>
+          <div class="ux-bar-s">252s / 60s threshold ✓</div>
+        </div>
+        <div class="ux-foot">Updates every 5 s — no interaction needed</div>
+        <div class="ux-state-label">State A — Room calm · safe to rest</div>
+      </div>
+
+      <!-- State: DETECTED -->
+      <div class="ux-state" style="border-top:3px dotted #444">
+        <div class="ux-tiny">■ REST ENVIRONMENT MONITOR</div>
+        <div class="ux-sym" style="color:#909090">●</div>
+        <div class="ux-status" style="color:#aaa">MOTION DETECTED</div>
+        <div class="ux-msg" style="color:#3e3e3e">Movement detected now.<br>Wait for room to settle.</div>
+        <div class="ux-bar-wrap">
+          <div class="ux-bar-l">CALM DURATION</div>
+          <div class="ux-bar" style="color:#333;letter-spacing:3px">█░░░░░░░░░</div>
+          <div class="ux-bar-s">6s / 60s threshold</div>
+        </div>
+        <div class="ux-foot" style="color:#1e1e1e">Updates every 5 s — no interaction needed</div>
+        <div class="ux-state-label" style="color:#282828">State B — Motion detected · not suitable</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="intro-callout">
+    <strong>🎨 Accessibility decisions — discuss with the class:</strong>
+    <ul style="margin-top:0.4rem;padding-left:1.1rem">
+      <li><strong>✓ and ●</strong> — symbols that are distinguishable without colour (Daniel has colour-vision deficiency)</li>
+      <li><strong>Border style changes</strong> — solid (calm) vs dotted (motion) — two different visual patterns</li>
+      <li><strong>Text progress bar</strong> — ██████████ vs █░░░░░░░░░ — readable without colour coding</li>
+      <li><strong>Auto-refresh every 5 s</strong> — Daniel never has to interact with it at all</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════ STEP-BY-STEP ═══════════════ -->
+  <p class="section-label">Step-by-step lesson — follow these in order</p>
+
+  <div class="step-list">
+
+    <!-- STEP 1 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">1</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 7 minutes</span>
+        <h3>Connect the PIR sensor to the IO Shield</h3>
+        <p>The Gravity PIR uses a 3-pin cable. It plugs straight into the IO Shield — no wires to count individually, no resistors needed.</p>
+
+        <table class="wire-table" style="margin:0.75rem 0">
+          <thead>
+            <tr><th>Do this</th><th>Where it goes</th><th>Why</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Check IO Shield is seated firmly on your FireBeetle 2</td>
+              <td>All header pins connected</td>
+              <td>Board must be connected before powering on</td>
+            </tr>
+            <tr>
+              <td>Take the 3-pin Gravity cable from the PIR bag</td>
+              <td>Plug one end into the PIR sensor</td>
+              <td>Only fits one way — keyed connector</td>
+            </tr>
+            <tr>
+              <td>Plug the other end into port <span class="pin-tag">D3</span> on the IO Shield</td>
+              <td>Digital port D3 → GPIO26</td>
+              <td>SIG wire carries HIGH when motion detected</td>
+            </tr>
+            <tr>
+              <td>Show your teacher, then plug in USB-C</td>
+              <td>USB-C → computer</td>
+              <td>Always check wiring before powering on</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top:0.5rem"><strong>Open Thonny</strong> — Run → Configure interpreter → <strong>MicroPython (ESP32)</strong> → choose your COM port → OK. You should see <code>>>></code> in the Shell. ✅</p>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">2</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 10 minutes</span>
+        <h3>Write and save boot.py — WiFi connection</h3>
+        <p>File → New in Thonny. Type the code below. <strong>Change the two WiFi lines</strong> to match the network your teacher has written on the board.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-fname">boot.py — save to MicroPython device</span>
+            <span class="code-lang">MicroPython</span>
+          </div>
+          <div class="code-body"><pre><span class="cm"># boot.py — runs automatically when the board powers on
+# Connects the ESP32 to WiFi so our web server can be reached</span>
+
+<span class="kw">import</span> network, time
+
+WIFI_NAME     = <span class="st">'YourNetworkName'</span>   <span class="cm"># ← change this</span>
+WIFI_PASSWORD = <span class="st">'YourPassword'</span>       <span class="cm"># ← change this</span>
+
+wlan = network.WLAN(network.STA_IF)
+wlan.active(<span class="nm">True</span>)
+wlan.connect(WIFI_NAME, WIFI_PASSWORD)
+
+<span class="cm"># ITERATION — wait up to 15 seconds for WiFi</span>
+timeout = <span class="nm">15</span>
+<span class="kw">while not</span> wlan.isconnected() <span class="kw">and</span> timeout > <span class="nm">0</span>:
+    time.sleep(<span class="nm">1</span>)
+    timeout -= <span class="nm">1</span>
+
+<span class="cm"># SELECTION — did we connect?</span>
+<span class="kw">if</span> wlan.isconnected():
+    print(<span class="st">'Connected! Open this in your browser:'</span>)
+    print(<span class="st">'  http://'</span> + wlan.ifconfig()[<span class="nm">0</span>])
+<span class="kw">else</span>:
+    print(<span class="st">'WiFi failed — check name and password'</span>)</pre></div>
+        </div>
+
+        <ol style="margin-top:0.5rem">
+          <li><strong>File → Save as… → MicroPython device</strong> → filename: <code>boot.py</code> → OK</li>
+          <li>Press the <strong>RST button</strong> on your FireBeetle 2</li>
+          <li>Watch the Shell — write down the IP address that appears, e.g. <code>192.168.1.55</code></li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">3</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 28 minutes</span>
+        <h3>Write and save main.py — sensor, algorithm, web server</h3>
+        <p>File → New (new tab). Read through the code with your teacher before typing — the comments explain every important line. Pay attention to <strong>Section 2</strong> (<code>get_status()</code>) — this is the algorithm that converts a sensor reading into a message for Daniel.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-fname">main.py — save to MicroPython device</span>
+            <span class="code-lang">MicroPython</span>
+          </div>
+          <div class="code-body"><pre><span class="cm"># main.py — PIR Motion Sensor Rest Monitor
+# FireBeetle 2 ESP32-E | EEDU IoT Kit | MicroPython
+# STARTING POINT — extend this code to build your own solution</span>
+
+<span class="kw">from</span> machine <span class="kw">import</span> Pin
+<span class="kw">import</span> socket, time
+
+
+<span class="cm"># ── SECTION 1: Hardware ───────────────────────────────────────
+# PIR Gravity cable → D3 port on IO Shield → GPIO26
+# pir.value() returns: 1 = motion detected, 0 = no motion</span>
+
+pir = Pin(<span class="nm">26</span>, Pin.IN)
+
+<span class="cm"># ticks_ms() counts milliseconds since the board powered on.
+# We record WHEN motion last happened so we can ask:
+# "how many seconds have passed since then?"</span>
+last_motion_ms = time.ticks_add(time.ticks_ms(), -<span class="nm">61000</span>)  <span class="cm"># start as if 61 s ago</span>
+
+CALM_SECONDS = <span class="nm">60</span>   <span class="cm"># room must be still for this many seconds</span>
+                     <span class="cm"># try changing to 10 during testing, reset to 60 after</span>
+
+
+<span class="cm"># ── SECTION 2: Algorithm ─────────────────────────────────────
+# This function answers Daniel's question:
+# "Is my room calm enough to rest right now?"
+#
+# Returns: state (str), symbol (str), message (str), seconds (int)</span>
+
+<span class="kw">def</span> <span class="fn">get_status</span>():
+    <span class="kw">global</span> last_motion_ms
+
+    <span class="cm"># Check PIR — update timer if motion is detected right now</span>
+    <span class="kw">if</span> pir.value() == <span class="nm">1</span>:
+        last_motion_ms = time.ticks_ms()
+
+    <span class="cm"># How many whole seconds since motion was last detected?</span>
+    elapsed_ms = time.ticks_diff(time.ticks_ms(), last_motion_ms)
+    seconds    = elapsed_ms // <span class="nm">1000</span>
+
+    <span class="cm"># SELECTION — 3-state decision based on PIR + elapsed time</span>
+    <span class="kw">if</span> pir.value() == <span class="nm">1</span>:
+        <span class="cm"># Motion is happening RIGHT NOW</span>
+        <span class="kw">return</span> <span class="st">'DETECTED'</span>, <span class="st">'\u25cf'</span>, <span class="st">'Movement detected now. Wait for calm.'</span>, seconds
+
+    <span class="kw">elif</span> seconds < CALM_SECONDS:
+        <span class="cm"># No motion right now but not enough time has passed yet</span>
+        remaining = CALM_SECONDS - seconds
+        msg = <span class="st">'Last movement {}s ago. Need {}s more of calm.'</span>.format(seconds, remaining)
+        <span class="kw">return</span> <span class="st">'SETTLING'</span>, <span class="st">'~'</span>, msg, seconds
+
+    <span class="kw">else</span>:
+        <span class="cm"># Room has been undisturbed long enough — suitable for rest</span>
+        mins    = seconds // <span class="nm">60</span>
+        sec_rem = seconds % <span class="nm">60</span>
+        duration = <span class="st">'{}m {}s'</span>.format(mins, sec_rem) <span class="kw">if</span> mins > <span class="nm">0</span> <span class="kw">else</span> <span class="st">'{}s'</span>.format(seconds)
+        <span class="kw">return</span> <span class="st">'CALM'</span>, <span class="st">'\u2713'</span>, <span class="st">'No movement for {}. Room is ready.'</span>.format(duration), seconds
+
+
+<span class="cm"># ── SECTION 3: Build the HTML page ───────────────────────────
+# Generates the page Daniel sees on his tablet.
+# Design: dark background, high contrast, symbols not colours.</span>
+
+<span class="kw">def</span> <span class="fn">build_page</span>(state, symbol, message, seconds):
+
+    <span class="cm"># Text progress bar — fills as the room stays calm</span>
+    filled = min(<span class="nm">10</span>, seconds * <span class="nm">10</span> // CALM_SECONDS)
+    bar    = <span class="st">'\u2588'</span> * filled + <span class="st">'\u2591'</span> * (<span class="nm">10</span> - filled)   <span class="cm"># █ and ░</span>
+    bar_sub = <span class="st">'{}s / {}s threshold'</span>.format(min(seconds, CALM_SECONDS), CALM_SECONDS)
+
+    <span class="cm"># Border STYLE changes with state — accessible without colour</span>
+    <span class="kw">if</span>   state == <span class="st">'CALM'</span>:     border = <span class="st">'border:3px solid #ddd'</span>
+    <span class="kw">elif</span> state == <span class="st">'SETTLING'</span>: border = <span class="st">'border:3px dashed #aaa'</span>
+    <span class="kw">else</span>:                      border = <span class="st">'border:3px dotted #777'</span>
+
+    <span class="kw">return</span> <span class="st">"""&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;meta name="viewport" content="width=device-width,initial-scale=1"&gt;
+&lt;meta http-equiv="refresh" content="5"&gt;
+&lt;title&gt;Rest Monitor&lt;/title&gt;
+&lt;style&gt;
+  body{{background:#111;color:#eee;font-family:monospace;
+       display:flex;flex-direction:column;align-items:center;
+       min-height:100vh;padding:20px 14px;gap:14px}}
+  h1{{font-size:.75rem;letter-spacing:4px;color:#444;text-transform:uppercase}}
+  .card{{background:#1c1c1c;border-radius:10px;
+         padding:22px 24px;text-align:center;width:100%;max-width:380px}}
+  .sym{{font-size:4rem;line-height:1.1}}
+  .state{{font-size:1.2rem;font-weight:bold;letter-spacing:1px;margin:6px 0 4px}}
+  .msg{{font-size:.84rem;color:#666;line-height:1.55}}
+  .bwrap{{background:#141414;border:1px solid #1e1e1e;border-radius:7px;
+          padding:10px 12px;width:100%;max-width:380px}}
+  .bl{{font-size:.56rem;letter-spacing:2px;color:#333;text-transform:uppercase}}
+  .bar{{font-size:1rem;letter-spacing:4px;color:#888;margin:4px 0 2px}}
+  .bs{{font-size:.6rem;color:#2e2e2e}}
+  footer{{font-size:.6rem;color:#252525;text-align:center}}
+&lt;/style&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;&amp;#9632; REST ENVIRONMENT MONITOR&lt;/h1&gt;
+  &lt;div class="card" style="{border};background:#1c1c1c;border-radius:10px;
+                            padding:22px 24px;text-align:center;
+                            width:100%;max-width:380px"&gt;
+    &lt;div class="sym"&gt;{symbol}&lt;/div&gt;
+    &lt;div class="state"&gt;{state}&lt;/div&gt;
+    &lt;div class="msg"&gt;{message}&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="bwrap"&gt;
+    &lt;div class="bl"&gt;CALM DURATION&lt;/div&gt;
+    &lt;div class="bar"&gt;{bar}&lt;/div&gt;
+    &lt;div class="bs"&gt;{bar_sub}&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;footer&gt;Updates every 5 s &amp;mdash; no interaction needed &amp;middot; FireBeetle 2 &amp;middot; PIR&lt;/footer&gt;
+&lt;/body&gt;&lt;/html&gt;"""</span>.format(
+        border=border, symbol=symbol, state=state,
+        message=message, bar=bar, bar_sub=bar_sub
+    )
+
+
+<span class="cm"># ── SECTION 4: Web Server ─────────────────────────────────────
+# ITERATION: while True loop — wait for a browser to connect,
+# send the HTML page, then loop back and wait again.</span>
+
+server = socket.socket()
+server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="nm">1</span>)
+server.bind((<span class="st">''</span>, <span class="nm">80</span>))   <span class="cm"># port 80 = standard HTTP</span>
+server.listen(<span class="nm">3</span>)
+print(<span class="st">'Server ready — open your IP address in a browser'</span>)
+
+<span class="kw">while True</span>:                 <span class="cm"># ITERATION — run forever</span>
+    <span class="kw">try</span>:
+        conn, _ = server.accept()        <span class="cm"># wait for browser to connect</span>
+        conn.recv(<span class="nm">1024</span>)                  <span class="cm"># read the request (we ignore it)</span>
+
+        state, symbol, message, seconds = get_status()
+
+        print(<span class="st">'[{}] {}s since motion'</span>.format(state, seconds))  <span class="cm"># debug</span>
+
+        page     = build_page(state, symbol, message, seconds)
+        response = (<span class="st">'HTTP/1.1 200 OK\r\n'</span>
+                    <span class="st">'Content-Type: text/html\r\n'</span>
+                    <span class="st">'Connection: close\r\n\r\n'</span> + page)
+        conn.sendall(response.encode())
+        conn.close()
+
+    <span class="kw">except</span> Exception <span class="kw">as</span> e:
+        print(<span class="st">'Error:'</span>, e)
+        <span class="kw">try</span>: conn.close()
+        <span class="kw">except</span>: <span class="kw">pass</span></pre></div>
+        </div>
+
+        <ol style="margin-top:0.6rem">
+          <li><strong>File → Save as… → MicroPython device → </strong><code>main.py</code> → OK</li>
+          <li>Press the <strong>RST button</strong> on your FireBeetle 2</li>
+          <li>Watch the Shell — you should see: <code>Server ready — open your IP address in a browser</code></li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">4</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 10 minutes</span>
+        <h3>Open the dashboard and test it</h3>
+        <ol>
+          <li>Make sure your computer or phone is on <strong>the same WiFi network</strong> as the FireBeetle 2</li>
+          <li>Open any web browser — type <code>http://</code> followed by the IP address you wrote down, e.g. <code>http://192.168.1.55</code></li>
+          <li>You should see the Rest Monitor dashboard with a large symbol and status message ✅</li>
+        </ol>
+
+        <p style="margin-top:0.6rem"><strong>Test the three states:</strong></p>
+        <ul>
+          <li><strong>Wave your hand</strong> at the PIR — it should switch to <strong>MOTION DETECTED ●</strong> within 5 s</li>
+          <li><strong>Keep still</strong> — after ~10 s it should show <strong>SETTLING ~</strong> (counting up toward 60 s)</li>
+          <li><strong>Set <code>CALM_SECONDS = 10</code></strong> temporarily — wait 10 s to see <strong>CALM ✓</strong> faster during testing</li>
+          <li>Check the Thonny Shell — each page visit prints the current state and seconds</li>
+        </ul>
+
+        <p style="margin-top:0.6rem"><strong>Reset to <code>CALM_SECONDS = 60</code></strong> once you've seen all three states working.</p>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">5</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 5 minutes</span>
+        <h3>Journal entry — document and reflect</h3>
+        <ol>
+          <li>Take a <strong>screenshot of your working dashboard</strong> showing CALM ✓ — paste into OneNote with today's date</li>
+          <li>Take a screenshot showing MOTION DETECTED ● or SETTLING ~</li>
+          <li>In your journal, answer both questions:</li>
+        </ol>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0.75rem 1rem;margin-top:0.5rem;font-size:0.88rem;">
+          <p style="margin:0 0 0.4rem;color:var(--primary-dark);font-weight:700">📓 Journal questions</p>
+          <p style="margin:0 0 0.3rem;color:var(--text)"><strong>Q1.</strong> The code uses <code>ticks_ms()</code> to track time rather than checking <code>pir.value()</code> directly. Explain <em>why</em> this produces more useful information for Daniel.</p>
+          <p style="margin:0;color:var(--text)"><strong>Q2.</strong> Find and label one example of <strong>selection</strong> and one example of <strong>iteration</strong> in your code. Write the line numbers in your journal.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /step-list -->
+
+  <!-- EXTEND THIS CODE -->
+  <p class="section-label">Where to go next — extend your starting point</p>
+  <div class="assessment-prep">
+    <h2>🔨 Ideas for extending this solution</h2>
+    <p class="assessment-intro">This starting-point code meets the basic requirements. Here are ways to make it more complete and move toward a higher-quality FIA2 submission. Choose what makes sense for your design and justify your choices in your journal.</p>
+    <div class="resource-grid">
+      <div class="resource-card">
+        <span class="resource-tag">Threshold</span>
+        <h3>Justify the 60-second threshold</h3>
+        <p>Why 60 seconds? Is it the right amount for Daniel? Find one research source about sleep environment and explain whether you would change this value and why.</p>
+        <p style="font-size:0.8rem;color:var(--muted)"><em>Connects to: Determining &amp; Synthesising — success criteria justification</em></p>
+      </div>
+      <div class="resource-card">
+        <span class="resource-tag">Algorithm</span>
+        <h3>Add a STARTING UP state</h3>
+        <p>PIR sensors fire false readings for ~30 s after power-on. Add a check using <code>ticks_diff()</code> from startup to suppress readings during warm-up.</p>
+        <p style="font-size:0.8rem;color:var(--muted)"><em>Connects to: Generating — accuracy and maintainability of programmed components</em></p>
+      </div>
+      <div class="resource-card">
+        <span class="resource-tag">Sensor</span>
+        <h3>Add temperature &amp; humidity (Lesson 2)</h3>
+        <p>Add the DHT11, DHT22, or DHT20 to check temperature (16–22°C) and humidity (&lt;70%) as additional conditions. Dashboard gains reading tiles and a combined score.</p>
+        <p style="font-size:0.8rem;color:var(--muted)"><em>Connects to: Generating — data components, additional programmed conditions</em></p>
+      </div>
+      <div class="resource-card">
+        <span class="resource-tag">UX</span>
+        <h3>Improve Daniel's dashboard</h3>
+        <p>Modify <code>build_page()</code> in <code>main.py</code>. Try larger fonts, different symbols, or an additional advice section. Each change should be justified by a success criterion.</p>
+        <p style="font-size:0.8rem;color:var(--muted)"><em>Connects to: Evaluating — user experience refinements</em></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TROUBLESHOOTING -->
+  <div class="teacher-note" style="margin-top:1.25rem">
+    <strong>🚨 Troubleshooting — if something's not working</strong>
+    <ul style="margin-top:0.4rem;padding-left:1.1rem;color:var(--warn-text)">
+      <li><strong>COM port not found in Thonny</strong> — try a different USB cable (must be a data cable, not charge-only)</li>
+      <li><strong>WiFi connection fails</strong> — check SSID and password are exactly right. Network must be 2.4 GHz. Try your phone's hotspot.</li>
+      <li><strong>Page won't load in browser</strong> — are you on the same network as the FireBeetle 2? Did you type the IP correctly from the Shell?</li>
+      <li><strong>PIR fires immediately on startup</strong> — this is normal warm-up behaviour. Wait 30 seconds.</li>
+      <li><strong>"File not found" or code not running</strong> — did you save to "MicroPython device" not "This computer"? Check the file panel in Thonny.</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>Digital Solutions Unit 1 · FIA2 Project · St Peters Lutheran College Springfield · Ms Baessler</p>
+    <p style="margin-top:0.3rem;font-size:0.82rem">
+      EEDU IoT Kit (TEM2022B-EN-1) · FireBeetle 2 ESP32-E · Gravity PIR · D3 / GPIO26 · MicroPython · Thonny IDE
+    </p>
+  </footer>
+
+</div><!-- /container -->
+</body>
+</html>
