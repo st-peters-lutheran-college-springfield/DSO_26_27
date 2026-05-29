@@ -142,7 +142,7 @@
 
     .resource-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1rem;
     }
 
@@ -230,6 +230,12 @@
       color: var(--muted);
       font-size: 0.92rem;
     }
+
+    @media (max-width: 900px) {
+      .resource-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -279,16 +285,6 @@
       <h2 id="suggested-learning-sequence">Suggested Learning Sequence</h2>
       <p class="assessment-intro">Use these links to move into the Unit 1 suggested learning sequence pages.</p>
       <div class="resource-grid">
-        <article class="resource-card">
-        <article class="resource-card">
-          <div class="resource-tag">Student page</div>
-          <h3>Student Hub</h3>
-          <p>Access the student-facing hub page for Unit 1 suggested learning sequence materials.</p>
-          <div class="resource-actions">
-            <a class="btn btn-primary" href="./Unit%201/Suggested%20Learning%20Sequence/student_hub.html">Open student hub</a>
-          </div>
-        </article>
-
         <article class="resource-card">
           <div class="resource-tag">Lesson today</div>
           <h3>PIR Motion Sensor Rest Monitor</h3>
@@ -340,8 +336,7 @@
             <a class="btn btn-primary" href="./Unit%201/Assessment%20exemplar/fia2_student_scaffold.html">Open student scaffold</a>
           </div>
         </article>
-
-        
+      </div>
 
       <div class="teacher-note">
         <strong>Classroom note:</strong> Students should use the scaffold to plan and structure their own writing. Exemplars are for modelling strong features, not copying.
