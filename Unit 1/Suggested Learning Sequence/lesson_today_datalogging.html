@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson Today — Data Logging &amp; Patterns | EEDU IoT Kit</title>
+<style>
+  /* ── style.css ── */
+  :root {
+    color-scheme: light;
+    --bg: #f4f7fb;
+    --surface: #ffffff;
+    --primary: #1d4ed8;
+    --primary-dark: #1e3a8a;
+    --accent: #c8102e;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #dbe2f0;
+    --success-bg: #ecfdf5;
+    --success-border: #a7f3d0;
+    --success-text: #047857;
+    --warn-bg: #fef3c7;
+    --warn-border: #fcd34d;
+    --warn-text: #92400e;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+  .top-nav { margin-bottom: 1.25rem; }
+  .top-nav a { color: var(--primary); text-decoration: none; font-weight: 700; }
+  .crumb-current { color: var(--muted); font-weight: 600; }
+  .hero { background: linear-gradient(135deg, var(--surface), #eef4ff); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1rem; box-shadow: 0 8px 24px rgba(29,78,216,0.06); }
+  h1 { margin: 0; color: var(--primary); font-size: clamp(1.6rem,3vw,2.4rem); }
+  .subtitle { margin-top: 0.5rem; color: var(--muted); max-width: 70ch; }
+  .intro-callout { margin-top: 1rem; background: var(--success-bg); border: 1px solid var(--success-border); border-left: 5px solid var(--success-text); border-radius: 12px; padding: 1rem 1.1rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1rem; box-shadow: 0 4px 14px rgba(15,23,42,0.04); }
+  .card h2 { margin-top: 0; margin-bottom: 0.5rem; font-size: 1.05rem; color: var(--primary); }
+  .assessment-prep { margin-top: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; box-shadow: 0 6px 20px rgba(15,23,42,0.05); }
+  .assessment-prep h2 { margin-top: 0; color: var(--primary-dark); }
+  .learning-path { margin-top: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; box-shadow: 0 6px 20px rgba(15,23,42,0.05); }
+  .learning-path h2 { margin-top: 0; color: var(--primary-dark); }
+  .assessment-intro { color: var(--muted); margin-bottom: 1rem; max-width: 75ch; }
+  .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+  .resource-card { border: 1px solid var(--border); border-radius: 14px; padding: 1rem; background: linear-gradient(180deg, #ffffff, #f8fbff); }
+  .resource-tag { display: inline-block; font-size: 0.78rem; font-weight: 700; color: white; background: var(--accent); border-radius: 999px; padding: 0.25rem 0.6rem; margin-bottom: 0.75rem; }
+  .resource-card h3 { margin: 0 0 0.5rem; color: var(--primary-dark); font-size: 1.08rem; }
+  .resource-card p { margin: 0 0 0.9rem; color: var(--muted); }
+  .resource-card ul { margin: 0 0 1rem; padding-left: 1.15rem; }
+  .resource-card li { margin-bottom: 0.35rem; }
+  .resource-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .btn { display: inline-block; text-decoration: none; font-weight: 700; border-radius: 10px; padding: 0.65rem 0.95rem; transition: transform 0.15s ease, box-shadow 0.15s ease; font-size: 0.9rem; }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(29,78,216,0.15); }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-secondary { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+  .teacher-note { margin-top: 1rem; background: var(--warn-bg); border: 1px solid var(--warn-border); border-left: 5px solid var(--warn-text); border-radius: 12px; padding: 0.9rem 1rem; color: var(--warn-text); }
+  ul { margin: 0; padding-left: 1.15rem; }
+  footer { margin-top: 2rem; text-align: center; color: var(--muted); font-size: 0.92rem; }
+
+  /* ── supplemental — matching Lessons 1 & 2 ── */
+  .site-header { background: var(--primary-dark); color: #fff; padding: 0.6rem 1rem; font-size: 0.82rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .site-header span { opacity: 0.55; }
+  .site-header a { color: rgba(255,255,255,0.65); text-decoration: none; margin-left: auto; font-size: 0.8rem; }
+
+  .lesson-banner { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: #fff; padding: 2.4rem 1rem 2rem; position: relative; overflow: hidden; }
+  .lesson-banner::before { content: ''; position: absolute; top: -40px; right: -40px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.06); pointer-events: none; }
+  .lesson-banner::after { content: ''; position: absolute; bottom: -60px; left: -30px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.04); pointer-events: none; }
+  .lesson-banner-inner { max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
+  .lesson-eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; padding: 0.3rem 0.85rem; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 0.85rem; }
+  .lesson-banner h1 { color: #fff; font-size: clamp(1.7rem,4vw,2.8rem); line-height: 1.15; margin: 0 0 0.55rem; }
+  .lesson-banner h1 em { opacity: 0.72; font-style: normal; font-weight: 400; }
+  .lesson-banner p { color: rgba(255,255,255,0.75); font-size: 0.96rem; max-width: 58ch; margin: 0 0 1.1rem; line-height: 1.6; }
+  .lesson-meta-row { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .lmeta { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.22); border-radius: 999px; padding: 0.22rem 0.7rem; font-size: 0.77rem; font-weight: 600; color: rgba(255,255,255,0.92); }
+
+  .section-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 1.75rem 0 0.7rem; display: flex; align-items: center; gap: 0.5rem; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* wiring */
+  .wire-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  .wire-table th { background: #eff6ff; color: var(--primary-dark); text-align: left; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border); }
+  .wire-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--bg); color: var(--text); }
+  .wire-table tr:hover td { background: var(--bg); }
+  .pin-tag { display: inline-block; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 5px; padding: 1px 8px; font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--primary-dark); font-weight: 700; }
+  .pin-tag.i2c { background: #f0fdf4; border-color: var(--success-border); color: var(--success-text); }
+
+  /* gravity visual */
+  .gravity-visual { display: flex; align-items: center; gap: 1.25rem; background: #f8fbff; border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin: 0.75rem 0; flex-wrap: wrap; }
+  .gconn { background: var(--surface); border: 2px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; text-align: center; min-width: 120px; }
+  .gconn h5 { margin: 0 0 0.5rem; font-size: 0.78rem; color: var(--primary-dark); text-transform: uppercase; letter-spacing: 0.5px; }
+  .gpins { display: flex; gap: 4px; justify-content: center; margin-bottom: 5px; }
+  .gpin { width: 16px; height: 24px; border-radius: 3px; border: 1px solid var(--border); }
+  .gpin.blk { background: #1f2937; } .gpin.red { background: #ef4444; }
+  .gpin.yel { background: #d97706; } .gpin.whi { background: #f3f4f6; border-color: #d1d5db; }
+  .gpin-label { font-size: 0.62rem; color: var(--muted); font-family: monospace; }
+  .garrow { font-size: 1.6rem; color: var(--success-text); }
+  .gport-label { display: inline-block; background: var(--success-text); color: #fff; border-radius: 6px; padding: 3px 10px; font-size: 0.78rem; font-weight: 700; font-family: monospace; margin-top: 6px; }
+
+  /* step cards */
+  .step-list { display: flex; flex-direction: column; gap: 0; }
+  .step-item { display: grid; grid-template-columns: 52px 1fr; border: 1px solid var(--border); border-top: none; background: var(--surface); }
+  .step-item:first-child { border-top: 1px solid var(--border); border-radius: 12px 12px 0 0; }
+  .step-item:last-child { border-radius: 0 0 12px 12px; }
+  .step-num-col { background: #eff6ff; border-right: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: center; padding-top: 1.1rem; }
+  .step-circle { width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+  .step-body { padding: 1rem 1.1rem; }
+  .step-body h3 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--primary-dark); }
+  .step-body p { margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--muted); }
+  .step-body ol, .step-body ul { font-size: 0.88rem; color: var(--text); padding-left: 1.15rem; margin: 0.3rem 0; }
+  .step-body li { margin-bottom: 0.3rem; }
+  .step-time { display: inline-block; font-size: 0.72rem; font-weight: 700; background: #eff6ff; color: var(--primary); border: 1px solid #bfdbfe; border-radius: 999px; padding: 0.1rem 0.6rem; margin-bottom: 0.5rem; }
+
+  /* code blocks — blue-tinted */
+  .code-block { background: #0c1a3a; border-radius: 12px; overflow: hidden; margin: 0.75rem 0; border: 1px solid #1e3a8a; }
+  .code-header { background: #132047; padding: 0.5rem 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e3a8a; }
+  .code-fname { font-family: 'Courier New', monospace; font-size: 0.75rem; color: #93c5fd; }
+  .code-lang { font-family: 'Courier New', monospace; font-size: 0.65rem; color: #3b5fc0; text-transform: uppercase; letter-spacing: 1px; }
+  .code-body { padding: 1rem 1.1rem; overflow-x: auto; }
+  .code-body pre { font-family: 'Courier New', monospace; font-size: 0.82rem; color: #bfdbfe; white-space: pre; line-height: 1.75; margin: 0; }
+  .kw { color: #93c5fd; font-weight: 600; } .cm { color: #3b5fc0; font-style: italic; }
+  .st { color: #86efac; } .fn { color: #e0f2fe; } .nm { color: #fbbf24; }
+
+  /* concept tags */
+  .concept-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.5rem; }
+  .ctag { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 0.15rem 0.55rem; font-size: 0.75rem; color: var(--primary); font-weight: 600; }
+
+  /* sc chips */
+  .sc-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+  .sc-chip { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.35rem 0.75rem; font-size: 0.82rem; color: var(--primary-dark); display: flex; align-items: center; gap: 0.4rem; }
+  .sc-chip strong { color: var(--primary); }
+
+  /* starting point box */
+  .starting-point-box { background: #eff6ff; border: 1px solid #bfdbfe; border-left: 5px solid var(--primary); border-radius: 12px; padding: 1rem 1.1rem; margin: 1rem 0; }
+  .starting-point-box h3 { margin: 0 0 0.35rem; color: var(--primary-dark); font-size: 0.96rem; }
+  .starting-point-box p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+
+  /* dashboard preview — blue dark */
+  .ux-preview { background: #0a1628; border: 2px solid #1e3a8a; border-radius: 14px; overflow: hidden; margin: 0.75rem 0; }
+  .ux-chrome { background: #0f2044; border-bottom: 1px solid #1e3a8a; padding: 8px 14px; display: flex; align-items: center; gap: 8px; }
+  .ux-dot { width: 9px; height: 9px; border-radius: 50%; background: #1e3a8a; }
+  .ux-url { font-family: monospace; font-size: 0.68rem; color: #2d4a7a; margin-left: 8px; }
+  .ux-badge { font-family: monospace; font-size: 0.62rem; color: #1e3a8a; margin-left: auto; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* history table in preview */
+  .log-preview { padding: 16px; font-family: monospace; }
+  .log-title { font-size: 0.6rem; letter-spacing: 3px; color: #1e3a8a; text-transform: uppercase; margin-bottom: 10px; text-align: center; }
+  .log-table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+  .log-table th { color: #2d4a7a; text-align: left; padding: 4px 8px; border-bottom: 1px solid #1e3a8a; font-size: 0.62rem; letter-spacing: 1px; text-transform: uppercase; }
+  .log-table td { padding: 5px 8px; border-bottom: 1px solid #0f2044; color: #93c5fd; }
+  .log-table td.ok { color: #86efac; } .log-table td.warn { color: #fbbf24; } .log-table td.bad { color: #f87171; }
+  .log-nav { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+  .log-link { font-size: 0.62rem; color: #2d4a7a; font-family: monospace; padding: 3px 8px; border: 1px solid #1e3a8a; border-radius: 4px; }
+
+  /* data repo concept diagram */
+  .repo-diagram { display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap; margin: 0.75rem 0; padding: 1.25rem; background: #f8fbff; border: 1px solid var(--border); border-radius: 12px; }
+  .repo-node { background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 12px 16px; text-align: center; min-width: 130px; }
+  .repo-node h4 { font-size: 0.78rem; font-weight: 700; color: var(--primary-dark); margin: 0 0 4px; }
+  .repo-node p { font-size: 0.72rem; color: var(--muted); margin: 0; }
+  .repo-node.highlight { border-color: var(--primary); background: #eff6ff; }
+  .repo-node.highlight h4 { color: var(--primary); }
+  .repo-arrow { font-size: 1.5rem; color: var(--primary); padding: 0 12px; }
+  .repo-arrow small { display: block; font-size: 0.62rem; color: var(--muted); text-align: center; margin-top: 2px; }
+
+  /* route table */
+  .route-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; margin: 0.6rem 0; }
+  .route-table th { background: #eff6ff; color: var(--primary-dark); text-align: left; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border); }
+  .route-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--bg); color: var(--text); }
+  .route-table tr:hover td { background: var(--bg); }
+  .method-tag { display: inline-block; background: #eff6ff; border: 1px solid #bfdbfe; color: var(--primary); border-radius: 5px; padding: 1px 8px; font-family: monospace; font-size: 0.78rem; font-weight: 700; }
+
+  /* extend grid */
+  .extend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 0.75rem; margin: 0.75rem 0; }
+  .extend-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: 10px; padding: 0.85rem 1rem; }
+  .extend-card h4 { margin: 0 0 0.3rem; font-size: 0.9rem; color: var(--primary-dark); }
+  .extend-card p { margin: 0; font-size: 0.83rem; color: var(--muted); }
+
+  /* video grid */
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 0.75rem 0; }
+  .video-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .video-wrap { position: relative; padding-bottom: 56.25%; height: 0; background: var(--primary-dark); }
+  .video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+  .video-info { padding: 0.75rem 0.9rem; }
+  .video-info h4 { margin: 0 0 0.25rem; font-size: 0.88rem; color: var(--primary-dark); line-height: 1.35; }
+  .video-info p { margin: 0; font-size: 0.77rem; color: var(--muted); }
+  .vtag { display: inline-block; margin-top: 5px; background: #eff6ff; border: 1px solid #bfdbfe; color: var(--primary); border-radius: 4px; padding: 1px 7px; font-size: 0.68rem; font-family: monospace; }
+
+  @media (max-width: 600px) {
+    .step-item { grid-template-columns: 40px 1fr; }
+    .gravity-visual { flex-direction: column; }
+    .repo-diagram { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <strong>St Peters Lutheran College Springfield</strong>
+  <span>·</span><span>Digital Solutions — Unit 1</span>
+  <span>·</span><span>Ms Baessler</span>
+  <a href="index.html">← Back to Hub</a>
+</div>
+
+<div class="lesson-banner">
+  <div class="lesson-banner-inner">
+    <div class="lesson-eyebrow">📅 Lesson Today &nbsp;·&nbsp; 60 minutes &nbsp;·&nbsp; Lesson 3 of 4</div>
+    <h1>Data Logging <em>— Track Patterns Over Time</em></h1>
+    <p>Add the <strong>RTC SD2405</strong> real-time clock to timestamp every sensor reading. Store readings in a log and serve a history page so Daniel — and you — can see how his room changes over time. Connects directly to the FIA2 <em>data repositories</em> requirement.</p>
+    <div class="lesson-meta-row">
+      <span class="lmeta">🧰 EEDU IoT Kit</span>
+      <span class="lmeta">🐍 MicroPython + Thonny</span>
+      <span class="lmeta">⏰ RTC SD2405 → I²C (0x32)</span>
+      <span class="lmeta">🗃️ In-memory data log (list)</span>
+      <span class="lmeta">📊 /history web page</span>
+      <span class="lmeta">📡 Builds on Lessons 1 &amp; 2</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- breadcrumb -->
+  <nav class="top-nav">
+    <a href="index.html">FIA2 Project Hub</a> &rsaquo;
+    <a href="lesson_today_pir.html">Lesson 1 — PIR</a> &rsaquo;
+    <a href="lesson_today_temp.html">Lesson 2 — Temp/Humidity</a> &rsaquo;
+    <span class="crumb-current">Lesson 3 — Data Logging</span>
+  </nav>
+
+  <div class="starting-point-box">
+    <h3>🔗 Builds on Lessons 1 &amp; 2</h3>
+    <p>You need your Lesson 2 <code>main.py</code> (PIR + temp/humidity + web server) working before starting today. The RTC connects to the same I²C bus as the DHT20 if you're using one — both can run simultaneously using the Gravity I²C Hub from the kit. Today you will <strong>replace</strong> <code>main.py</code> with a new version that adds timestamps and a history log.</p>
+  </div>
+
+  <div class="teacher-note">
+    <strong>👩‍🏫 Teacher — before the lesson</strong>
+    <ul style="margin-top:0.4rem;padding-left:1.1rem;color:var(--warn-text)">
+      <li>Lesson 2 must be working — all three sensors (PIR, temp/humidity, web server) before starting</li>
+      <li><strong>RTC I²C address is 0x32</strong> — does not conflict with DHT20 (0x38)</li>
+      <li>If using DHT20 + RTC simultaneously, students need the <strong>Gravity I²C Hub</strong> from the kit — one hub port for DHT20, one for RTC, hub into IO Shield I²C port</li>
+      <li>If using DHT11/22 (digital D2), the RTC connects directly to the I²C port — no hub needed</li>
+      <li><strong>RTC initial time set:</strong> students will set the RTC time once using the Shell. Demonstrate this on the projector — it only needs to happen once per board</li>
+      <li>Key teaching focus: the <code>log</code> list is an <strong>in-memory data repository</strong> — data is lost on reset. This limitation is the journal reflection prompt and connects to future database study in Unit 2</li>
+    </ul>
+  </div>
+
+  <!-- overview cards -->
+  <div class="grid">
+    <div class="card">
+      <h2>🎯 What you will add today</h2>
+      <ul style="font-size:0.87rem;color:var(--text)">
+        <li>Connect the RTC SD2405 to read the current date and time</li>
+        <li>Add a timestamp to every sensor reading</li>
+        <li>Store up to 50 readings in a log (a Python list)</li>
+        <li>New web route <code>/history</code> shows all logged readings</li>
+        <li>Dashboard footer shows time of last update</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>⏰ What is an RTC?</h2>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.5rem">RTC = Real-Time Clock. The SD2405 is a small I²C chip that keeps track of the current date and time — even when the board is powered off (it has its own battery).</p>
+      <ul style="font-size:0.87rem;color:var(--text)">
+        <li>I²C address: <code>0x32</code></li>
+        <li>Tracks: seconds, minutes, hours, day, month, year</li>
+        <li>Gravity 4-pin connector → I²C port on IO Shield</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>👤 Why this helps Daniel</h2>
+      <ul style="font-size:0.87rem;color:var(--text)">
+        <li>Daniel arrives home at different times — logged data shows whether conditions are typically better at 6am vs 2pm</li>
+        <li>Patterns reveal if the room is usually warm during afternoon, helping Daniel plan when to use a fan</li>
+        <li>Logging evidence of poor conditions justifies future improvements (e.g. better insulation)</li>
+        <li>Time-stamped data supports the FIA2 <em>data repository</em> requirement</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>💡 Programming concepts</h2>
+      <div class="concept-tags">
+        <span class="ctag">Data repository (list)</span>
+        <span class="ctag">I²C protocol (RTC)</span>
+        <span class="ctag">Iteration (log loop)</span>
+        <span class="ctag">Data structures (dict)</span>
+        <span class="ctag">Multiple HTTP routes</span>
+        <span class="ctag">String formatting</span>
+        <span class="ctag">BCD encoding</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- data repository concept -->
+  <p class="section-label">What is a data repository?</p>
+  <div class="assessment-prep" style="margin-top:0">
+    <h2>🗃️ Data repositories in FIA2</h2>
+    <p class="assessment-intro">The QCAA syllabus requires your solution to include a <em>data repository</em> — a structured place where data is stored so it can be retrieved later. Today's lesson uses an <strong>in-memory list</strong> as a simple data repository.</p>
+    <div class="repo-diagram">
+      <div class="repo-node">
+        <h4>Sensors</h4>
+        <p>PIR · Temp<br>Humidity · RTC</p>
+      </div>
+      <div class="repo-arrow">→<br><small>reading</small></div>
+      <div class="repo-node highlight">
+        <h4>📋 Log List</h4>
+        <p>In-memory<br>data repository<br>up to 50 entries</p>
+      </div>
+      <div class="repo-arrow">→<br><small>retrieve</small></div>
+      <div class="repo-node">
+        <h4>Web Routes</h4>
+        <p>/ dashboard<br>/history table<br>/data JSON</p>
+      </div>
+    </div>
+    <div class="teacher-note" style="margin-top:0.75rem">
+      <strong>📌 Limitation — discuss with students:</strong> The log list is stored in RAM. When the board resets, <strong>all data is lost</strong>. In a real product, you would save to a file or database (Unit 2 — Application and Data Solutions). Recording this limitation in your journal is part of the <strong>Evaluating</strong> criterion — justified recommendation for future improvement.
+    </div>
+  </div>
+
+  <p class="section-label">Success criteria for today</p>
+  <div class="sc-chips">
+    <div class="sc-chip"><strong>SC1</strong> RTC reads correct date and time</div>
+    <div class="sc-chip"><strong>SC2</strong> Every sensor reading is stored with a timestamp</div>
+    <div class="sc-chip"><strong>SC3</strong> /history page displays all logged readings in a table</div>
+    <div class="sc-chip"><strong>SC4</strong> Dashboard shows time of last update — live for Daniel</div>
+  </div>
+
+  <!-- STEP-BY-STEP -->
+  <p class="section-label">Step-by-step lesson — follow in order</p>
+
+  <div class="step-list">
+
+    <!-- STEP 1 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">1</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 8 minutes</span>
+        <h3>Connect the RTC SD2405 to the IO Shield</h3>
+        <p>The RTC uses a 4-pin Gravity cable and connects to an I²C port — the same type as the DHT20. If you are using a DHT20, you need the <strong>Gravity I²C Hub</strong> to connect both to the same bus.</p>
+
+        <div class="gravity-visual">
+          <div class="gconn">
+            <h5>RTC SD2405</h5>
+            <div class="gpins">
+              <div class="gpin blk"></div><div class="gpin red"></div>
+              <div class="gpin yel"></div><div class="gpin whi"></div>
+            </div>
+            <div class="gpin-label">GND · VCC · SCL · SDA</div>
+          </div>
+          <div class="garrow">→</div>
+          <div style="text-align:center;font-size:0.82rem;color:var(--muted)">4-pin Gravity<br>cable</div>
+          <div class="garrow">→</div>
+          <div class="gconn" style="border-color:var(--success-border)">
+            <h5>IO Shield</h5>
+            <div class="gpins">
+              <div class="gpin blk"></div><div class="gpin red"></div>
+              <div class="gpin yel"></div><div class="gpin whi"></div>
+            </div>
+            <div class="gpin-label">GND · VCC · SCL · SDA</div>
+            <span class="gport-label">I²C port</span>
+          </div>
+        </div>
+
+        <table class="wire-table">
+          <tr><th>RTC Wire</th><th>Port on IO Shield</th><th>GPIO</th></tr>
+          <tr><td>Black (GND)</td><td><span class="pin-tag i2c">I²C port</span></td><td>Ground</td></tr>
+          <tr><td>Red (VCC)</td><td><span class="pin-tag i2c">I²C port</span></td><td>3.3V power</td></tr>
+          <tr><td>Yellow (SCL)</td><td><span class="pin-tag i2c">I²C port</span></td><td>GPIO22</td></tr>
+          <tr><td>White/Blue (SDA)</td><td><span class="pin-tag i2c">I²C port</span></td><td>GPIO21</td></tr>
+        </table>
+
+        <div class="intro-callout" style="margin-top:0.75rem">
+          <strong>Using DHT20 as well?</strong> Connect both DHT20 and RTC into separate ports on the <strong>Gravity I²C Hub</strong>, then plug the hub into the IO Shield's I²C port. All four devices (PIR, DHT20, RTC, hub) can run simultaneously. I²C address of RTC is <strong>0x32</strong> — no conflict with DHT20 (0x38).
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">2</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 5 minutes</span>
+        <h3>Set the RTC time — run this once in the Thonny Shell</h3>
+        <p>The RTC needs to be set to the correct time once. After that it keeps time on its own battery. Paste the code below into the <strong>Thonny Shell</strong> (the bottom panel) — not into a file. Change the values to today's date and time.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-fname">Paste into the Thonny Shell — run once only</span>
+            <span class="code-lang">MicroPython Shell</span>
+          </div>
+          <div class="code-body"><pre><span class="kw">from</span> machine <span class="kw">import</span> I2C, Pin
+<span class="kw">import</span> time
+
+_i = I2C(<span class="nm">0</span>, scl=Pin(<span class="nm">22</span>), sda=Pin(<span class="nm">21</span>), freq=<span class="nm">100000</span>)
+_A = <span class="nm">0x32</span>
+
+<span class="cm"># ── SET THESE TO TODAY'S DATE AND TIME ─────────────────────
+# Format:  sec, min, hour, weekday(1=Mon), day, month, year</span>
+sec, mn, hr, wd, day, mon, yr = <span class="nm">0</span>, <span class="nm">30</span>, <span class="nm">9</span>, <span class="nm">1</span>, <span class="nm">30</span>, <span class="nm">5</span>, <span class="nm">25</span>
+<span class="cm"># ────────────────────────────────────────────────────────────</span>
+
+<span class="kw">def</span> <span class="fn">bcd</span>(v): <span class="kw">return</span> ((v // <span class="nm">10</span>) &lt;&lt; <span class="nm">4</span>) | (v % <span class="nm">10</span>)
+
+<span class="cm"># Enable write, set time, disable write</span>
+_i.writeto(_A, bytes([<span class="nm">0x10</span>, <span class="nm">0x80</span>]))
+_i.writeto(_A, bytes([<span class="nm">0x00</span>, bcd(sec), bcd(mn), bcd(hr), bcd(wd), bcd(day), bcd(mon), bcd(yr)]))
+_i.writeto(_A, bytes([<span class="nm">0x10</span>, <span class="nm">0x00</span>]))
+print(<span class="st">'RTC time set!'</span>)</pre></div>
+        </div>
+
+        <p style="font-size:0.86rem;color:var(--muted)">You should see <code>RTC time set!</code> in the Shell. The RTC will now keep time even after the board resets or powers off.</p>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">3</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 28 minutes</span>
+        <h3>Replace main.py — add timestamps, log, and /history route</h3>
+        <p>File → New in Thonny. This replaces your Lesson 2 <code>main.py</code>. Change the <code>SENSOR</code> line to match your temp/humidity module as before.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-fname">main.py — save to MicroPython device (replaces Lesson 2)</span>
+            <span class="code-lang">MicroPython · ESP32</span>
+          </div>
+          <div class="code-body"><pre><span class="cm"># main.py — Data Logging Rest Monitor
+# FireBeetle 2 ESP32-E | EEDU IoT Kit | Lesson 3
+# Adds: RTC timestamps + in-memory log + /history route
+#
+# SENSORS:
+#   PIR      → D3 port  (GPIO26)          ← Lesson 1
+#   Temp/Hum → D2 / I²C (GPIO25 / 0x38)  ← Lesson 2
+#   RTC SD2405 → I²C    (0x32)            ← NEW today</span>
+
+<span class="cm"># ── CHANGE TO MATCH YOUR SENSOR ─────────────────────────────</span>
+SENSOR = <span class="st">'DHT11'</span>   <span class="cm"># 'DHT11'  'DHT22'  'DHT20'</span>
+<span class="cm"># ────────────────────────────────────────────────────────────</span>
+
+MAX_LOG = <span class="nm">50</span>    <span class="cm"># maximum readings to keep in memory</span>
+
+<span class="kw">from</span> machine <span class="kw">import</span> Pin, I2C
+<span class="kw">import</span> socket, time
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════
+# SECTION 1 — RTC SD2405  (I²C address 0x32)
+# Reads the current date and time as a formatted string.
+# BCD = Binary Coded Decimal — the SD2405 stores time in this
+# format. bcd_to_int() converts each byte back to a number.
+# ════════════════════════════════════════════════════════════</span>
+
+_rtc_bus = I2C(<span class="nm">0</span>, scl=Pin(<span class="nm">22</span>), sda=Pin(<span class="nm">21</span>), freq=<span class="nm">100000</span>)
+RTC_ADDR = <span class="nm">0x32</span>
+
+<span class="kw">def</span> <span class="fn">bcd_to_int</span>(b): <span class="kw">return</span> (b &gt;&gt; <span class="nm">4</span>) * <span class="nm">10</span> + (b &amp; <span class="nm">0x0F</span>)
+
+<span class="kw">def</span> <span class="fn">read_rtc</span>():
+    <span class="st">"""
+    Read date and time from RTC SD2405.
+    Returns: formatted string 'HH:MM:SS DD/MM/YY'
+             or 'RTC error' if the sensor fails.
+    """</span>
+    <span class="kw">try</span>:
+        _rtc_bus.writeto(RTC_ADDR, bytes([<span class="nm">0x00</span>]))       <span class="cm"># point to register 0</span>
+        d = _rtc_bus.readfrom(RTC_ADDR, <span class="nm">7</span>)             <span class="cm"># read 7 bytes</span>
+        sec  = bcd_to_int(d[<span class="nm">0</span>] &amp; <span class="nm">0x7F</span>)
+        mn   = bcd_to_int(d[<span class="nm">1</span>] &amp; <span class="nm">0x7F</span>)
+        hr   = bcd_to_int(d[<span class="nm">2</span>] &amp; <span class="nm">0x3F</span>)
+        day  = bcd_to_int(d[<span class="nm">4</span>] &amp; <span class="nm">0x3F</span>)
+        mon  = bcd_to_int(d[<span class="nm">5</span>] &amp; <span class="nm">0x1F</span>)
+        yr   = bcd_to_int(d[<span class="nm">6</span>])
+        <span class="kw">return</span> <span class="st">'{:02d}:{:02d}:{:02d} {:02d}/{:02d}/{:02d}'</span>.format(hr, mn, sec, day, mon, yr)
+    <span class="kw">except</span> Exception <span class="kw">as</span> e:
+        print(<span class="st">'RTC error:'</span>, e)
+        <span class="kw">return</span> <span class="st">'RTC error'</span>
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════
+# SECTION 2 — Temp &amp; Humidity Sensor (same as Lesson 2)
+# ════════════════════════════════════════════════════════════</span>
+
+<span class="kw">if</span> SENSOR <span class="kw">in</span> (<span class="st">'DHT11'</span>, <span class="st">'DHT22'</span>):
+    <span class="kw">import</span> dht
+    _d = dht.DHT11(Pin(<span class="nm">25</span>)) <span class="kw">if</span> SENSOR == <span class="st">'DHT11'</span> <span class="kw">else</span> dht.DHT22(Pin(<span class="nm">25</span>))
+    <span class="kw">def</span> <span class="fn">read_sensor</span>():
+        <span class="kw">try</span>:
+            _d.measure()
+            <span class="kw">return</span> float(_d.temperature()), float(_d.humidity())
+        <span class="kw">except</span> OSError: <span class="kw">return</span> <span class="nm">None</span>, <span class="nm">None</span>
+<span class="kw">else</span>:
+    _A20 = <span class="nm">0x38</span>
+    time.sleep_ms(<span class="nm">100</span>)
+    <span class="kw">try</span>:
+        s = _rtc_bus.readfrom(_A20, <span class="nm">1</span>)[<span class="nm">0</span>]
+        <span class="kw">if</span> (s &amp; <span class="nm">0x18</span>) != <span class="nm">0x18</span>:
+            <span class="kw">for</span> c <span class="kw">in</span> (<span class="nm">b</span><span class="st">'\x1B\x00\x00'</span>, <span class="nm">b</span><span class="st">'\x1C\x00\x00'</span>, <span class="nm">b</span><span class="st">'\x1E\x00\x00'</span>): _rtc_bus.writeto(_A20, c)
+    <span class="kw">except</span>: <span class="kw">pass</span>
+    <span class="kw">def</span> <span class="fn">read_sensor</span>():
+        <span class="kw">try</span>:
+            _rtc_bus.writeto(_A20, <span class="nm">b</span><span class="st">'\xAC\x33\x00'</span>); time.sleep_ms(<span class="nm">80</span>)
+            d = _rtc_bus.readfrom(_A20, <span class="nm">6</span>)
+            <span class="kw">if</span> d[<span class="nm">0</span>] &amp; <span class="nm">0x80</span>: <span class="kw">return</span> <span class="nm">None</span>, <span class="nm">None</span>
+            h = round(((d[<span class="nm">1</span>]&lt;&lt;<span class="nm">12</span>)|(d[<span class="nm">2</span>]&lt;&lt;<span class="nm">4</span>)|(d[<span class="nm">3</span>]&gt;&gt;<span class="nm">4</span>))/<span class="nm">1048576</span>*<span class="nm">100</span>,<span class="nm">1</span>)
+            t = round(((d[<span class="nm">3</span>]&amp;<span class="nm">0x0F</span>)&lt;&lt;<span class="nm">16</span>|d[<span class="nm">4</span>]&lt;&lt;<span class="nm">8</span>|d[<span class="nm">5</span>])/<span class="nm">1048576</span>*<span class="nm">200</span>-<span class="nm">50</span>,<span class="nm">1</span>)
+            <span class="kw">return</span> t, h
+        <span class="kw">except</span>: <span class="kw">return</span> <span class="nm">None</span>, <span class="nm">None</span>
+
+print(<span class="st">'Sensor:'</span>, SENSOR, <span class="st">'| RTC at 0x32 | PIR at GPIO26'</span>)
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════
+# SECTION 3 — PIR (unchanged from Lessons 1 &amp; 2)
+# ════════════════════════════════════════════════════════════</span>
+
+pir = Pin(<span class="nm">26</span>, Pin.IN)
+last_motion_ms = time.ticks_add(time.ticks_ms(), -<span class="nm">61000</span>)
+CALM_SECONDS   = <span class="nm">60</span>
+WARMUP_MS      = <span class="nm">30000</span>
+startup_ms     = time.ticks_ms()
+
+<span class="kw">def</span> <span class="fn">check_pir</span>():
+    <span class="kw">global</span> last_motion_ms
+    <span class="kw">if</span> pir.value() == <span class="nm">1</span>: last_motion_ms = time.ticks_ms()
+    <span class="kw">return</span> pir.value() == <span class="nm">1</span>
+
+<span class="kw">def</span> <span class="fn">seconds_since_motion</span>():
+    <span class="kw">return</span> time.ticks_diff(time.ticks_ms(), last_motion_ms) // <span class="nm">1000</span>
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════
+# SECTION 4 — Algorithm (same 3-condition logic as Lesson 2)
+# ════════════════════════════════════════════════════════════</span>
+
+TEMP_MIN, TEMP_MAX, HUM_MAX = <span class="nm">16.0</span>, <span class="nm">22.0</span>, <span class="nm">70.0</span>
+
+<span class="kw">def</span> <span class="fn">evaluate_rest</span>(temp, hum):
+    motion_now = check_pir()
+    secs       = seconds_since_motion()
+    warmup     = time.ticks_diff(time.ticks_ms(), startup_ms) &lt; WARMUP_MS
+    motion_ok  = (not motion_now) and (secs &gt;= CALM_SECONDS) and (not warmup)
+    temp_ok    = temp is not <span class="nm">None</span> and TEMP_MIN &lt;= temp &lt;= TEMP_MAX
+    hum_ok     = hum  is not <span class="nm">None</span> and hum &lt;= HUM_MAX
+    score      = (1 if motion_ok else 0) + (1 if temp_ok else 0) + (1 if hum_ok else 0)
+    <span class="kw">if</span> warmup:
+        status, advice = <span class="st">'STARTING UP'</span>, <span class="st">'Sensors warming up...'</span>
+    <span class="kw">elif</span> score == <span class="nm">3</span>:
+        status, advice = <span class="st">'SUITABLE FOR REST'</span>, <span class="st">'All conditions met. Room is ready.'</span>
+    <span class="kw">elif</span> score == <span class="nm">0</span>:
+        status, advice = <span class="st">'NOT SUITABLE'</span>, <span class="st">'Motion, temp and humidity all need attention.'</span>
+    <span class="kw">else</span>:
+        issues = []
+        <span class="kw">if not</span> motion_ok: issues.append(<span class="st">'motion'</span>)
+        <span class="kw">if not</span> temp_ok and temp is not <span class="nm">None</span>: issues.append(<span class="st">'temp {:.1f}C'</span>.format(temp))
+        <span class="kw">if not</span> hum_ok  and hum  is not <span class="nm">None</span>: issues.append(<span class="st">'hum {:.0f}%'</span>.format(hum))
+        status = <span class="st">'NEEDS ADJUSTMENT'</span>
+        advice = <span class="st">'Fix: '</span> + <span class="st">', '</span>.join(issues)
+    <span class="kw">return</span> status, advice, score, motion_ok, temp_ok, hum_ok, secs
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════
+# SECTION 5 — Data Log  (the data repository)
+#
+# 'log' is a Python list that stores dictionaries.
+# Each dictionary = one reading with a timestamp.
+# ITERATION: when the log reaches MAX_LOG entries,
+# the oldest entry (index 0) is removed to make room.
+# ════════════════════════════════════════════════════════════</span>
+
+log = []  <span class="cm"># in-memory data repository — cleared on board reset</span>
+
+<span class="kw">def</span> <span class="fn">append_log</span>(timestamp, temp, hum, status, score):
+    <span class="st">"""Add one reading to the log. Remove oldest if full."""</span>
+    entry = {
+        <span class="st">'ts'</span>     : timestamp,   <span class="cm"># e.g. '09:32:15 30/05/25'</span>
+        <span class="st">'temp'</span>   : temp,         <span class="cm"># float °C or None</span>
+        <span class="st">'hum'</span>    : hum,          <span class="cm"># float % or None</span>
+        <span class="st">'status'</span> : status,       <span class="cm"># string</span>
+        <span class="st">'score'</span>  : score         <span class="cm"># 0-3</span>
+    }
+    log.append(entry)
+    <span class="kw">if</span> len(log) &gt; MAX_LOG:
+        log.pop(<span class="nm">0</span>)       <span class="cm"># remove oldest entry (FIFO)</span>
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════
+# SECTION 6 — HTML Builders
+# ════════════════════════════════════════════════════════════</span>
+
+<span class="kw">def</span> <span class="fn">build_dashboard</span>(temp, hum, status, advice, score, m_ok, t_ok, h_ok, secs, ts):
+    t_s = <span class="st">'{:.1f}C'</span>.format(temp) if temp is not <span class="nm">None</span> else <span class="st">'---'</span>
+    h_s = <span class="st">'{:.0f}%'</span>.format(hum)  if hum  is not <span class="nm">None</span> else <span class="st">'---'</span>
+    syms = {<span class="nm">3</span>:<span class="st">'\u2713'</span>, <span class="nm">2</span>:<span class="st">'~'</span>, <span class="nm">1</span>:<span class="st">'!'</span>, <span class="nm">0</span>:<span class="st">'\u2717'</span>}
+    brds = {<span class="nm">3</span>:<span class="st">'border:3px solid #93c5fd'</span>, <span class="nm">2</span>:<span class="st">'border:3px dashed #60a5fa'</span>,
+            <span class="nm">1</span>:<span class="st">'border:3px dotted #3b82f6'</span>, <span class="nm">0</span>:<span class="st">'border:3px dotted #1d4ed8'</span>}
+    sym  = syms.get(score, <span class="st">'?'</span>)
+    brd  = brds.get(score, <span class="st">'border:3px dotted #1d4ed8'</span>)
+    mb   = <span class="st">'[OK]'</span> if m_ok else <span class="st">'[--]'</span>
+    tb   = <span class="st">'[OK]'</span> if t_ok else <span class="st">'[--]'</span>
+    hb   = <span class="st">'[OK]'</span> if h_ok else <span class="st">'[--]'</span>
+    filled = min(<span class="nm">10</span>, secs * <span class="nm">10</span> // CALM_SECONDS)
+    bar  = <span class="st">'\u2588'</span> * filled + <span class="st">'\u2591'</span> * (<span class="nm">10</span> - filled)
+    log_count = len(log)
+
+    <span class="kw">return</span> <span class="st">"""&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;&lt;meta name="viewport" content="width=device-width,initial-scale=1"&gt;
+&lt;meta http-equiv="refresh" content="5"&gt;&lt;title&gt;Rest Monitor&lt;/title&gt;
+&lt;style&gt;
+*{{box-sizing:border-box;margin:0;padding:0}}
+body{{background:#0a1628;color:#bfdbfe;font-family:monospace;
+     display:flex;flex-direction:column;align-items:center;
+     min-height:100vh;padding:18px 12px;gap:12px}}
+h1{{font-size:.72rem;letter-spacing:4px;color:#1e3a8a;text-transform:uppercase}}
+.card{{background:#0f2044;border-radius:10px;padding:20px 22px;
+       text-align:center;width:100%;max-width:420px}}
+.sym{{font-size:3.8rem;line-height:1.1;color:#93c5fd}}
+.status{{font-size:1.1rem;font-weight:bold;letter-spacing:1px;color:#bfdbfe;margin:7px 0 4px}}
+.advice{{font-size:.8rem;color:#1e3a8a;line-height:1.55}}
+.bwrap,.infowrap{{background:#0c1a38;border:1px solid #1e3a8a;border-radius:7px;
+                  padding:8px 10px;width:100%;max-width:420px}}
+.bl{{font-size:.55rem;letter-spacing:2px;color:#1e3a8a;text-transform:uppercase}}
+.bar{{font-size:1rem;letter-spacing:4px;color:#3b82f6;margin:4px 0 2px}}
+.bs{{font-size:.6rem;color:#1a3566}}
+.grid3{{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:420px}}
+.tile{{background:#0c1a38;border:1px solid #1a3566;border-radius:7px;padding:10px 6px;text-align:center}}
+.tl{{font-size:.54rem;letter-spacing:1.5px;color:#1e3a8a;text-transform:uppercase}}
+.tv{{font-size:.88rem;font-weight:bold;margin:4px 0 2px;color:#93c5fd}}
+.bdg{{font-size:.72rem;padding:1px 5px;border-radius:3px}}
+.ok-bg{{background:#0a2e1a;color:#86efac}}.fail-bg{{background:#2e0a0a;color:#f87171}}
+.nav-row{{display:flex;gap:8px;width:100%;max-width:420px;justify-content:center}}
+.nav-link{{font-size:.7rem;color:#2d4a7a;border:1px solid #1e3a8a;border-radius:5px;
+           padding:3px 10px;text-decoration:none;font-family:monospace}}
+footer{{font-size:.6rem;color:#1a3566;text-align:center}}
+&lt;/style&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;&amp;#9632; REST ENVIRONMENT MONITOR&lt;/h1&gt;
+  &lt;div class="card" style="{brd};background:#0f2044;border-radius:10px;padding:20px 22px;text-align:center;width:100%;max-width:420px"&gt;
+    &lt;div class="sym"&gt;{sym}&lt;/div&gt;
+    &lt;div class="status"&gt;{status}&lt;/div&gt;
+    &lt;div class="advice"&gt;{advice}&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="bwrap"&gt;
+    &lt;div class="bl"&gt;CALM TIMER&lt;/div&gt;
+    &lt;div class="bar"&gt;{bar}&lt;/div&gt;
+    &lt;div class="bs"&gt;{secs}s / {thresh}s threshold&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="grid3"&gt;
+    &lt;div class="tile"&gt;&lt;div class="tl"&gt;Motion&lt;/div&gt;&lt;div class="tv"&gt;&lt;span class="bdg {mc}"&gt;{mb}&lt;/span&gt;&lt;/div&gt;&lt;div style="font-size:.55rem;color:#1a3566"&gt;PIR D3&lt;/div&gt;&lt;/div&gt;
+    &lt;div class="tile"&gt;&lt;div class="tl"&gt;Temp&lt;/div&gt;&lt;div class="tv"&gt;{t}&lt;/div&gt;&lt;div&gt;&lt;span class="bdg {tc}"&gt;{tb}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;div class="tile"&gt;&lt;div class="tl"&gt;Humidity&lt;/div&gt;&lt;div class="tv"&gt;{h}&lt;/div&gt;&lt;div&gt;&lt;span class="bdg {hc}"&gt;{hb}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="infowrap"&gt;
+    &lt;div class="bl"&gt;LAST UPDATED&lt;/div&gt;
+    &lt;div style="font-size:.8rem;color:#93c5fd;margin-top:3px"&gt;{ts}&lt;/div&gt;
+    &lt;div class="bs"&gt;{log_count} readings logged (max {max_log})&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="nav-row"&gt;
+    &lt;a href="/" class="nav-link"&gt;&#9632; Dashboard&lt;/a&gt;
+    &lt;a href="/history" class="nav-link"&gt;&#128202; History&lt;/a&gt;
+    &lt;a href="/data" class="nav-link"&gt;&#123;&#125; JSON&lt;/a&gt;
+  &lt;/div&gt;
+  &lt;footer&gt;Updates every 5 s · no interaction needed · {snr} · RTC SD2405&lt;/footer&gt;
+&lt;/body&gt;&lt;/html&gt;"""</span>.format(
+        sym=sym, brd=brd, status=status, advice=advice,
+        bar=bar, secs=min(secs,CALM_SECONDS), thresh=CALM_SECONDS,
+        t=t_s, h=h_s, mb=mb, tb=tb, hb=hb,
+        mc=<span class="st">'ok-bg'</span> if m_ok else <span class="st">'fail-bg'</span>,
+        tc=<span class="st">'ok-bg'</span> if t_ok else <span class="st">'fail-bg'</span>,
+        hc=<span class="st">'ok-bg'</span> if h_ok else <span class="st">'fail-bg'</span>,
+        ts=ts, log_count=log_count, max_log=MAX_LOG, snr=SENSOR
+    )
+
+
+<span class="kw">def</span> <span class="fn">build_history</span>():
+    <span class="st">"""Build the /history page — a table of all logged readings."""</span>
+    rows = <span class="st">''</span>
+    score_sym = {<span class="nm">3</span>:<span class="st">'\u2713'</span>, <span class="nm">2</span>:<span class="st">'~'</span>, <span class="nm">1</span>:<span class="st">'!'</span>, <span class="nm">0</span>:<span class="st">'\u2717'</span>}
+    <span class="cm"># ITERATION: loop through log in reverse (newest first)</span>
+    <span class="kw">for</span> e <span class="kw">in</span> reversed(log):
+        sym = score_sym.get(e[<span class="st">'score'</span>], <span class="st">'?'</span>)
+        t_s = <span class="st">'{:.1f}'</span>.format(e[<span class="st">'temp'</span>]) if e[<span class="st">'temp'</span>] is not <span class="nm">None</span> else <span class="st">'---'</span>
+        h_s = <span class="st">'{:.0f}'</span>.format(e[<span class="st">'hum'</span>])  if e[<span class="st">'hum'</span>]  is not <span class="nm">None</span> else <span class="st">'---'</span>
+        <span class="cm"># Colour-code by score — accessible: also uses symbols in status column</span>
+        score_style = (<span class="st">'color:#86efac'</span> if e[<span class="st">'score'</span>] == <span class="nm">3</span> else
+                       <span class="st">'color:#fbbf24'</span> if e[<span class="st">'score'</span>] &gt;= <span class="nm">1</span> else <span class="st">'color:#f87171'</span>)
+        rows += (<span class="st">'&lt;tr&gt;&lt;td style="color:#60a5fa"&gt;{}&lt;/td&gt;&lt;td&gt;{}°C&lt;/td&gt;'</span>
+                 <span class="st">'&lt;td&gt;{}%&lt;/td&gt;&lt;td style="{}"&gt;{} {}&lt;/td&gt;&lt;/tr&gt;'</span>).format(
+            e[<span class="st">'ts'</span>], t_s, h_s, score_style, sym, e[<span class="st">'status'</span>])
+
+    <span class="kw">if not</span> rows:
+        rows = <span class="st">'&lt;tr&gt;&lt;td colspan="4" style="color:#1e3a8a;text-align:center"&gt;No readings yet — visit the dashboard to log data&lt;/td&gt;&lt;/tr&gt;'</span>
+
+    <span class="kw">return</span> <span class="st">"""&lt;!DOCTYPE html&gt;&lt;html lang="en"&gt;&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;&lt;meta name="viewport" content="width=device-width,initial-scale=1"&gt;
+&lt;title&gt;Rest Monitor — History&lt;/title&gt;
+&lt;style&gt;
+*{{box-sizing:border-box;margin:0;padding:0}}
+body{{background:#0a1628;color:#bfdbfe;font-family:monospace;
+     min-height:100vh;padding:18px 12px}}
+h1{{font-size:.72rem;letter-spacing:4px;color:#1e3a8a;text-transform:uppercase;
+    text-align:center;margin-bottom:12px}}
+.wrap{{max-width:600px;margin:0 auto}}
+.meta{{font-size:.65rem;color:#1e3a8a;text-align:center;margin-bottom:10px}}
+table{{width:100%;border-collapse:collapse}}
+th{{font-size:.6rem;letter-spacing:1.5px;color:#2d4a7a;text-transform:uppercase;
+    padding:7px 10px;border-bottom:1px solid #1e3a8a;text-align:left}}
+td{{padding:7px 10px;border-bottom:1px solid #0f2044;font-size:.78rem}}
+tr:nth-child(even){{background:#0c1a38}}
+.nav{{display:flex;gap:8px;justify-content:center;margin-top:14px}}
+.nav a{{font-size:.7rem;color:#2d4a7a;border:1px solid #1e3a8a;border-radius:5px;
+        padding:3px 10px;text-decoration:none}}
+&lt;/style&gt;&lt;/head&gt;
+&lt;body&gt;&lt;div class="wrap"&gt;
+  &lt;h1&gt;&amp;#9632; HISTORY LOG&lt;/h1&gt;
+  &lt;div class="meta"&gt;{count} readings stored · newest first · max {max_log}&lt;/div&gt;
+  &lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;Timestamp&lt;/th&gt;&lt;th&gt;Temp&lt;/th&gt;&lt;th&gt;Humidity&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;&lt;/tr&gt;
+    {rows}
+  &lt;/table&gt;
+  &lt;div class="nav"&gt;
+    &lt;a href="/"&gt;&amp;#9632; Dashboard&lt;/a&gt;
+    &lt;a href="/data"&gt;&amp;#123;&amp;#125; JSON&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"""</span>.format(count=len(log), max_log=MAX_LOG, rows=rows)
+
+
+<span class="kw">def</span> <span class="fn">build_json</span>():
+    <span class="st">"""Return all log entries as a JSON string."""</span>
+    entries = []
+    <span class="kw">for</span> e <span class="kw">in</span> log:
+        entries.append(
+            <span class="st">'{{"ts":"{}","temp":{},"hum":{},"status":"{}","score":{}}}'</span>.format(
+                e[<span class="st">'ts'</span>],
+                e[<span class="st">'temp'</span>] if e[<span class="st">'temp'</span>] is not <span class="nm">None</span> else <span class="st">'null'</span>,
+                e[<span class="st">'hum'</span>]  if e[<span class="st">'hum'</span>]  is not <span class="nm">None</span> else <span class="st">'null'</span>,
+                e[<span class="st">'status'</span>], e[<span class="st">'score'</span>]
+            )
+        )
+    <span class="kw">return</span> <span class="st">'["'</span> + <span class="st">'","'</span>.join([]) + <span class="st">'"]\n'</span> <span class="kw">if not</span> entries <span class="kw">else</span> <span class="st">'['</span> + <span class="st">', '</span>.join(entries) + <span class="st">']'</span>
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════
+# SECTION 7 — Web Server with 3 routes
+# GET /         → live dashboard
+# GET /history  → log table
+# GET /data     → JSON
+# ITERATION: while True handles one request at a time
+# ════════════════════════════════════════════════════════════</span>
+
+srv = socket.socket()
+srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="nm">1</span>)
+srv.bind((<span class="st">''</span>, <span class="nm">80</span>)); srv.listen(<span class="nm">3</span>)
+print(<span class="st">'Server ready | routes: /  /history  /data'</span>)
+
+<span class="kw">while True</span>:                   <span class="cm"># ITERATION</span>
+    <span class="kw">try</span>:
+        conn, _ = srv.accept()
+        req = conn.recv(<span class="nm">1024</span>).decode(<span class="st">'utf-8'</span>, <span class="st">'ignore'</span>)
+        path = req.split(<span class="st">' '</span>)[<span class="nm">1</span>] <span class="kw">if</span> len(req.split(<span class="st">' '</span>)) &gt; <span class="nm">1</span> else <span class="st">'/'</span>
+
+        temp, hum = read_sensor()
+        ts = read_rtc()
+        status, advice, score, m_ok, t_ok, h_ok, secs = evaluate_rest(temp, hum)
+        append_log(ts, temp, hum, status, score)
+
+        print(<span class="st">'[{}] {} T:{} H:{} → {}'</span>.format(ts, SENSOR, temp, hum, status))
+
+        <span class="cm"># SELECTION — route to correct page</span>
+        <span class="kw">if</span> path.startswith(<span class="st">'/history'</span>):
+            ct, body = <span class="st">'text/html'</span>, build_history()
+        <span class="kw">elif</span> path.startswith(<span class="st">'/data'</span>):
+            ct, body = <span class="st">'application/json'</span>, build_json()
+        <span class="kw">else</span>:
+            ct, body = <span class="st">'text/html'</span>, build_dashboard(
+                temp, hum, status, advice, score, m_ok, t_ok, h_ok, secs, ts)
+
+        conn.sendall((<span class="st">'HTTP/1.1 200 OK\r\nContent-Type: {}\r\nConnection: close\r\n\r\n'</span>.format(ct) + body).encode())
+        conn.close()
+        time.sleep(<span class="nm">2</span>)
+
+    <span class="kw">except</span> Exception <span class="kw">as</span> e:
+        print(<span class="st">'Error:'</span>, e)
+        <span class="kw">try</span>: conn.close()
+        <span class="kw">except</span>: <span class="kw">pass</span></pre></div>
+        </div>
+
+        <ol style="margin-top:0.6rem">
+          <li>File → Save as… → <strong>MicroPython device</strong> → <code>main.py</code> → OK</li>
+          <li>Press <strong>RST</strong> on your FireBeetle 2</li>
+          <li>Shell should show <code>Sensor: DHT11 | RTC at 0x32 | PIR at GPIO26</code> then <code>Server ready | routes: /  /history  /data</code></li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">4</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 10 minutes</span>
+        <h3>Test all three routes in the browser</h3>
+        <p>Open a browser on the same WiFi network and navigate to your IP address. You now have three pages:</p>
+
+        <table class="route-table">
+          <tr><th>URL</th><th>Method</th><th>What you see</th></tr>
+          <tr>
+            <td><code>http://&lt;IP&gt;/</code></td>
+            <td><span class="method-tag">GET</span></td>
+            <td>Live dashboard with timestamp and log count. Refreshes every 5 s.</td>
+          </tr>
+          <tr>
+            <td><code>http://&lt;IP&gt;/history</code></td>
+            <td><span class="method-tag">GET</span></td>
+            <td>Table of all stored readings — newest first — with timestamp, temp, humidity and status symbol.</td>
+          </tr>
+          <tr>
+            <td><code>http://&lt;IP&gt;/data</code></td>
+            <td><span class="method-tag">GET</span></td>
+            <td>Raw JSON array of all log entries — useful for data analysis or future database connection.</td>
+          </tr>
+        </table>
+
+        <!-- history preview -->
+        <div class="ux-preview" style="margin-top:0.9rem">
+          <div class="ux-chrome">
+            <div class="ux-dot"></div><div class="ux-dot"></div><div class="ux-dot"></div>
+            <span class="ux-url">http://192.168.1.55/history — History Log</span>
+            <span class="ux-badge">Preview</span>
+          </div>
+          <div class="log-preview">
+            <div class="log-title">■ HISTORY LOG &nbsp;·&nbsp; 6 readings · newest first</div>
+            <table class="log-table">
+              <tr><th>Timestamp</th><th>Temp</th><th>Humidity</th><th>Status</th></tr>
+              <tr><td>09:48:22 30/05/25</td><td>20.5°C</td><td class="ok">62%</td><td class="ok">✓ SUITABLE FOR REST</td></tr>
+              <tr><td>09:48:17 30/05/25</td><td>20.5°C</td><td class="ok">62%</td><td class="ok">✓ SUITABLE FOR REST</td></tr>
+              <tr><td>09:48:05 30/05/25</td><td>21.0°C</td><td class="warn">68%</td><td class="warn">~ NEEDS ADJUSTMENT</td></tr>
+              <tr><td>09:47:58 30/05/25</td><td>21.0°C</td><td class="warn">68%</td><td class="warn">~ NEEDS ADJUSTMENT</td></tr>
+              <tr><td>09:47:42 30/05/25</td><td>25.3°C</td><td class="bad">74%</td><td class="bad">✗ NOT SUITABLE</td></tr>
+              <tr><td>09:47:36 30/05/25</td><td>25.2°C</td><td class="bad">74%</td><td class="bad">✗ NOT SUITABLE</td></tr>
+            </table>
+            <div class="log-nav">
+              <span class="log-link">■ Dashboard</span>
+              <span class="log-link">{} JSON</span>
+            </div>
+          </div>
+        </div>
+
+        <p style="font-size:0.86rem;color:var(--muted);margin-top:0.65rem"><strong>Tests to try:</strong></p>
+        <ul>
+          <li>Visit <code>/</code> several times — each visit creates a new log entry. Watch the count increase in the info tile.</li>
+          <li>Visit <code>/history</code> — you should see your readings listed newest first with timestamps from the RTC.</li>
+          <li>Breathe on the sensor between visits — the history table should show different temperature and humidity values with matching status symbols.</li>
+          <li>Visit <code>/data</code> — your log as JSON. Copy it into your OneNote journal as evidence of your data repository.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">5</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 9 minutes</span>
+        <h3>Journal entry — data, limitations, and assessment connections</h3>
+        <ol>
+          <li>Screenshot of your <code>/history</code> page showing at least 5 readings — paste into OneNote</li>
+          <li>Copy the raw JSON from <code>/data</code> into your journal as evidence of your data repository</li>
+          <li>Answer <strong>both</strong> journal questions below</li>
+        </ol>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:0.85rem 1rem;margin-top:0.6rem">
+          <p style="font-weight:700;color:var(--primary-dark);margin:0 0 0.4rem;font-size:0.9rem">📓 Journal questions</p>
+          <p style="font-size:0.88rem;color:var(--text);margin:0 0 0.4rem"><strong>Q1 — Data repository limitation:</strong> The log list is stored in RAM and is cleared every time the board resets. Describe this as a limitation of your current solution and write a justified recommendation for how it could be improved (hint: think about saving to a file, or using a database in Unit 2).</p>
+          <p style="font-size:0.88rem;color:var(--text);margin:0"><strong>Q2 — Patterns in your data:</strong> Look at your history table. Is there any pattern in your readings (e.g. temperature rises over time, humidity increases when you breathe on it)? Write two observations using the words <em>data</em>, <em>trend</em> and <em>repository</em>.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /step-list -->
+
+  <!-- EXTENDING -->
+  <p class="section-label">Extending your solution — FIA2 ideas</p>
+  <div class="extend-grid">
+    <div class="extend-card">
+      <h4>📊 Analyse patterns</h4>
+      <p>Add a <code>/summary</code> route that calculates the average temperature and humidity across all log entries. This turns raw data into useful information — connects to the FIA2 <em>data analysis</em> requirement.</p>
+    </div>
+    <div class="extend-card">
+      <h4>🗑️ Clear log endpoint</h4>
+      <p>Add a <code>/clear</code> route that empties the log and redirects to <code>/history</code>. Discuss with your teacher: should a reset button be in the dashboard UX? Would Daniel ever want to clear the log?</p>
+    </div>
+    <div class="extend-card">
+      <h4>📁 Save to file</h4>
+      <p>MicroPython can write to the board's flash storage using <code>open('log.csv', 'a')</code>. This means data survives a reset. Research this extension and record the trade-offs (storage limits, write cycles) in your journal.</p>
+    </div>
+    <div class="extend-card">
+      <h4>⚠️ Evaluate impacts</h4>
+      <p>Logging timestamped environmental data raises questions: Who owns this data? Could it reveal when Daniel is home? Record your evaluation of the personal and social impacts — this is the Evaluating criterion (Obj 7).</p>
+    </div>
+  </div>
+
+  <!-- VIDEOS -->
+  <p class="section-label">Tutorial videos — watch if you need help or finish early</p>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="video-wrap">
+        <iframe src="https://www.youtube-nocookie.com/embed/X_-095XJvp4"
+          title="MicroPython ESP32 Thonny" allowfullscreen loading="lazy"
+          allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+      </div>
+      <div class="video-info">
+        <h4>MicroPython on ESP32 with Thonny</h4>
+        <p>Firmware setup and first code on ESP32. Reference if your board needs firmware installed.</p>
+        <span class="vtag">ESP32 setup · Dec 2024</span>
+      </div>
+    </div>
+    <div class="video-card">
+      <div class="video-wrap">
+        <iframe src="https://www.youtube-nocookie.com/embed/DV--xQTVflI"
+          title="DHT MicroPython" allowfullscreen loading="lazy"
+          allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+      </div>
+      <div class="video-info">
+        <h4>DHT Sensors with MicroPython</h4>
+        <p>Reference for the temp/humidity sensor code that carries over from Lesson 2.</p>
+        <span class="vtag">DHT sensor · Jan 2025</span>
+      </div>
+    </div>
+    <div class="video-card">
+      <div class="video-wrap">
+        <iframe src="https://www.youtube-nocookie.com/embed/CPkzcNIVqPQ"
+          title="Getting Started MicroPython Thonny" allowfullscreen loading="lazy"
+          allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+      </div>
+      <div class="video-info">
+        <h4>Getting Started: MicroPython &amp; Thonny</h4>
+        <p>Shell, REPL and saving files to the device. Good catch-up reference.</p>
+        <span class="vtag">Student reference</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- troubleshooting -->
+  <div class="teacher-note">
+    <strong>🚨 Troubleshooting</strong>
+    <ul style="margin-top:0.4rem;padding-left:1.1rem;color:var(--warn-text)">
+      <li><strong>RTC shows wrong time</strong> — re-run the time-set Shell code from Step 2 with correct values</li>
+      <li><strong>RTC error on init</strong> — check the 4-pin Gravity cable is in an I²C port. If using DHT20 as well, use the Gravity I²C Hub — both devices need to share the same bus</li>
+      <li><strong>/history shows no readings</strong> — the log only fills when you visit <code>/</code> (each visit triggers a read and append). Visit the dashboard a few times first.</li>
+      <li><strong>I²C address conflict</strong> — RTC (0x32) and DHT20 (0x38) have different addresses. They can run on the same bus simultaneously without conflict.</li>
+      <li><strong>Saved to wrong place</strong> — File → Save as → <strong>MicroPython device</strong>, not "This computer"</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>Digital Solutions Unit 1 · FIA2 Project · Lesson 3 · St Peters Lutheran College Springfield · Ms Baessler</p>
+    <p style="margin-top:0.3rem;font-size:0.82rem">EEDU IoT Kit (TEM2022B-EN-1) · FireBeetle 2 ESP32-E · RTC SD2405 · I²C 0x32 · MicroPython · Thonny IDE</p>
+  </footer>
+
+</div>
+</body>
+</html>
