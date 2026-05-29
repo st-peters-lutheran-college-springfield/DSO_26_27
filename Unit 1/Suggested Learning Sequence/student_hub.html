@@ -44,7 +44,6 @@
   .teacher-note { margin-top: 1rem; background: var(--warn-bg); border: 1px solid var(--warn-border); border-left: 5px solid var(--warn-text); border-radius: 12px; padding: 0.9rem 1rem; color: var(--warn-text); }
   ul { margin: 0; padding-left: 1.15rem; }
   footer { margin-top: 2rem; text-align: center; color: var(--muted); font-size: 0.92rem; }
-  /* supplements */
   .site-header { background: var(--primary-dark); color: #fff; padding: 0.6rem 1rem; font-size: 0.82rem; display: flex; align-items: center; gap: 0.5rem; }
   .site-header span { opacity: 0.6; }
   .kit-badge { display: inline-flex; align-items: center; gap: 0.45rem; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.35rem 0.75rem; font-size: 0.82rem; color: var(--primary-dark); margin-top: 0.85rem; }
@@ -57,7 +56,6 @@
   .persona-needs { list-style: none; padding: 0; margin: 0.4rem 0 0; }
   .persona-needs li { font-size: 0.8rem; color: var(--text); padding: 0.2rem 0; border-top: 1px solid var(--bg); }
   .persona-needs li::before { content: "→ "; color: var(--primary); font-weight: 700; }
-  /* sensor id */
   .sensor-id-box { background: #fffbeb; border: 1px solid #fde68a; border-left: 5px solid var(--warn-text); border-radius: 12px; padding: 1rem 1.1rem; margin-top: 0.75rem; }
   .sensor-id-box h4 { margin: 0 0 0.6rem; color: var(--warn-text); font-size: 0.95rem; }
   .sensor-row { display: grid; grid-template-columns: repeat(auto-fit,minmax(175px,1fr)); gap: 0.6rem; margin: 0.6rem 0; }
@@ -66,7 +64,6 @@
   .sensor-opt p { margin: 0; font-size: 0.78rem; color: var(--muted); }
   .sport { display: inline-block; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 5px; font-size: 0.72rem; padding: 0.1rem 0.45rem; color: var(--primary); font-weight: 700; margin-top: 0.4rem; }
   .sport.i2c { background: #f0fdf4; border-color: #a7f3d0; color: var(--success-text); }
-  /* path */
   .path-steps { display: flex; flex-direction: column; gap: 0; margin-top: 1rem; }
   .path-step { display: grid; grid-template-columns: 40px 1fr; gap: 0.9rem; padding: 0.9rem 0; border-bottom: 1px solid var(--border); align-items: start; }
   .path-step:last-child { border-bottom: none; }
@@ -80,7 +77,6 @@
   .tag-lesson { background: #eff6ff; color: var(--primary); }
   .tag-next { background: var(--warn-bg); color: var(--warn-text); }
   .tag-later { background: var(--bg); color: var(--muted); }
-  /* criteria */
   .crit-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 0.75rem; }
   .crit-table th { text-align: left; padding: 0.55rem 0.75rem; background: #eff6ff; color: var(--primary-dark); font-size: 0.77rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border); }
   .crit-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
@@ -136,7 +132,6 @@
     </div>
   </div>
 
-  <!-- OVERVIEW -->
   <p class="section-label">Project overview</p>
   <div class="grid">
     <div class="card">
@@ -194,7 +189,6 @@
     </div>
   </div>
 
-  <!-- SENSOR ID BOX -->
   <div class="sensor-id-box">
     <h4>🔍 Lesson 2 — Identify your temperature &amp; humidity sensor before you start</h4>
     <p style="font-size:0.85rem;color:var(--warn-text);margin-bottom:0.4rem">Look at the label on your sensor module. The wiring and <strong>one line of code</strong> differ between sensors — everything else stays the same.</p>
@@ -218,7 +212,6 @@
     <p style="font-size:0.8rem;color:var(--warn-text);margin:0"><strong>Not sure?</strong> Count connector pins: 3 pins = DHT11 or DHT22 (digital port). 4 pins = DHT20 (I²C port). The Lesson 2 tutorial shows all three.</p>
   </div>
 
-  <!-- LEARNING PATH -->
   <div class="learning-path">
     <h2>📍 Learning Path — 4 Lessons</h2>
     <p class="assessment-intro">Work through lessons in order — each builds on the previous code. The <span style="background:#fee2e2;color:var(--accent);border-radius:4px;padding:1px 5px;font-size:0.75rem;font-weight:700">TODAY</span> tag shows where to begin.</p>
@@ -265,7 +258,6 @@
     </div>
   </div>
 
-  <!-- RESOURCES -->
   <p class="section-label">Lesson resources — open each file when ready</p>
   <div class="resource-grid">
     <div class="resource-card">
@@ -295,27 +287,41 @@
         <li>Visual sensor identification guide included</li>
       </ul>
       <div class="resource-actions">
-        <a href="lesson_today_tempHumidity.html" class="btn btn-primary">▶ Open Lesson 2</a>
+        <a href="lesson_today_dhp.html" class="btn btn-primary">▶ Open Lesson 2</a>
       </div>
     </div>
 
     <div class="resource-card">
-      <span class="resource-tag tag-dark resource-tag">FULL EXEMPLAR</span>
-      <h3>Complete Project Solution &amp; Teaching Guide</h3>
-      <p>Reference solution showing a complete, proficient-level FIA2 submission. Use this to see all components combined and understand what a high-quality response addresses.</p>
+      <span class="resource-tag">LESSON 3</span>
+      <h3>Data Logging — History &amp; Evidence</h3>
+      <p>Extend your solution to store timestamped readings and show patterns over time. This supports testing evidence, refinement decisions, and FIA2 data-repository requirements.</p>
       <ul>
-        <li>Dual-board architecture (ESP8266 sensors + ESP32 server)</li>
-        <li>All sensors combined with full algorithm</li>
-        <li>Full criteria mapping: Determining, Generating, Evaluating</li>
-        <li>Annotated code with all programming concepts labelled</li>
+        <li>Add timestamps using the RTC</li>
+        <li>Store readings for later review</li>
+        <li>Create a <code>/history</code> view</li>
+        <li>Use results as evaluation evidence</li>
       </ul>
       <div class="resource-actions">
-        <a href="fia2_teaching_guide.html" class="btn btn-primary">▶ Open Exemplar</a>
+        <a href="lesson_today_datalogging.html" class="btn btn-primary">▶ Open Lesson 3</a>
+      </div>
+    </div>
+
+    <div class="resource-card">
+      <span class="resource-tag">LESSON 4</span>
+      <h3>Evaluate &amp; Refine — Video and Testing</h3>
+      <p>Review your dashboard against the success criteria, annotate interface decisions, and prepare your 2-minute assessment video with clear evidence and reflection.</p>
+      <ul>
+        <li>Evaluate against all success criteria</li>
+        <li>Refine thresholds and UI decisions</li>
+        <li>Plan your 2-minute assessment video</li>
+        <li>Record justified improvements in OneNote</li>
+      </ul>
+      <div class="resource-actions">
+        <a href="lesson_today_evaluation.html" class="btn btn-primary">▶ Open Lesson 4</a>
       </div>
     </div>
   </div>
 
-  <!-- ASSESSMENT -->
   <div class="assessment-prep">
     <h2>📝 Assessment — 25 Marks Total</h2>
     <p class="assessment-intro">Submission components: a <strong>2-min video</strong>, <strong>OneNote journal</strong> (5× A3 visual + 2× A4 annotated code), submitted via Turnitin by <strong>12 June, 3 PM</strong>.</p>
@@ -389,7 +395,6 @@
     </ul>
   </div>
 
-  <!-- JOURNAL NOTE -->
   <div class="teacher-note">
     <strong>📓 OneNote Journal — document everything as you go</strong>
     <ul style="margin-top:0.5rem;padding-left:1.1rem;color:var(--warn-text)">
@@ -400,7 +405,6 @@
     </ul>
   </div>
 
-  <!-- QUICK REFERENCE -->
   <p class="section-label">Quick reference</p>
   <div class="grid">
     <div class="card">
