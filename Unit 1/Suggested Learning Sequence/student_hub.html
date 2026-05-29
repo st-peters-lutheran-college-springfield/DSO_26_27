@@ -18,7 +18,7 @@
   .top-nav { margin-bottom: 1.25rem; }
   .top-nav a { color: var(--primary); text-decoration: none; font-weight: 700; }
   .crumb-current { color: var(--muted); font-weight: 600; }
-  .hero { background: linear-gradient(135deg, var(--surface), #eef4ff); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1rem; box-shadow: 0 8px 24px rgba(29,78,216,0.06); }
+  .hero { background: linear-gradient(135deg, var(--surface), #eef4ff); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1rem; box-shadow: 0 8px 24px rgba(29,78,216,0.08); }
   h1 { margin: 0; color: var(--primary); font-size: clamp(1.6rem,3vw,2.4rem); }
   .subtitle { margin-top: 0.5rem; color: var(--muted); max-width: 70ch; }
   .intro-callout { margin-top: 1rem; background: var(--success-bg); border: 1px solid var(--success-border); border-left: 5px solid var(--success-text); border-radius: 12px; padding: 1rem 1.1rem; }
@@ -47,11 +47,11 @@
   /* supplements */
   .site-header { background: var(--primary-dark); color: #fff; padding: 0.6rem 1rem; font-size: 0.82rem; display: flex; align-items: center; gap: 0.5rem; }
   .site-header span { opacity: 0.6; }
-  .kit-badge { display: inline-flex; align-items: center; gap: 0.45rem; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.35rem 0.75rem; font-size: 0.82rem; color: var(--primary-dark); font-weight: 600; margin-top: 0.9rem; }
+  .kit-badge { display: inline-flex; align-items: center; gap: 0.45rem; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.35rem 0.75rem; font-size: 0.82rem; color: var(--primary-dark); margin-top: 0.85rem; }
   .hero-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
   .meta-chip { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 999px; padding: 0.2rem 0.65rem; font-size: 0.77rem; color: var(--primary); font-weight: 600; }
   .persona-row { display: flex; gap: 0.9rem; align-items: flex-start; }
-  .persona-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--bg); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; }
+  .persona-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--bg); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
   .persona-detail h3 { margin: 0 0 0.2rem; font-size: 0.96rem; color: var(--primary-dark); }
   .persona-detail p { margin: 0 0 0.25rem; font-size: 0.82rem; color: var(--muted); }
   .persona-needs { list-style: none; padding: 0; margin: 0.4rem 0 0; }
@@ -64,13 +64,13 @@
   .sensor-opt { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 0.9rem; }
   .sensor-opt h5 { margin: 0 0 0.25rem; font-size: 0.88rem; color: var(--primary-dark); }
   .sensor-opt p { margin: 0; font-size: 0.78rem; color: var(--muted); }
-  .sport { display: inline-block; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 5px; font-size: 0.72rem; padding: 0.1rem 0.45rem; color: var(--primary); font-weight: 700; margin-top: 0.35rem; font-family: monospace; }
+  .sport { display: inline-block; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 5px; font-size: 0.72rem; padding: 0.1rem 0.45rem; color: var(--primary); font-weight: 700; margin-top: 0.4rem; }
   .sport.i2c { background: #f0fdf4; border-color: #a7f3d0; color: var(--success-text); }
   /* path */
   .path-steps { display: flex; flex-direction: column; gap: 0; margin-top: 1rem; }
   .path-step { display: grid; grid-template-columns: 40px 1fr; gap: 0.9rem; padding: 0.9rem 0; border-bottom: 1px solid var(--border); align-items: start; }
   .path-step:last-child { border-bottom: none; }
-  .step-num { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.88rem; flex-shrink: 0; }
+  .step-num { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.88rem; }
   .step-num.today { background: var(--accent); }
   .step-num.soon { background: var(--border); color: var(--muted); }
   .step-body h3 { margin: 0 0 0.2rem; font-size: 0.95rem; color: var(--primary-dark); }
@@ -86,7 +86,7 @@
   .crit-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
   .crit-table tr:hover td { background: var(--bg); }
   .marks-badge { display: inline-block; background: var(--primary); color: #fff; border-radius: 999px; padding: 0.15rem 0.55rem; font-size: 0.75rem; font-weight: 700; }
-  .obj-tag { display: inline-block; background: #eff6ff; border: 1px solid #bfdbfe; color: var(--primary); border-radius: 999px; padding: 0.1rem 0.5rem; font-size: 0.72rem; font-weight: 600; margin: 0.1rem 0.1rem 0.1rem 0; }
+  .obj-tag { display: inline-block; background: #eff6ff; border: 1px solid #bfdbfe; color: var(--primary); border-radius: 999px; padding: 0.1rem 0.5rem; font-size: 0.72rem; font-weight: 600; margin: 0 0.2rem 0.2rem 0; }
   .checkpoints { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.75rem; }
   .checkpoint { display: flex; align-items: center; gap: 0.75rem; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.7rem 0.9rem; }
   .checkpoint-box { width: 22px; height: 22px; border: 2px solid var(--border); border-radius: 5px; background: #fff; flex-shrink: 0; }
@@ -97,7 +97,7 @@
   .tag-dark { background: var(--primary-dark); }
   .sc-list { list-style: none; padding: 0; margin: 0.5rem 0 0; }
   .sc-list li { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.3rem 0; font-size: 0.86rem; border-top: 1px solid var(--border); }
-  .sc-num { background: var(--primary); color: #fff; border-radius: 50%; width: 20px; height: 20px; min-width: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; margin-top: 0.1rem; }
+  .sc-num { background: var(--primary); color: #fff; border-radius: 50%; width: 20px; height: 20px; min-width: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; margin-top: 1px; }
   .concept-row { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem; }
   .concept { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.15rem 0.5rem; font-size: 0.74rem; color: var(--muted); font-weight: 600; }
   .section-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 1.5rem 0 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
@@ -121,7 +121,7 @@
 
   <div class="hero">
     <h1>🏠 FIA2 Project — Home Rest &amp; Recovery Monitor</h1>
-    <p class="subtitle">Build a real-time environmental monitoring system using the DFRobot EEDU IoT Kit. Your solution helps <strong>Daniel Foster</strong> — a shift worker — know whether his home is suitable for rest and recovery.</p>
+    <p class="subtitle">Build a real-time environmental monitoring system using the DFRobot EEDU IoT Kit. Your solution helps <strong>Daniel Foster</strong> — a shift worker — know whether his home environment is suitable for sleep and recovery.</p>
     <div class="kit-badge">🧰 <strong>Kit:</strong> Hackster &amp; DFRobot IoT Starter EEDU Kit (ESP32) &nbsp;·&nbsp; SKU: TEM2022B-EN-1</div>
     <div class="hero-meta">
       <span class="meta-chip">📅 Due: 12 June, 3 PM</span>
@@ -132,7 +132,7 @@
       <span class="meta-chip">🌐 Web dashboard</span>
     </div>
     <div class="intro-callout">
-      <strong>✅ How to use this page:</strong> Start at <em>Lesson 1 — PIR Motion Sensor</em>. Each lesson builds on the last. Keep your <strong>OneNote journal open</strong> and document as you go. Lesson files open directly in your browser.
+      <strong>✅ How to use this page:</strong> Start at <em>Lesson 1 — PIR Motion Sensor</em>. Each lesson builds on the last. Keep your <strong>OneNote journal open</strong> and document as you go.
     </div>
   </div>
 
@@ -157,7 +157,7 @@
     </div>
     <div class="card">
       <h2>🔧 What You Are Building</h2>
-      <p style="color:var(--muted);font-size:0.9rem;margin-bottom:0.6rem">A MicroPython program on the FireBeetle 2 ESP32-E that monitors Daniel's room and serves a live rest-suitability dashboard to any browser on the network.</p>
+      <p style="color:var(--muted);font-size:0.9rem;margin-bottom:0.6rem">A MicroPython program on the FireBeetle 2 ESP32-E that monitors Daniel's room and serves a live rest-suitability dashboard to a browser.</p>
       <ul style="font-size:0.87rem">
         <li>PIR sensor detects movement in the room</li>
         <li>Temp &amp; humidity sensor checks comfort conditions</li>
@@ -197,7 +197,7 @@
   <!-- SENSOR ID BOX -->
   <div class="sensor-id-box">
     <h4>🔍 Lesson 2 — Identify your temperature &amp; humidity sensor before you start</h4>
-    <p style="font-size:0.85rem;color:var(--warn-text);margin-bottom:0.4rem">Look at the label on your sensor module. The wiring and <strong>one line of code</strong> differ between sensors — everything else is identical.</p>
+    <p style="font-size:0.85rem;color:var(--warn-text);margin-bottom:0.4rem">Look at the label on your sensor module. The wiring and <strong>one line of code</strong> differ between sensors — everything else stays the same.</p>
     <div class="sensor-row">
       <div class="sensor-opt">
         <h5>DHT11</h5>
@@ -215,19 +215,19 @@
         <span class="sport i2c">I²C port · address 0x38</span>
       </div>
     </div>
-    <p style="font-size:0.8rem;color:var(--warn-text);margin:0"><strong>Not sure?</strong> Count connector pins: 3 pins = DHT11 or DHT22 (digital port). 4 pins = DHT20 (I²C port). The Lesson 2 tutorial has a visual identification guide.</p>
+    <p style="font-size:0.8rem;color:var(--warn-text);margin:0"><strong>Not sure?</strong> Count connector pins: 3 pins = DHT11 or DHT22 (digital port). 4 pins = DHT20 (I²C port). The Lesson 2 tutorial shows all three.</p>
   </div>
 
   <!-- LEARNING PATH -->
   <div class="learning-path">
     <h2>📍 Learning Path — 4 Lessons</h2>
-    <p class="assessment-intro">Work through lessons in order — each builds on the previous code. The <span style="background:#fee2e2;color:var(--accent);border-radius:4px;padding:1px 5px;font-size:0.8rem;font-weight:700">TODAY</span> tag shows the current lesson.</p>
+    <p class="assessment-intro">Work through lessons in order — each builds on the previous code. The <span style="background:#fee2e2;color:var(--accent);border-radius:4px;padding:1px 5px;font-size:0.75rem;font-weight:700">TODAY</span> tag shows where to begin.</p>
     <div class="path-steps">
       <div class="path-step">
         <div class="step-num today">1</div>
         <div class="step-body">
           <h3>PIR Motion Sensor — Is Daniel's room calm?</h3>
-          <p>Connect Gravity PIR to D3 on the IO Shield. Write <code>boot.py</code> (WiFi) and <code>main.py</code> (motion tracking + web server). Dashboard shows <strong>ROOM IS CALM ✓</strong> or <strong>MOTION DETECTED ●</strong> with a live 60-second progress bar.</p>
+          <p>Connect Gravity PIR to D3 on the IO Shield. Write <code>boot.py</code> (WiFi) and <code>main.py</code> (motion tracking + web server). Dashboard shows <strong>ROOM IS CALM ✓</strong> or motion detected.</p>
           <span class="step-tag tag-today">TODAY · Lesson 1</span>
           <span class="step-tag tag-lesson">PIR → D3 / GPIO26</span>
           <span class="step-tag tag-lesson">selection · iteration · time tracking</span>
@@ -237,7 +237,7 @@
         <div class="step-num soon">2</div>
         <div class="step-body">
           <h3>Temperature &amp; Humidity — Is it comfortable to sleep?</h3>
-          <p>Add your temp &amp; humidity sensor. <strong>Works with DHT11, DHT22, or DHT20</strong> — set one line at the top of <code>main.py</code> to match your module. Extend <code>evaluate_rest()</code> to check temperature (16–22°C) and humidity (&lt;70%). Dashboard gains two reading tiles and a combined 3-condition score.</p>
+          <p>Add your temp &amp; humidity sensor. <strong>Works with DHT11, DHT22, or DHT20</strong> — set one line at the top of <code>main.py</code> to match your module. Extend <code>evaluate_rest()</code> with more conditions.</p>
           <span class="step-tag tag-next">Lesson 2</span>
           <span class="step-tag tag-lesson">DHT11/22 → D2 (GPIO25)</span>
           <span class="step-tag tag-lesson">DHT20 → I²C (0x38)</span>
@@ -279,14 +279,14 @@
         <li>Accessible dashboard: ✓ / ● symbol + text bar</li>
       </ul>
       <div class="resource-actions">
-        <a href="lesson1_pir_motion.html" class="btn btn-primary">▶ Open Lesson 1</a>
+        <a href="lesson_today_pir.html" class="btn btn-primary">▶ Open Lesson 1</a>
       </div>
     </div>
 
     <div class="resource-card">
       <span class="resource-tag tag-blue resource-tag">LESSON 2</span>
       <h3>Temp &amp; Humidity — DHT11, DHT22, or DHT20</h3>
-      <p>Set <code>SENSOR = 'DHT11'</code> (or <code>'DHT22'</code> or <code>'DHT20'</code>) at the top of <code>main.py</code> to match your module. All sensor types produce the same result in the algorithm. Wiring diagrams for both digital and I²C options included.</p>
+      <p>Set <code>SENSOR = 'DHT11'</code> (or <code>'DHT22'</code> or <code>'DHT20'</code>) at the top of <code>main.py</code> to match your module. All sensor types produce the same result in the algorithm.</p>
       <ul>
         <li><strong>DHT11 / DHT22</strong> — 3-pin Gravity → D2 port (GPIO25)</li>
         <li><strong>DHT20</strong> — 4-pin Gravity → I²C port (0x38)</li>
@@ -295,7 +295,7 @@
         <li>Visual sensor identification guide included</li>
       </ul>
       <div class="resource-actions">
-        <a href="lesson2_temp_humidity.html" class="btn btn-primary">▶ Open Lesson 2</a>
+        <a href="lesson_today_tempHumidity.html" class="btn btn-primary">▶ Open Lesson 2</a>
       </div>
     </div>
 
@@ -335,7 +335,7 @@
           <td><strong>Generating</strong></td>
           <td><span class="obj-tag">Obj 6</span></td>
           <td><span class="marks-badge">9</span></td>
-          <td>Working code demonstrating <strong>selection</strong> (if/elif/else), <strong>iteration</strong> (while loop), <strong>user input</strong> (browser HTTP request), and <strong>data output</strong> (HTML dashboard). Annotate your code to label each concept.</td>
+          <td>Working code demonstrating <strong>selection</strong> (if/elif/else), <strong>iteration</strong> (while loop), <strong>user input</strong> (browser HTTP GET request), and <strong>data output</strong> (HTML dashboard and sensor values).</td>
         </tr>
         <tr>
           <td><strong>Evaluating</strong></td>
