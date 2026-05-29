@@ -46,7 +46,7 @@
   footer { margin-top: 2rem; text-align: center; color: var(--muted); font-size: 0.92rem; }
   .site-header { background: var(--primary-dark); color: #fff; padding: 0.6rem 1rem; font-size: 0.82rem; display: flex; align-items: center; gap: 0.5rem; }
   .site-header span { opacity: 0.6; }
-  .kit-badge { display: inline-flex; align-items: center; gap: 0.45rem; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.35rem 0.75rem; font-size: 0.82rem; color: var(--primary-dark); margin-top: 0.85rem; }
+  .kit-badge { display: inline-flex; align-items: center; gap: 0.45rem; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.35rem 0.75rem; font-size: 0.82rem; color: var(--primary); }
   .hero-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
   .meta-chip { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 999px; padding: 0.2rem 0.65rem; font-size: 0.77rem; color: var(--primary); font-weight: 600; }
   .persona-row { display: flex; gap: 0.9rem; align-items: flex-start; }
@@ -62,7 +62,7 @@
   .sensor-opt { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 0.9rem; }
   .sensor-opt h5 { margin: 0 0 0.25rem; font-size: 0.88rem; color: var(--primary-dark); }
   .sensor-opt p { margin: 0; font-size: 0.78rem; color: var(--muted); }
-  .sport { display: inline-block; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 5px; font-size: 0.72rem; padding: 0.1rem 0.45rem; color: var(--primary); font-weight: 700; margin-top: 0.4rem; }
+  .sport { display: inline-block; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 5px; font-size: 0.72rem; padding: 0.1rem 0.45rem; color: var(--primary); font-weight: 700; margin-top: 0.45rem; }
   .sport.i2c { background: #f0fdf4; border-color: #a7f3d0; color: var(--success-text); }
   .path-steps { display: flex; flex-direction: column; gap: 0; margin-top: 1rem; }
   .path-step { display: grid; grid-template-columns: 40px 1fr; gap: 0.9rem; padding: 0.9rem 0; border-bottom: 1px solid var(--border); align-items: start; }
@@ -93,7 +93,7 @@
   .tag-dark { background: var(--primary-dark); }
   .sc-list { list-style: none; padding: 0; margin: 0.5rem 0 0; }
   .sc-list li { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.3rem 0; font-size: 0.86rem; border-top: 1px solid var(--border); }
-  .sc-num { background: var(--primary); color: #fff; border-radius: 50%; width: 20px; height: 20px; min-width: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; margin-top: 1px; }
+  .sc-num { background: var(--primary); color: #fff; border-radius: 50%; width: 20px; height: 20px; min-width: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; }
   .concept-row { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem; }
   .concept { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.15rem 0.5rem; font-size: 0.74rem; color: var(--muted); font-weight: 600; }
   .section-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 1.5rem 0 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
@@ -111,13 +111,13 @@
 <div class="container">
 
   <nav class="top-nav">
-    <a href="#">Digital Solutions</a> &rsaquo; <a href="#">Unit 1</a> &rsaquo;
+    <a href="https://st-peters-lutheran-college-springfield.github.io/DSO_26_27/index.html">Digital Solutions</a> &rsaquo; <a href="https://st-peters-lutheran-college-springfield.github.io/DSO_26_27/unit1-creating-with-code.html">Unit 1</a> &rsaquo;
     <span class="crumb-current">FIA2 Project — Home Rest &amp; Recovery Monitor</span>
   </nav>
 
   <div class="hero">
     <h1>🏠 FIA2 Project — Home Rest &amp; Recovery Monitor</h1>
-    <p class="subtitle">Build a real-time environmental monitoring system using the DFRobot EEDU IoT Kit. Your solution helps <strong>Daniel Foster</strong> — a shift worker — know whether his home environment is suitable for sleep and recovery.</p>
+    <p class="subtitle">Build a real-time environmental monitoring system using the DFRobot EEDU IoT Kit. Your solution helps <strong>Daniel Foster</strong> — a shift worker — know whether his home environment is suitable for rest and recovery.</p>
     <div class="kit-badge">🧰 <strong>Kit:</strong> Hackster &amp; DFRobot IoT Starter EEDU Kit (ESP32) &nbsp;·&nbsp; SKU: TEM2022B-EN-1</div>
     <div class="hero-meta">
       <span class="meta-chip">📅 Due: 12 June, 3 PM</span>
@@ -209,18 +209,18 @@
         <span class="sport i2c">I²C port · address 0x38</span>
       </div>
     </div>
-    <p style="font-size:0.8rem;color:var(--warn-text);margin:0"><strong>Not sure?</strong> Count connector pins: 3 pins = DHT11 or DHT22 (digital port). 4 pins = DHT20 (I²C port). The Lesson 2 tutorial shows all three.</p>
+    <p style="font-size:0.8rem;color:var(--warn-text);margin:0"><strong>Not sure?</strong> Count connector pins: 3 pins = DHT11 or DHT22 (digital port). 4 pins = DHT20 (I²C port). The Lesson 2 tutorial includes a visual guide.</p>
   </div>
 
   <div class="learning-path">
     <h2>📍 Learning Path — 4 Lessons</h2>
-    <p class="assessment-intro">Work through lessons in order — each builds on the previous code. The <span style="background:#fee2e2;color:var(--accent);border-radius:4px;padding:1px 5px;font-size:0.75rem;font-weight:700">TODAY</span> tag shows where to begin.</p>
+    <p class="assessment-intro">Work through lessons in order — each builds on the previous code. The <span style="background:#fee2e2;color:var(--accent);border-radius:4px;padding:1px 5px;font-size:0.75rem;font-weight:700">TODAY</span> tag shows what to open now.</p>
     <div class="path-steps">
       <div class="path-step">
         <div class="step-num today">1</div>
         <div class="step-body">
           <h3>PIR Motion Sensor — Is Daniel's room calm?</h3>
-          <p>Connect Gravity PIR to D3 on the IO Shield. Write <code>boot.py</code> (WiFi) and <code>main.py</code> (motion tracking + web server). Dashboard shows <strong>ROOM IS CALM ✓</strong> or motion detected.</p>
+          <p>Connect Gravity PIR to D3 on the IO Shield. Write <code>boot.py</code> (WiFi) and <code>main.py</code> (motion tracking + web server). Dashboard shows <strong>ROOM IS CALM ✓</strong> or motion detected status.</p>
           <span class="step-tag tag-today">TODAY · Lesson 1</span>
           <span class="step-tag tag-lesson">PIR → D3 / GPIO26</span>
           <span class="step-tag tag-lesson">selection · iteration · time tracking</span>
@@ -230,7 +230,7 @@
         <div class="step-num soon">2</div>
         <div class="step-body">
           <h3>Temperature &amp; Humidity — Is it comfortable to sleep?</h3>
-          <p>Add your temp &amp; humidity sensor. <strong>Works with DHT11, DHT22, or DHT20</strong> — set one line at the top of <code>main.py</code> to match your module. Extend <code>evaluate_rest()</code> with more conditions.</p>
+          <p>Add your temp &amp; humidity sensor. <strong>Works with DHT11, DHT22, or DHT20</strong> — set one line at the top of <code>main.py</code> to match your module. Extend <code>evaluate_rest()</code> to combine conditions.</p>
           <span class="step-tag tag-next">Lesson 2</span>
           <span class="step-tag tag-lesson">DHT11/22 → D2 (GPIO25)</span>
           <span class="step-tag tag-lesson">DHT20 → I²C (0x38)</span>
@@ -263,7 +263,7 @@
     <div class="resource-card">
       <span class="resource-tag">LESSON 1 — START HERE</span>
       <h3>PIR Motion Sensor Rest Monitor</h3>
-      <p>Step-by-step: connect PIR sensor, write <code>boot.py</code> and <code>main.py</code>, view Daniel's live dashboard in a browser — all in 60 minutes. Includes teacher notes and a Daniel's UX preview.</p>
+      <p>Step-by-step: connect PIR sensor, write <code>boot.py</code> and <code>main.py</code>, view Daniel's live dashboard in a browser — all in 60 minutes. Includes teacher notes and a Daniel's UX context.</p>
       <ul>
         <li>Wiring: Gravity PIR → D3 port (GPIO26)</li>
         <li>Motion timer using <code>ticks_ms()</code></li>
@@ -341,7 +341,7 @@
           <td><strong>Generating</strong></td>
           <td><span class="obj-tag">Obj 6</span></td>
           <td><span class="marks-badge">9</span></td>
-          <td>Working code demonstrating <strong>selection</strong> (if/elif/else), <strong>iteration</strong> (while loop), <strong>user input</strong> (browser HTTP GET request), and <strong>data output</strong> (HTML dashboard and sensor values).</td>
+          <td>Working code demonstrating <strong>selection</strong> (if/elif/else), <strong>iteration</strong> (while loop), <strong>user input</strong> (browser HTTP GET request), and <strong>data output</strong> (HTML + sensor readings).</td>
         </tr>
         <tr>
           <td><strong>Evaluating</strong></td>
