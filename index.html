@@ -8,11 +8,16 @@
     :root {
       color-scheme: light;
       --bg: #f4f7fb;
-      --card: #ffffff;
+      --surface: #ffffff;
       --primary: #1d4ed8;
+      --primary-dark: #1e3a8a;
+      --accent: #c8102e;
       --text: #1f2937;
       --muted: #6b7280;
       --border: #dbe2f0;
+      --highlight: #eff6ff;
+      --shadow: 0 8px 24px rgba(29, 78, 216, 0.06);
+      --radius: 16px;
     }
 
     * { box-sizing: border-box; }
@@ -22,7 +27,7 @@
       font-family: Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .container {
@@ -31,99 +36,130 @@
       padding: 2rem 1rem 3rem;
     }
 
-    header {
-      text-align: center;
-      margin-bottom: 2rem;
+    .hero {
+      background: linear-gradient(135deg, var(--surface), #eef4ff);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow);
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
       color: var(--primary);
     }
 
     .subtitle {
-      margin-top: 0.75rem;
+      margin-top: 0.6rem;
       color: var(--muted);
+      max-width: 70ch;
+    }
+
+    .intro-callout {
+      margin-top: 1rem;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-left: 5px solid #047857;
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
     }
 
     .unit-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 1rem;
-      margin-top: 1.5rem;
+      margin-top: 1.25rem;
     }
 
     .unit-card {
-      background: var(--card);
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+      border-radius: 14px;
+      padding: 1.2rem;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
     }
 
     .unit-card h2 {
       margin: 0 0 0.5rem;
       font-size: 1.15rem;
-      color: var(--primary);
+      color: var(--primary-dark);
     }
 
     .unit-card p {
-      margin: 0 0 0.85rem;
+      margin: 0 0 0.9rem;
       color: var(--muted);
-      font-size: 0.95rem;
     }
 
     .unit-actions {
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
-      margin-top: 1rem;
+      gap: 0.75rem;
     }
 
-    .unit-link {
+    .btn {
       display: inline-block;
-      color: var(--primary);
-      font-weight: 700;
       text-decoration: none;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 0.7rem 1rem;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
-    .unit-link:hover {
-      text-decoration: underline;
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(29, 78, 216, 0.15);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
     }
 
     footer {
       margin-top: 2rem;
       text-align: center;
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: 0.92rem;
     }
   </style>
 </head>
 <body>
   <main class="container">
-    <header>
+    <section class="hero">
       <h1>General Subject Digital Solutions (QLD)</h1>
       <p class="subtitle">Learning platform landing page for Units 1–4 · Course years 2026 / 2027</p>
-    </header>
+      <div class="intro-callout">
+        <strong>Start here:</strong> use this homepage to move into each unit landing page, then into the related learning sequence and support materials.
+      </div>
+    </section>
 
     <section class="unit-grid" aria-label="Digital Solutions Units">
       <article class="unit-card">
-        <h2>Unit 1</h2>
-        <p>Explore data and create digital solutions using foundational computational thinking.</p>
+        <h2>Unit 1: Creating with Code</h2>
+        <p>Explore data and create digital solutions using foundational computational thinking. Open the Unit 1 landing page for learning resources, suggested learning sequence pages and assessment support.</p>
         <div class="unit-actions">
-          <a class="unit-link" href="./Unit%201/Suggested%20Learning%20Sequence/index.html">Learning Resources →</a>
-          <a class="unit-link" href="./Unit%201/Assessment%20exemplar/index.html">Assessment Support →</a>
+          <a class="btn btn-primary" href="./unit1-creating-with-code.html">Open Unit 1 landing page</a>
         </div>
       </article>
+
       <article class="unit-card">
         <h2>Unit 2</h2>
         <p>Analyse data and apply user experience principles in real-world digital contexts.</p>
       </article>
+
       <article class="unit-card">
         <h2>Unit 3</h2>
         <p>Develop and evaluate data-driven prototypes with a focus on quality and testing.</p>
       </article>
+
       <article class="unit-card">
         <h2>Unit 4</h2>
         <p>Design complete digital solutions and justify decisions through iterative refinement.</p>
