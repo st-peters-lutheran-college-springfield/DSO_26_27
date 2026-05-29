@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Topic 2 — User Experiences &amp; Interfaces | Cover Lesson Resource</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f4f7fb; --surface: #ffffff; --primary: #1d4ed8; --primary-dark: #1e3a8a;
+    --accent: #c8102e; --text: #1f2937; --muted: #6b7280; --border: #dbe2f0;
+    --success-bg: #ecfdf5; --success-border: #a7f3d0; --success-text: #047857;
+    --warn-bg: #fef3c7; --warn-border: #fcd34d; --warn-text: #92400e;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+  .top-nav { margin-bottom: 1.25rem; }
+  .top-nav a { color: var(--primary); text-decoration: none; font-weight: 700; }
+  .crumb-current { color: var(--muted); font-weight: 600; }
+  .hero { background: linear-gradient(135deg, var(--surface), #eef4ff); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1rem; box-shadow: 0 8px 24px rgba(29,78,216,0.08); }
+  h1 { margin: 0; color: var(--primary); font-size: clamp(1.5rem,3vw,2.2rem); }
+  .subtitle { margin-top: 0.5rem; color: var(--muted); max-width: 70ch; }
+  .intro-callout { margin-top: 1rem; background: var(--success-bg); border: 1px solid var(--success-border); border-left: 5px solid var(--success-text); border-radius: 12px; padding: 1rem 1.1rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1rem; box-shadow: 0 4px 14px rgba(15,23,42,0.04); }
+  .card h2 { margin-top: 0; margin-bottom: 0.5rem; font-size: 1.05rem; color: var(--primary); }
+  .assessment-prep { margin-top: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; box-shadow: 0 6px 20px rgba(15,23,42,0.05); }
+  .assessment-prep h2 { margin-top: 0; color: var(--primary-dark); }
+  .learning-path { margin-top: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; box-shadow: 0 6px 20px rgba(15,23,42,0.05); }
+  .learning-path h2 { margin-top: 0; color: var(--primary-dark); }
+  .assessment-intro { color: var(--muted); margin-bottom: 1rem; max-width: 75ch; }
+  .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+  .resource-card { border: 1px solid var(--border); border-radius: 14px; padding: 1rem; background: linear-gradient(180deg, #ffffff, #f8fbff); }
+  .resource-tag { display: inline-block; font-size: 0.78rem; font-weight: 700; color: white; background: var(--accent); border-radius: 999px; padding: 0.25rem 0.6rem; margin-bottom: 0.75rem; }
+  .resource-card h3 { margin: 0 0 0.5rem; color: var(--primary-dark); font-size: 1.08rem; }
+  .resource-card p { margin: 0 0 0.9rem; color: var(--muted); }
+  .resource-card ul { margin: 0 0 1rem; padding-left: 1.15rem; }
+  .resource-card li { margin-bottom: 0.35rem; }
+  .resource-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .btn { display: inline-block; text-decoration: none; font-weight: 700; border-radius: 10px; padding: 0.65rem 0.95rem; transition: transform 0.15s ease, box-shadow 0.15s ease; font-size: 0.9rem; }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(29,78,216,0.15); }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-secondary { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+  .teacher-note { margin-top: 1rem; background: var(--warn-bg); border: 1px solid var(--warn-border); border-left: 5px solid var(--warn-text); border-radius: 12px; padding: 0.9rem 1rem; color: var(--warn-text); }
+  ul { margin: 0; padding-left: 1.15rem; }
+  footer { margin-top: 2rem; text-align: center; color: var(--muted); font-size: 0.92rem; }
+  .site-header { background: var(--primary-dark); color: #fff; padding: 0.6rem 1rem; font-size: 0.82rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .site-header span { opacity: 0.55; }
+  .site-header a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.8rem; margin-left: auto; }
+  .cover-banner { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #1d4ed8 100%); color: #fff; padding: 2.2rem 1rem 1.8rem; position: relative; overflow: hidden; }
+  .cover-banner::before { content: ''; position: absolute; top: -50px; right: -50px; width: 280px; height: 280px; border-radius: 50%; background: rgba(255,255,255,0.04); pointer-events: none; }
+  .cover-banner-inner { max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
+  .cover-eyebrow { display: inline-flex; align-items: center; gap: 0.45rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); border-radius: 999px; padding: 0.28rem 0.8rem; font-size: 0.76rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 0.85rem; }
+  .cover-banner h1 { color: #fff; font-size: clamp(1.55rem,4vw,2.5rem); line-height: 1.15; margin: 0 0 0.5rem; }
+  .cover-banner h1 em { opacity: 0.65; font-style: normal; font-weight: 400; }
+  .cover-banner p { color: rgba(255,255,255,0.68); font-size: 0.95rem; max-width: 60ch; margin: 0 0 1rem; line-height: 1.6; }
+  .cover-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .cchip { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 0.22rem 0.65rem; font-size: 0.76rem; font-weight: 600; color: rgba(255,255,255,0.92); }
+  .section-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 1.75rem 0 0.7rem; display: flex; align-items: center; gap: 0.5rem; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .syllabus-block { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin: 0.75rem 0; }
+  .syllabus-header { background: var(--primary-dark); color: #fff; padding: 0.75rem 1.1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
+  .syllabus-header h3 { margin: 0; font-size: 0.95rem; }
+  .syllabus-header a { color: rgba(255,255,255,0.75); font-size: 0.76rem; text-decoration: underline; white-space: nowrap; }
+  .syllabus-header a:hover { color: #fff; }
+  .dotpoints { list-style: none; padding: 0; margin: 0; }
+  .dp-group { padding: 0.9rem 1.1rem; border-bottom: 1px solid var(--bg); }
+  .dp-group:last-child { border-bottom: none; }
+  .dp-group h4 { font-size: 0.82rem; font-weight: 700; color: var(--primary); margin: 0 0 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; }
+  .dp-group ul { list-style: none; padding: 0; margin: 0; }
+  .dp-group li { font-size: 0.88rem; color: var(--text); padding: 0.22rem 0 0.22rem 1.2rem; position: relative; border-top: 1px solid var(--bg); line-height: 1.5; }
+  .dp-group li:first-child { border-top: none; }
+  .dp-group li::before { content: '—'; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
+  .dp-group li.sub { padding-left: 2.2rem; }
+  .dp-group li.sub::before { content: '·'; left: 1.2rem; }
+  .obj-pill { display: inline-block; background: #eff6ff; border: 1px solid #bfdbfe; color: var(--primary); border-radius: 999px; padding: 0.1rem 0.5rem; font-size: 0.7rem; font-weight: 700; margin-left: 0.35rem; }
+  .highlight-dp { background: #fffbeb; }
+  .carp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.9rem; margin: 0.75rem 0; }
+  .carp-card { border-radius: 12px; padding: 1rem 1.1rem; border: 1px solid var(--border); }
+  .carp-card.C { border-top: 4px solid #dc2626; background: #fff5f5; }
+  .carp-card.A { border-top: 4px solid #1d4ed8; background: #eff6ff; }
+  .carp-card.R { border-top: 4px solid #16a34a; background: #f0fdf4; }
+  .carp-card.P { border-top: 4px solid #9333ea; background: #faf5ff; }
+  .carp-card h3 { font-size: 0.95rem; font-weight: 700; margin: 0 0 0.4rem; }
+  .carp-card.C h3 { color: #dc2626; }
+  .carp-card.A h3 { color: #1d4ed8; }
+  .carp-card.R h3 { color: #16a34a; }
+  .carp-card.P h3 { color: #9333ea; }
+  .carp-card p { font-size: 0.84rem; color: var(--muted); margin: 0 0 0.5rem; }
+  .carp-card ul { font-size: 0.82rem; color: var(--text); padding-left: 1rem; margin: 0; }
+  .carp-card li { margin-bottom: 0.2rem; }
+  .usability-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 0.75rem; margin: 0.75rem 0; }
+  .up-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.85rem 1rem; }
+  .up-card h4 { font-size: 0.88rem; font-weight: 700; color: var(--primary-dark); margin: 0 0 0.3rem; }
+  .up-card p { font-size: 0.8rem; color: var(--muted); margin: 0 0 0.4rem; }
+  .up-card .example { font-size: 0.76rem; color: var(--success-text); font-style: italic; }
+  .video-embed { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .video-wrap { position: relative; padding-bottom: 56.25%; height: 0; background: #000; }
+  .video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+  .video-caption { padding: 0.75rem 1rem; }
+  .video-caption h4 { margin: 0 0 0.25rem; font-size: 0.9rem; color: var(--primary-dark); }
+  .video-caption p { margin: 0; font-size: 0.8rem; color: var(--muted); }
+  .vtag { display: inline-block; background: var(--bg); border: 1px solid var(--border); color: var(--muted); border-radius: 4px; padding: 1px 7px; font-size: 0.68rem; font-family: monospace; margin-top: 5px; }
+  .video-grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 0.75rem 0; }
+  .script-block { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin: 0.75rem 0; }
+  .script-row { display: grid; grid-template-columns: 60px 80px 1fr; border-bottom: 1px solid var(--bg); align-items: start; }
+  .script-row:last-child { border-bottom: none; }
+  .script-row.head { background: var(--bg); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+  .sr-time { padding: 0.6rem 0.75rem; font-size: 0.82rem; font-family: monospace; color: var(--primary); font-weight: 700; }
+  .sr-section { padding: 0.6rem 0.75rem; font-size: 0.78rem; font-weight: 700; color: var(--primary-dark); }
+  .sr-content { padding: 0.6rem 0.75rem; font-size: 0.86rem; color: var(--text); }
+  .sr-content ul { margin: 0.3rem 0; font-size: 0.83rem; }
+  .sr-content li { margin: 0.2rem 0; }
+  .sr-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .checklist { list-style: none; padding: 0; margin: 0.5rem 0; }
+  .checklist li { display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.45rem 0; border-bottom: 1px solid var(--bg); font-size: 0.88rem; }
+  .checklist li:last-child { border-bottom: none; }
+  .cbox { width: 20px; height: 20px; min-width: 20px; border: 2px solid var(--border); border-radius: 4px; background: var(--surface); flex-shrink: 0; margin-top: 1px; }
+  .cl-obj { display: inline-block; background: #eff6ff; border: 1px solid #bfdbfe; color: var(--primary); border-radius: 999px; padding: 0.08rem 0.45rem; font-size: 0.68rem; font-weight: 700; margin-left: 0.35rem; }
+  .ux-mini { background: #111; border-radius: 10px; padding: 16px; font-family: monospace; color: #ddd; text-align: center; }
+  .ux-mini .sym { font-size: 2.2rem; line-height: 1; }
+  .ux-mini .lbl { font-size: 0.75rem; letter-spacing: 2px; color: #555; text-transform: uppercase; margin-top: 5px; }
+  .ux-mini .msg { font-size: 0.72rem; color: #484848; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .script-row { grid-template-columns: 50px 1fr; }
+    .sr-section { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <strong>St Peters Lutheran College Springfield</strong>
+  <span>·</span><span>Digital Solutions 2025</span>
+  <span>·</span><span>Unit 1 — Creating with Code</span>
+  <a href="student_hub.html">← Back to Hub</a>
+</div>
+
+<div class="cover-banner">
+  <div class="cover-banner-inner">
+    <div class="cover-eyebrow">📚 Cover Lesson Resource &nbsp;·&nbsp; Unit 1, Topic 2</div>
+    <h1>User Experiences &amp; Interfaces <em>— and your 2-minute video</em></h1>
+    <p>This page guides you through the QCAA syllabus content for Topic 2, connects it to Daniel's dashboard you are building, and explains exactly how to plan and record your 2-minute assessment video.</p>
+    <div class="cover-chips">
+      <span class="cchip">📄 QCAA Syllabus — Unit 1 Topic 2</span>
+      <span class="cchip">🎨 UX &amp; Useability Principles</span>
+      <span class="cchip">📐 Visual Design (CARP)</span>
+      <span class="cchip">🎬 2-min Assessment Video</span>
+      <span class="cchip">👤 Daniel Foster — persona</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <nav class="top-nav">
+    <a href="student_hub.html">FIA2 Project Hub</a> &rsaquo;
+    <span class="crumb-current">Topic 2 — User Experiences &amp; Interfaces</span>
+  </nav>
+
+  <div class="teacher-note">
+    <strong>👋 Cover teacher — instructions for this lesson</strong>
+    <ol style="margin-top:0.4rem;padding-left:1.1rem;color:var(--warn-text)">
+      <li>Ask students to open this page and the <strong>FIA2 Project Hub</strong> (<code>student_hub.html</code>) side by side</li>
+      <li>Students work through this page <strong>independently</strong> — each section has a clear task</li>
+      <li>The lesson is self-paced reading + journaling — no login, no IDE, no hardware needed</li>
+      <li>Students should be writing in their <strong>OneNote project journal</strong> throughout</li>
+      <li>There are no videos to mark — this is a <strong>planning and understanding lesson</strong></li>
+      <li>At the end, students use the video script planner at the bottom to draft their 2-min video plan</li>
+    </ol>
+  </div>
+
+  <div class="intro-callout">
+    <strong>✅ Today's learning goals:</strong> By the end of this lesson you will be able to explain what makes Daniel's dashboard a <em>good</em> user interface — using the correct QCAA vocabulary and visual design principles.
+  </div>
+
+  <p class="section-label">Part 1 — What the QCAA syllabus says you must know</p>
+  <div class="syllabus-block">
+    <div class="syllabus-header">
+      <h3>📄 Unit 1, Topic 2: User Experiences and Interfaces — Syllabus Dot Points</h3>
+      <a href="https://www.qcaa.qld.edu.au/downloads/senior-qce/syllabuses/snr_digital_solutions_25_syll.pdf" target="_blank" rel="noopener">Open full syllabus PDF ↗</a>
+    </div>
+    <ul class="dotpoints">
+      <div class="dp-group">
+        <h4>Recognise and describe <span class="obj-pill">Obj 1</span></h4>
+        <ul>
+          <li>The meaning and importance of <strong>user experience (UX)</strong></li>
+          <li>Useability principles including <strong>accessibility, effectiveness, safety, utility</strong> and <strong>learnability</strong></li>
+        </ul>
+      </div>
+      <div class="dp-group">
+        <h4>Explore existing user interfaces <span class="obj-pill">Obj 3</span></h4>
+        <ul>
+          <li>Identify pitfalls and useful solutions in existing interfaces</li>
+          <li>Determine how <strong>user characteristics</strong> influence the user-interface requirements and user experience for problems and solutions in relation to the useability principles</li>
+        </ul>
+      </div>
+      <div class="dp-group highlight-dp">
+        <h4>Explore and use the elements and principles of visual communication <span class="obj-pill">Obj 2</span><span class="obj-pill">Obj 5</span></h4>
+        <ul>
+          <li><strong>Elements</strong> are limited to: space, line, colour, shape, texture, tone, form, proportion and scale</li>
+          <li><strong>Principles</strong> are limited to: <strong>balance, contrast, proximity, harmony, alignment, repetition</strong> and hierarchy</li>
+        </ul>
+      </div>
+      <div class="dp-group">
+        <h4>Symbolise ideas for a user interface <span class="obj-pill">Obj 2</span></h4>
+        <ul>
+          <li>Using sketches, diagrams, schematic diagrams or mock-ups</li>
+          <li>Document and justify design decisions that address the user characteristics and useability principles</li>
+        </ul>
+      </div>
+      <div class="dp-group">
+        <h4>Determine possible personal, social and economic impacts <span class="obj-pill">Obj 7</span></h4>
+        <ul>
+          <li>Of the user interface on individuals, organisations and society</li>
+        </ul>
+      </div>
+      <div class="dp-group">
+        <h4>Appraise user interfaces against useability principles <span class="obj-pill">Obj 7</span></h4>
+        <ul>
+          <li>Evaluate strengths and limitations of your interface design</li>
+          <li>Make refinements and justified recommendations based on evaluation</li>
+        </ul>
+      </div>
+    </ul>
+  </div>
+
+  <p style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem">Source: <em>Digital Solutions 2025 v1.4 General Senior Syllabus</em>, QCAA, p. 17. © State of Queensland (QCAA) 2026 CC BY 4.0.</p>
+
+  <div class="teacher-note" style="margin-top:0.9rem">
+    <strong>📓 Journal Task 1 — ~10 minutes</strong>
+    <p style="margin-top:0.3rem;color:var(--warn-text)">Open your OneNote journal. Pick any app or website you use every day (e.g. your school portal, a game, YouTube, Spotify). Write 3–5 sentences explaining what makes it easy or difficult to use.</p>
+  </div>
+
+  <p class="section-label">Part 2 — The five useability principles &amp; Daniel's dashboard</p>
+  <div class="usability-grid">
+    <div class="up-card"><h4>♿ Accessibility</h4><p>Can <em>everyone</em> use the interface, including people with disabilities or impairments?</p><span class="example">→ Daniel has colour-vision deficiency. His dashboard uses ✓/● symbols and text labels — not colour alone.</span></div>
+    <div class="up-card"><h4>✅ Effectiveness</h4><p>Does the interface help users achieve their goal accurately and completely?</p><span class="example">→ Daniel's goal: know if room is calm. Dashboard shows "ROOM IS CALM" — one glance, goal achieved.</span></div>
+    <div class="up-card"><h4>🛡️ Safety</h4><p>Does the design prevent user errors and protect them from dangerous mistakes?</p><span class="example">→ Dashboard is read-only — Daniel can't accidentally change settings when half-asleep.</span></div>
+    <div class="up-card"><h4>🔧 Utility</h4><p>Does the interface provide the right functions for what the user actually needs?</p><span class="example">→ Dashboard shows motion status and calm timer — exactly what Daniel needs, nothing more.</span></div>
+    <div class="up-card"><h4>📖 Learnability</h4><p>How quickly can a new user understand how to use the interface?</p><span class="example">→ No buttons, no menus, no login. Daniel can use it with zero instruction — maximum learnability.</span></div>
+  </div>
+
+  <div class="teacher-note">
+    <strong>📓 Journal Task 2 — ~8 minutes</strong>
+    <p style="margin-top:0.3rem;color:var(--warn-text)">In your journal, write one sentence for each of the five useability principles explaining how your PIR dashboard either meets or fails to meet that principle.</p>
+  </div>
+
+  <p class="section-label">Part 3 — Visual design principles (CARP) in the QCAA syllabus</p>
+  <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.75rem">The QCAA syllabus lists these visual design <strong>principles</strong> for Unit 1 Topic 2: <strong>balance, contrast, proximity, harmony, alignment, repetition and hierarchy.</strong> The acronym <strong>CARP</strong> (Contrast, Alignment, Repetition, Proximity) covers four of the most important ones for screen design.</p>
+
+  <div class="carp-grid">
+    <div class="carp-card C"><h3>C — Contrast</h3><p>Make different things look <em>different</em>. If two things aren't the same, make them very different — not just slightly different.</p><ul><li>Dark background (#111) vs near-white text (#eee)</li><li>Large symbol (✓) vs small label text</li><li>Solid / dashed / dotted borders to signal state</li></ul><p style="font-size:0.77rem;margin-top:0.4rem;color:#b91c1c"><strong>Syllabus link:</strong> contrast, hierarchy, tone</p></div>
+    <div class="carp-card A"><h3>A — Alignment</h3><p>Every element should have a visual connection to something else on the page. Nothing should be placed arbitrarily.</p><ul><li>All text centred — consistent axis throughout</li><li>Reading tiles aligned in a grid</li><li>Progress bar full-width — edge-to-edge alignment</li></ul><p style="font-size:0.77rem;margin-top:0.4rem;color:#1d4ed8"><strong>Syllabus link:</strong> alignment, balance</p></div>
+    <div class="carp-card R"><h3>R — Repetition</h3><p>Repeat visual elements throughout the design. This creates consistency and strengthens unity.</p><ul><li>Same monospace font everywhere</li><li>Same tile style for every reading card</li><li>Same border-radius on all containers</li></ul><p style="font-size:0.77rem;margin-top:0.4rem;color:#16a34a"><strong>Syllabus link:</strong> repetition, harmony</p></div>
+    <div class="carp-card P"><h3>P — Proximity</h3><p>Group related items together. Items that are related should be close; unrelated items should be separated.</p><ul><li>Symbol + status label + message grouped in one card</li><li>Progress bar separated from status card</li><li>Reading tiles separate from main status area</li></ul><p style="font-size:0.77rem;margin-top:0.4rem;color:#9333ea"><strong>Syllabus link:</strong> proximity, hierarchy</p></div>
+  </div>
+
+  <div class="card" style="margin-top:0.75rem">
+    <h2>🎨 Remaining syllabus principles — also in your design</h2>
+    <div class="grid" style="margin-top:0.5rem">
+      <div><strong style="font-size:0.88rem;color:var(--primary-dark)">Balance</strong><p style="font-size:0.82rem;color:var(--muted);margin:0.2rem 0 0">Visual weight is distributed evenly. Daniel's dashboard is vertically centred and full-width — no heavy left or right side.</p></div>
+      <div><strong style="font-size:0.88rem;color:var(--primary-dark)">Harmony</strong><p style="font-size:0.82rem;color:var(--muted);margin:0.2rem 0 0">All visual elements feel like they belong together. Using a single font family, monochrome palette, and consistent spacing creates harmony.</p></div>
+      <div><strong style="font-size:0.88rem;color:var(--primary-dark)">Hierarchy</strong><p style="font-size:0.82rem;color:var(--muted);margin:0.2rem 0 0">The most important information (status symbol + label) is largest and at the top. Secondary data (readings) is smaller below.</p></div>
+    </div>
+  </div>
+
+  <div class="assessment-prep" style="margin-top:1rem">
+    <h2>🔍 Connecting CARP to Daniel's actual dashboard</h2>
+    <p class="assessment-intro">This is what Daniel sees. Annotate a screenshot of this in your journal — label each design decision with the principle it demonstrates.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start">
+      <div class="ux-mini" style="border:3px solid #333;border-radius:10px">
+        <div style="font-size:0.55rem;letter-spacing:3px;color:#3a3a3a;text-transform:uppercase;margin-bottom:8px">■ REST ENVIRONMENT MONITOR</div>
+        <div class="sym">✓</div>
+        <div class="lbl">CALM</div>
+        <div class="msg">No movement for 4m 12s. Room is ready.</div>
+        <div style="background:#141414;border:1px solid #1e1e1e;border-radius:6px;padding:7px;margin-top:10px;">
+          <div style="font-size:0.5rem;color:#2a2a2a;letter-spacing:2px;margin-bottom:3px">CALM DURATION</div>
+          <div style="font-size:0.85rem;letter-spacing:3px;color:#777">██████████</div>
+          <div style="font-size:0.55rem;color:#252525;margin-top:2px">252s / 60s threshold ✓</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px">
+          <div style="background:#141414;border:1px solid #1e1e1e;border-radius:5px;padding:7px"><div style="font-size:0.5rem;color:#2e2e2e;letter-spacing:1.5px">LAST MOTION</div><div style="font-size:0.85rem;color:#bbb;font-weight:bold">4m 12s</div></div>
+          <div style="background:#141414;border:1px solid #1e1e1e;border-radius:5px;padding:7px"><div style="font-size:0.5rem;color:#2e2e2e;letter-spacing:1.5px">ROOM STATE</div><div style="font-size:0.85rem;color:#bbb;font-weight:bold">CALM</div></div>
+        </div>
+        <div style="font-size:0.5rem;color:#202020;margin-top:8px">Updates every 5s — no interaction needed</div>
+      </div>
+      <div>
+        <p style="font-size:0.87rem;color:var(--muted);margin-bottom:0.6rem"><strong>Design decisions to annotate:</strong></p>
+        <ul style="font-size:0.84rem;color:var(--text);padding-left:1rem">
+          <li style="margin-bottom:0.35rem"><strong>Contrast:</strong> #111 background vs #eee text — maximum readability, accessible for Daniel's CVD</li>
+          <li style="margin-bottom:0.35rem"><strong>Hierarchy:</strong> Large ✓ symbol → status label → advice text → data tiles — eye follows the correct priority order</li>
+          <li style="margin-bottom:0.35rem"><strong>Proximity:</strong> Status, label and message grouped in one card; readings in a separate tile section below</li>
+          <li style="margin-bottom:0.35rem"><strong>Repetition:</strong> Same monospace font, same tile style, same border-radius used consistently</li>
+          <li style="margin-bottom:0.35rem"><strong>Alignment:</strong> All elements centre-aligned on a single vertical axis</li>
+          <li style="margin-bottom:0.35rem"><strong>Symbol + text:</strong> ✓/● used alongside words — addresses Accessibility principle for colour-vision deficiency</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="teacher-note">
+    <strong>📓 Journal Task 3 — ~10 minutes</strong>
+    <p style="margin-top:0.3rem;color:var(--warn-text)">Take a screenshot of your own dashboard (or use the preview above). In OneNote, annotate it with arrows and labels identifying at least three UX or visual design principles.</p>
+  </div>
+
+  <p class="section-label">Part 4 — Your 2-minute assessment video</p>
+  <div class="assessment-prep">
+    <h2>🎬 What the assessment requires</h2>
+    <p class="assessment-intro">From the FIA2 task sheet: <em>"Visual and spoken video: up to 2 minutes, demonstrating the functionality of the user interface and data and programmed components."</em></p>
+    <div class="grid" style="margin-top:0.5rem">
+      <div class="card"><h2>✅ Must include</h2><ul style="font-size:0.87rem;color:var(--text)"><li>Your dashboard <strong>running live</strong> in a browser</li><li>At least one sensor <strong>changing the status</strong> (wave hand at PIR)</li><li>Your <strong>spoken explanation</strong> of what is happening</li><li>Reference to <strong>Daniel's needs</strong> and your design decisions</li><li>At least one UX or visual design principle <strong>named and explained</strong></li></ul></div>
+      <div class="card"><h2>🚫 Do not include</h2><ul style="font-size:0.87rem;color:var(--text)"><li>More than 2 minutes of footage</li><li>Just showing code — the video must show the <em>running interface</em></li><li>Silent screen recording — you must speak</li><li>Background music that drowns out your voice</li><li>Other students' names or faces</li></ul></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
