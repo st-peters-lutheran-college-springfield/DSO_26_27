@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> Today Lesson 2 — Temperature &amp; Humidity Sensor | EEDU IoT Kit</title>
+<style>
+  /* ── style.css ── */
+  :root {
+    color-scheme: light;
+    --bg: #f4f7fb;
+    --surface: #ffffff;
+    --primary: #1d4ed8;
+    --primary-dark: #1e3a8a;
+    --accent: #c8102e;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #dbe2f0;
+    --success-bg: #ecfdf5;
+    --success-border: #a7f3d0;
+    --success-text: #047857;
+    --warn-bg: #fef3c7;
+    --warn-border: #fcd34d;
+    --warn-text: #92400e;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+  .top-nav { margin-bottom: 1.25rem; }
+  .top-nav a { color: var(--primary); text-decoration: none; font-weight: 700; }
+  .crumb-current { color: var(--muted); font-weight: 600; }
+  .hero { background: linear-gradient(135deg, var(--surface), #eef4ff); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1rem; box-shadow: 0 8px 24px rgba(29,78,216,0.06); }
+  h1 { margin: 0; color: var(--primary); font-size: clamp(1.6rem,3vw,2.4rem); }
+  .subtitle { margin-top: 0.5rem; color: var(--muted); max-width: 70ch; }
+  .intro-callout { margin-top: 1rem; background: var(--success-bg); border: 1px solid var(--success-border); border-left: 5px solid var(--success-text); border-radius: 12px; padding: 1rem 1.1rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1rem; box-shadow: 0 4px 14px rgba(15,23,42,0.04); }
+  .card h2 { margin-top: 0; margin-bottom: 0.5rem; font-size: 1.05rem; color: var(--primary); }
+  .assessment-prep { margin-top: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; box-shadow: 0 6px 20px rgba(15,23,42,0.05); }
+  .assessment-prep h2 { margin-top: 0; color: var(--primary-dark); }
+  .learning-path { margin-top: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; box-shadow: 0 6px 20px rgba(15,23,42,0.05); }
+  .learning-path h2 { margin-top: 0; color: var(--primary-dark); }
+  .assessment-intro { color: var(--muted); margin-bottom: 1rem; max-width: 75ch; }
+  .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+  .resource-card { border: 1px solid var(--border); border-radius: 14px; padding: 1rem; background: linear-gradient(180deg, #ffffff, #f8fbff); }
+  .resource-tag { display: inline-block; font-size: 0.78rem; font-weight: 700; color: white; background: var(--accent); border-radius: 999px; padding: 0.25rem 0.6rem; margin-bottom: 0.75rem; }
+  .resource-card h3 { margin: 0 0 0.5rem; color: var(--primary-dark); font-size: 1.08rem; }
+  .resource-card p { margin: 0 0 0.9rem; color: var(--muted); }
+  .resource-card ul { margin: 0 0 1rem; padding-left: 1.15rem; }
+  .resource-card li { margin-bottom: 0.35rem; }
+  .resource-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .btn { display: inline-block; text-decoration: none; font-weight: 700; border-radius: 10px; padding: 0.65rem 0.95rem; transition: transform 0.15s ease, box-shadow 0.15s ease; font-size: 0.9rem; }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(29,78,216,0.15); }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-secondary { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+  .teacher-note { margin-top: 1rem; background: var(--warn-bg); border: 1px solid var(--warn-border); border-left: 5px solid var(--warn-text); border-radius: 12px; padding: 0.9rem 1rem; color: var(--warn-text); }
+  ul { margin: 0; padding-left: 1.15rem; }
+  footer { margin-top: 2rem; text-align: center; color: var(--muted); font-size: 0.92rem; }
+
+  /* ── supplemental ── */
+  .site-header {
+    background: var(--primary-dark);
+    color: #fff;
+    padding: 0.6rem 1rem;
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .site-header span { opacity: 0.55; }
+  .site-header a { color: rgba(255,255,255,0.65); text-decoration: none; margin-left: auto; font-size: 0.8rem; }
+
+  /* LESSON TODAY banner — blue/white */
+  .lesson-banner {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    color: #fff;
+    padding: 2.4rem 1rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .lesson-banner::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    pointer-events: none;
+  }
+  .lesson-banner::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -30px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+  .lesson-banner-inner { max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
+  .lesson-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 999px;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 0.85rem;
+  }
+  .lesson-banner h1 { color: #fff; font-size: clamp(1.7rem,4vw,2.8rem); line-height: 1.15; margin: 0 0 0.55rem; }
+  .lesson-banner h1 em { opacity: 0.72; font-style: normal; font-weight: 400; }
+  .lesson-banner p { color: rgba(255,255,255,0.75); font-size: 0.96rem; max-width: 58ch; margin: 0 0 1.1rem; line-height: 1.6; }
+  .lesson-meta-row { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .lmeta {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 999px;
+    padding: 0.22rem 0.7rem;
+    font-size: 0.77rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.92);
+  }
+
+  /* section divider */
+  .section-label {
+    font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--muted);
+    margin: 1.75rem 0 0.7rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* sensor selector */
+  .sensor-tabs { display: flex; gap: 0; border-radius: 12px 12px 0 0; overflow: hidden; border: 1px solid var(--border); border-bottom: none; }
+  .sensor-tab {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: var(--bg);
+    color: var(--muted);
+    border-right: 1px solid var(--border);
+    text-align: center;
+    transition: background 0.15s, color 0.15s;
+    user-select: none;
+  }
+  .sensor-tab:last-child { border-right: none; }
+  .sensor-tab.active {
+    background: var(--primary);
+    color: #fff;
+  }
+  .sensor-panel {
+    display: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0 0 12px 12px;
+    padding: 1.25rem;
+  }
+  .sensor-panel.active { display: block; }
+
+  /* wiring table */
+  .wire-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  .wire-table th { background: #eff6ff; color: var(--primary-dark); text-align: left; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border); }
+  .wire-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--bg); color: var(--text); }
+  .wire-table tr:hover td { background: var(--bg); }
+  .pin-tag { display: inline-block; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 5px; padding: 1px 8px; font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--primary-dark); font-weight: 700; }
+  .pin-tag.i2c { background: #f0fdf4; border-color: var(--success-border); color: var(--success-text); }
+
+  /* gravity connector visual */
+  .gravity-visual {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: #f8fbff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin: 0.75rem 0;
+    flex-wrap: wrap;
+  }
+  .gconn {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    min-width: 120px;
+  }
+  .gconn h5 { margin: 0 0 0.5rem; font-size: 0.78rem; color: var(--primary-dark); text-transform: uppercase; letter-spacing: 0.5px; }
+  .gpins { display: flex; gap: 4px; justify-content: center; margin-bottom: 5px; }
+  .gpin { width: 16px; height: 24px; border-radius: 3px; border: 1px solid var(--border); }
+  .gpin.blk { background: #1f2937; }
+  .gpin.red { background: #ef4444; }
+  .gpin.yel { background: #d97706; }
+  .gpin.whi { background: #f3f4f6; border-color: #d1d5db; }
+  .gpin-label { font-size: 0.62rem; color: var(--muted); font-family: monospace; }
+  .garrow { font-size: 1.6rem; color: var(--primary); }
+  .gport-label { display: inline-block; background: var(--primary); color: #fff; border-radius: 6px; padding: 3px 10px; font-size: 0.78rem; font-weight: 700; font-family: monospace; margin-top: 6px; }
+  .gport-label.i2c { background: var(--success-text); }
+
+  /* step cards */
+  .step-list { display: flex; flex-direction: column; gap: 0; }
+  .step-item { display: grid; grid-template-columns: 52px 1fr; border: 1px solid var(--border); border-top: none; background: var(--surface); }
+  .step-item:first-child { border-top: 1px solid var(--border); border-radius: 12px 12px 0 0; }
+  .step-item:last-child { border-radius: 0 0 12px 12px; }
+  .step-num-col { background: #eff6ff; border-right: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: center; padding-top: 1.1rem; }
+  .step-circle { width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+  .step-body { padding: 1rem 1.1rem; }
+  .step-body h3 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--primary-dark); }
+  .step-body p { margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--muted); }
+  .step-body ol, .step-body ul { font-size: 0.88rem; color: var(--text); padding-left: 1.15rem; margin: 0.3rem 0; }
+  .step-body li { margin-bottom: 0.3rem; }
+  .step-time { display: inline-block; font-size: 0.72rem; font-weight: 700; background: #eff6ff; color: var(--primary); border: 1px solid #bfdbfe; border-radius: 999px; padding: 0.1rem 0.6rem; margin-bottom: 0.5rem; }
+
+  /* code blocks — blue-tinted dark */
+  .code-block { background: #0c1a3a; border-radius: 12px; overflow: hidden; margin: 0.75rem 0; border: 1px solid #1e3a8a; }
+  .code-header { background: #132047; padding: 0.5rem 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e3a8a; }
+  .code-fname { font-family: 'Courier New', monospace; font-size: 0.75rem; color: #93c5fd; }
+  .code-lang { font-family: 'Courier New', monospace; font-size: 0.65rem; color: #3b5fc0; text-transform: uppercase; letter-spacing: 1px; }
+  .code-body { padding: 1rem 1.1rem; overflow-x: auto; }
+  .code-body pre { font-family: 'Courier New', monospace; font-size: 0.82rem; color: #bfdbfe; white-space: pre; line-height: 1.75; margin: 0; }
+  .kw { color: #93c5fd; font-weight: 600; }
+  .cm { color: #3b5fc0; font-style: italic; }
+  .st { color: #86efac; }
+  .fn { color: #e0f2fe; }
+  .nm { color: #fbbf24; }
+
+  /* UX dashboard preview — blue-accented dark */
+  .ux-preview { background: #0a1628; border: 2px solid #1e3a8a; border-radius: 14px; overflow: hidden; margin: 0.75rem 0; }
+  .ux-chrome { background: #0f2044; border-bottom: 1px solid #1e3a8a; padding: 8px 14px; display: flex; align-items: center; gap: 8px; }
+  .ux-dot { width: 9px; height: 9px; border-radius: 50%; background: #1e3a8a; }
+  .ux-url { font-family: monospace; font-size: 0.68rem; color: #2d4a7a; margin-left: 8px; }
+  .ux-badge { font-family: monospace; font-size: 0.62rem; color: #1e3a8a; margin-left: auto; text-transform: uppercase; letter-spacing: 1px; }
+  .ux-states { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .ux-state { padding: 20px 14px 14px; display: flex; flex-direction: column; align-items: center; gap: 9px; font-family: monospace; border-right: 1px solid #0f2044; }
+  .ux-state:last-child { border-right: none; }
+  .ux-tiny { font-size: 0.56rem; color: #1e3a8a; letter-spacing: 2px; text-transform: uppercase; }
+  .ux-sym { font-size: 2.8rem; line-height: 1; color: #93c5fd; }
+  .ux-status { font-size: 0.82rem; font-weight: bold; color: #bfdbfe; letter-spacing: 0.5px; text-align: center; line-height: 1.3; }
+  .ux-msg { font-size: 0.62rem; color: #2d4a7a; text-align: center; line-height: 1.5; max-width: 140px; }
+  .ux-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; width: 100%; }
+  .ux-tile { background: #0f2044; border: 1px solid #1a3566; border-radius: 5px; padding: 7px 6px; text-align: center; }
+  .ux-tl { font-size: 0.52rem; color: #1e3a8a; letter-spacing: 1.5px; text-transform: uppercase; }
+  .ux-tv { font-size: 0.88rem; font-weight: bold; margin: 3px 0 1px; }
+  .ux-ok { color: #86efac; }
+  .ux-fail { color: #f87171; }
+  .ux-neutral { color: #93c5fd; }
+  .ux-foot { font-size: 0.54rem; color: #1e3a8a; text-align: center; }
+  .ux-state-label { font-size: 0.58rem; color: #1e3a8a; letter-spacing: 1.5px; text-transform: uppercase; text-align: center; width: 100%; border-top: 1px solid #0f2044; padding-top: 7px; margin-top: 3px; }
+
+  /* concept tags */
+  .concept-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.5rem; }
+  .ctag { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 0.15rem 0.55rem; font-size: 0.75rem; color: var(--primary); font-weight: 600; }
+
+  /* sc chips */
+  .sc-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+  .sc-chip { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.35rem 0.75rem; font-size: 0.82rem; color: var(--primary-dark); display: flex; align-items: center; gap: 0.4rem; }
+  .sc-chip strong { color: var(--primary); }
+
+  /* algo table */
+  .algo-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; margin: 0.6rem 0; }
+  .algo-table th { background: #eff6ff; color: var(--primary-dark); text-align: left; padding: 0.55rem 0.75rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border); }
+  .algo-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--bg); color: var(--text); vertical-align: top; }
+  .algo-table tr:hover td { background: var(--bg); }
+  .score-badge { display: inline-block; background: var(--primary); color: #fff; border-radius: 999px; padding: 0.1rem 0.55rem; font-size: 0.75rem; font-weight: 700; }
+  .score-badge.full { background: var(--success-text); }
+  .score-badge.part { background: #d97706; }
+  .score-badge.none { background: #6b7280; }
+
+  /* starting point box */
+  .starting-point-box { background: #eff6ff; border: 1px solid #bfdbfe; border-left: 5px solid var(--primary); border-radius: 12px; padding: 1rem 1.1rem; margin: 1rem 0; }
+  .starting-point-box h3 { margin: 0 0 0.35rem; color: var(--primary-dark); font-size: 0.96rem; }
+  .starting-point-box p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+
+  /* video grid */
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 0.75rem 0; }
+  .video-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .video-wrap { position: relative; padding-bottom: 56.25%; height: 0; background: var(--primary-dark); }
+  .video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+  .video-info { padding: 0.75rem 0.9rem; }
+  .video-info h4 { margin: 0 0 0.25rem; font-size: 0.88rem; color: var(--primary-dark); line-height: 1.35; }
+  .video-info p { margin: 0; font-size: 0.77rem; color: var(--muted); }
+  .vtag { display: inline-block; margin-top: 5px; background: #eff6ff; border: 1px solid #bfdbfe; color: var(--primary); border-radius: 4px; padding: 1px 7px; font-size: 0.68rem; font-family: monospace; }
+
+  /* extend cards */
+  .extend-card { border-left: 4px solid var(--primary); border-radius: 0 12px 12px 0; padding: 0.85rem 1rem; background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: 10px; }
+  .extend-card h4 { margin: 0 0 0.3rem; font-size: 0.9rem; color: var(--primary-dark); }
+  .extend-card p { margin: 0; font-size: 0.83rem; color: var(--muted); }
+  .extend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 0.75rem; margin: 0.75rem 0; }
+
+  @media (max-width: 600px) {
+    .sensor-tabs { flex-direction: column; border-radius: 10px 10px 0 0; }
+    .sensor-tab { border-right: none; border-bottom: 1px solid var(--border); }
+    .ux-states { grid-template-columns: 1fr; }
+    .step-item { grid-template-columns: 40px 1fr; }
+    .gravity-visual { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- site bar -->
+<div class="site-header">
+  <strong>St Peters Lutheran College Springfield</strong>
+  <span>·</span><span>Digital Solutions — Unit 1</span>
+  <span>·</span><span>Ms Baessler</span>
+  <a href="index.html">← Back to Hub</a>
+</div>
+
+<!-- LESSON BANNER — blue -->
+<div class="lesson-banner">
+  <div class="lesson-banner-inner">
+    <div class="lesson-eyebrow">📅 Lesson Today &nbsp;·&nbsp; 60 minutes &nbsp;·&nbsp; Lesson 2 of 4</div>
+    <h1>Temperature &amp; Humidity Sensor <em>Rest Monitor</em></h1>
+    <p>Add a temperature and humidity sensor to your existing PIR motion dashboard. Works with <strong style="color:#fff">DHT11, DHT22, or DHT20</strong> — set one line at the top of your code to match your module. Daniel's dashboard gains two reading tiles and a combined 3-condition rest score.</p>
+    <div class="lesson-meta-row">
+      <span class="lmeta">🧰 EEDU IoT Kit</span>
+      <span class="lmeta">🐍 MicroPython + Thonny</span>
+      <span class="lmeta">🌡️ DHT11 / DHT22 → D2 (GPIO25)</span>
+      <span class="lmeta">💧 DHT20 → I²C port (0x38)</span>
+      <span class="lmeta">📡 Builds on Lesson 1 PIR code</span>
+      <span class="lmeta">🌐 Live 3-condition dashboard</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- breadcrumb -->
+  <nav class="top-nav">
+    <a href="index.html">FIA2 Project Hub</a> &rsaquo;
+    <a href="lesson_today_pir.html">Lesson 1 — PIR</a> &rsaquo;
+    <span class="crumb-current">Lesson 2 — Temperature &amp; Humidity</span>
+  </nav>
+
+  <!-- starting point -->
+  <div class="starting-point-box">
+    <h3>🔗 Builds directly on Lesson 1</h3>
+    <p>You need your Lesson 1 code (<code>boot.py</code> + <code>main.py</code> with PIR working) before starting today. If your board is not connected or Lesson 1 isn't working, ask your teacher. Today you will <strong>replace</strong> <code>main.py</code> with a new version that adds the temp/humidity sensor alongside the PIR.</p>
+  </div>
+
+  <!-- teacher note -->
+  <div class="teacher-note">
+    <strong>👩‍🏫 Teacher — before the lesson</strong>
+    <ul style="margin-top:0.4rem;padding-left:1.1rem;color:var(--warn-text)">
+      <li>Lesson 1 PIR code must be working on all boards — <code>boot.py</code> connects to WiFi, <code>main.py</code> serves the PIR dashboard</li>
+      <li>Check which sensor each student has — DHT11 / DHT22 (3-pin Gravity → D2) or DHT20 (4-pin Gravity → I²C port)</li>
+      <li><strong>Both sensors stay plugged in</strong> — PIR on D3, temp/humidity sensor on D2 or I²C port simultaneously</li>
+      <li>Key teaching pause: <code>if SENSOR in ('DHT11','DHT22')</code> block — discuss what this design pattern is called (abstraction/modularity) and why it's better than two separate programs</li>
+      <li>Common issue: DHT11/22 needs minimum 2 s between reads — the <code>time.sleep(2)</code> in the server loop handles this</li>
+    </ul>
+  </div>
+
+  <!-- overview cards -->
+  <div class="grid">
+    <div class="card">
+      <h2>🎯 What you will add today</h2>
+      <ul style="font-size:0.87rem;color:var(--text)">
+        <li>Connect a temp &amp; humidity sensor alongside your PIR</li>
+        <li>Read temperature (°C) and humidity (%) every 5 seconds</li>
+        <li>Add two more conditions to the rest algorithm</li>
+        <li>Dashboard shows a 3-condition combined score for Daniel</li>
+        <li>All three tiles: Motion + Temp + Humidity with [OK]/[--] badges</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>🧰 What you need today</h2>
+      <ul style="font-size:0.87rem;color:var(--text)">
+        <li>FireBeetle 2 ESP32-E (from Lesson 1, still connected)</li>
+        <li>Gravity IO Shield (still mounted)</li>
+        <li>PIR sensor on D3 (from Lesson 1 — leave it in)</li>
+        <li><strong>DHT11 or DHT22</strong> — 3-pin Gravity cable → D2 port<br><em>OR</em></li>
+        <li><strong>DHT20</strong> — 4-pin Gravity cable → I²C port</li>
+        <li>Thonny IDE open with your Lesson 1 files</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>👤 Why this matters for Daniel</h2>
+      <ul style="font-size:0.87rem;color:var(--text)">
+        <li>Motion alone is not enough — a calm but sweltering room won't let Daniel rest</li>
+        <li>Sleep research: 16–22°C is the ideal temperature range for sleep onset</li>
+        <li>Humidity above 70% makes rooms feel stuffy and disrupts sleep quality</li>
+        <li>Combined score means Daniel gets a single, reliable status message</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>💡 Programming concepts</h2>
+      <div class="concept-tags">
+        <span class="ctag">Selection (if/elif/else)</span>
+        <span class="ctag">Abstraction (SENSOR variable)</span>
+        <span class="ctag">Functions (modular design)</span>
+        <span class="ctag">Data output (HTML)</span>
+        <span class="ctag">Error handling (try/except)</span>
+        <span class="ctag">I²C protocol (DHT20)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- success criteria -->
+  <p class="section-label">Success criteria for today</p>
+  <div class="sc-chips">
+    <div class="sc-chip"><strong>SC1</strong> Sensor reads real temperature and humidity values</div>
+    <div class="sc-chip"><strong>SC2</strong> Dashboard shows all three conditions with [OK]/[--] status</div>
+    <div class="sc-chip"><strong>SC3</strong> Status message is specific — tells Daniel exactly what to adjust</div>
+    <div class="sc-chip"><strong>SC4</strong> Page auto-updates — no interaction needed for Daniel</div>
+  </div>
+
+  <!-- SENSOR IDENTIFICATION -->
+  <p class="section-label">Step 0 — Identify your sensor before connecting</p>
+
+  <div class="hero" style="padding:1.25rem;margin-bottom:0">
+    <h1 style="font-size:1.1rem">🔍 Which sensor do you have?</h1>
+    <p class="subtitle" style="margin-top:0.4rem">Look at the label on your sensor module. Count the connector pins. This determines your wiring and the one line of code you need to change.</p>
+    <div class="grid" style="margin-top:0.75rem">
+      <div class="card" style="border-top:3px solid var(--primary)">
+        <h2>DHT11</h2>
+        <p style="font-size:0.84rem;color:var(--muted);margin-bottom:0.4rem">Label says <strong>DHT11</strong> · blue or white module · <strong>3 pins</strong></p>
+        <ul style="font-size:0.82rem">
+          <li>Temperature: ±2°C accuracy (integers only)</li>
+          <li>Humidity: ±5% accuracy</li>
+          <li>Minimum 1 s between readings</li>
+        </ul>
+        <div style="margin-top:0.6rem"><span class="pin-tag">Digital → D2 port</span></div>
+        <div style="font-size:0.78rem;color:var(--primary);margin-top:0.35rem;font-weight:700">Set: SENSOR = 'DHT11'</div>
+      </div>
+      <div class="card" style="border-top:3px solid #1d4ed8">
+        <h2>DHT22 / AM2302</h2>
+        <p style="font-size:0.84rem;color:var(--muted);margin-bottom:0.4rem">Label says <strong>DHT22</strong> or <strong>AM2302</strong> · <strong>3 pins</strong></p>
+        <ul style="font-size:0.82rem">
+          <li>Temperature: ±0.5°C accuracy (float)</li>
+          <li>Humidity: ±2% accuracy</li>
+          <li>Minimum 2 s between readings</li>
+        </ul>
+        <div style="margin-top:0.6rem"><span class="pin-tag">Digital → D2 port</span></div>
+        <div style="font-size:0.78rem;color:var(--primary);margin-top:0.35rem;font-weight:700">Set: SENSOR = 'DHT22'</div>
+      </div>
+      <div class="card" style="border-top:3px solid var(--success-text)">
+        <h2>DHT20</h2>
+        <p style="font-size:0.84rem;color:var(--muted);margin-bottom:0.4rem">Label says <strong>DHT20</strong> · blue module · <strong>4 pins</strong></p>
+        <ul style="font-size:0.82rem">
+          <li>Temperature: ±0.5°C accuracy (float)</li>
+          <li>Humidity: ±3% accuracy</li>
+          <li>I²C address 0x38</li>
+        </ul>
+        <div style="margin-top:0.6rem"><span class="pin-tag i2c">I²C port (0x38)</span></div>
+        <div style="font-size:0.78rem;color:var(--success-text);margin-top:0.35rem;font-weight:700">Set: SENSOR = 'DHT20'</div>
+      </div>
+    </div>
+    <p style="font-size:0.82rem;color:var(--muted);margin-top:0.65rem"><strong>Not sure?</strong> Count the connector pins: 3 pins = DHT11 or DHT22 → digital D2 port. 4 pins = DHT20 → I²C port.</p>
+  </div>
+
+  <!-- ═══════════ STEP-BY-STEP ═══════════ -->
+  <p class="section-label">Step-by-step lesson — follow in order</p>
+
+  <div class="step-list">
+
+    <!-- STEP 1 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">1</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 8 minutes</span>
+        <h3>Connect your temperature &amp; humidity sensor</h3>
+        <p>Your PIR sensor stays connected on D3. You are adding a second sensor today — it plugs into a different port.</p>
+
+        <!-- tabbed wiring -->
+        <div class="sensor-tabs" id="wireTabs" style="margin-top:0.75rem">
+          <div class="sensor-tab active" onclick="switchTab('wire','dht11',this)">DHT11</div>
+          <div class="sensor-tab" onclick="switchTab('wire','dht22',this)">DHT22</div>
+          <div class="sensor-tab" onclick="switchTab('wire','dht20',this)">DHT20 (I²C)</div>
+        </div>
+
+        <div class="sensor-panel active" id="wire-dht11">
+          <div class="gravity-visual">
+            <div class="gconn">
+              <h5>DHT11</h5>
+              <div class="gpins"><div class="gpin blk"></div><div class="gpin red"></div><div class="gpin yel"></div></div>
+              <div class="gpin-label">GND · VCC · SIG</div>
+            </div>
+            <div class="garrow">→</div>
+            <div style="text-align:center;font-size:0.82rem;color:var(--muted)">3-pin Gravity cable<br><em>(included in kit)</em></div>
+            <div class="garrow">→</div>
+            <div class="gconn">
+              <h5>IO Shield</h5>
+              <div class="gpins"><div class="gpin blk"></div><div class="gpin red"></div><div class="gpin yel"></div></div>
+              <div class="gpin-label">GND · VCC · SIG</div>
+              <span class="gport-label">D2 port</span>
+            </div>
+          </div>
+          <table class="wire-table">
+            <tr><th>DHT11 Wire</th><th>Connect to</th><th>Notes</th></tr>
+            <tr><td>Black (GND)</td><td><span class="pin-tag">D2 port</span> on IO Shield</td><td>Ground</td></tr>
+            <tr><td>Red (VCC)</td><td><span class="pin-tag">D2 port</span> on IO Shield</td><td>3.3V power</td></tr>
+            <tr><td>Yellow (SIG)</td><td><span class="pin-tag">D2 → GPIO25</span></td><td>Digital data signal</td></tr>
+          </table>
+          <p style="font-size:0.84rem;color:var(--muted);margin-top:0.6rem">✅ PIR stays on D3. DHT11 goes on D2. Both plugged in at the same time — no conflict.</p>
+        </div>
+
+        <div class="sensor-panel" id="wire-dht22">
+          <div class="gravity-visual">
+            <div class="gconn">
+              <h5>DHT22</h5>
+              <div class="gpins"><div class="gpin blk"></div><div class="gpin red"></div><div class="gpin yel"></div></div>
+              <div class="gpin-label">GND · VCC · SIG</div>
+            </div>
+            <div class="garrow">→</div>
+            <div style="text-align:center;font-size:0.82rem;color:var(--muted)">3-pin Gravity cable<br><em>(included in kit)</em></div>
+            <div class="garrow">→</div>
+            <div class="gconn">
+              <h5>IO Shield</h5>
+              <div class="gpins"><div class="gpin blk"></div><div class="gpin red"></div><div class="gpin yel"></div></div>
+              <div class="gpin-label">GND · VCC · SIG</div>
+              <span class="gport-label">D2 port</span>
+            </div>
+          </div>
+          <table class="wire-table">
+            <tr><th>DHT22 Wire</th><th>Connect to</th><th>Notes</th></tr>
+            <tr><td>Black (GND)</td><td><span class="pin-tag">D2 port</span> on IO Shield</td><td>Ground</td></tr>
+            <tr><td>Red (VCC)</td><td><span class="pin-tag">D2 port</span> on IO Shield</td><td>3.3V power</td></tr>
+            <tr><td>Yellow (SIG)</td><td><span class="pin-tag">D2 → GPIO25</span></td><td>Digital data signal — identical to DHT11</td></tr>
+          </table>
+          <p style="font-size:0.84rem;color:var(--muted);margin-top:0.6rem">✅ DHT22 wires identically to DHT11 — same D2 port, same GPIO25. Only the code selector changes.</p>
+        </div>
+
+        <div class="sensor-panel" id="wire-dht20">
+          <div class="gravity-visual">
+            <div class="gconn">
+              <h5>DHT20</h5>
+              <div class="gpins"><div class="gpin blk"></div><div class="gpin red"></div><div class="gpin yel"></div><div class="gpin whi"></div></div>
+              <div class="gpin-label">GND · VCC · SCL · SDA</div>
+            </div>
+            <div class="garrow" style="color:var(--success-text)">→</div>
+            <div style="text-align:center;font-size:0.82rem;color:var(--muted)">4-pin Gravity cable<br><em>(included in kit)</em></div>
+            <div class="garrow" style="color:var(--success-text)">→</div>
+            <div class="gconn" style="border-color:var(--success-border)">
+              <h5>IO Shield</h5>
+              <div class="gpins"><div class="gpin blk"></div><div class="gpin red"></div><div class="gpin yel"></div><div class="gpin whi"></div></div>
+              <div class="gpin-label">GND · VCC · SCL · SDA</div>
+              <span class="gport-label i2c">I²C port</span>
+            </div>
+          </div>
+          <table class="wire-table">
+            <tr><th>DHT20 Wire</th><th>Connect to</th><th>Notes</th></tr>
+            <tr><td>Black (GND)</td><td><span class="pin-tag i2c">I²C port</span></td><td>Ground</td></tr>
+            <tr><td>Red (VCC)</td><td><span class="pin-tag i2c">I²C port</span></td><td>3.3V power</td></tr>
+            <tr><td>Yellow (SCL)</td><td><span class="pin-tag i2c">I²C → GPIO22</span></td><td>I²C clock signal</td></tr>
+            <tr><td>White/Blue (SDA)</td><td><span class="pin-tag i2c">I²C → GPIO21</span></td><td>I²C data signal</td></tr>
+          </table>
+          <div class="intro-callout" style="margin-top:0.75rem">
+            <strong>⚠️ Use the I²C port — not a D-port.</strong> The 4-pin connector fits analog (A) ports too — make sure it's in a port labelled <strong>I2C</strong> on the IO Shield.
+          </div>
+        </div>
+
+        <p style="font-size:0.86rem;color:var(--muted);margin-top:0.75rem"><strong>Show your teacher your wiring before pressing RST.</strong></p>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">2</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 5 minutes</span>
+        <h3>boot.py — no changes needed</h3>
+        <p>Your <code>boot.py</code> from Lesson 1 handles WiFi and does not need to change. Open Thonny, connect to your board, and confirm you can still see the IP address in the Shell by pressing RST. Write the IP down again if needed.</p>
+        <div class="intro-callout" style="margin-top:0.6rem">
+          <strong>✅ Confirm before continuing:</strong> <code>&gt;&gt;&gt;</code> prompt visible in Thonny Shell, and your IP address appears after RST. If WiFi fails, check the 2.4 GHz network credentials in <code>boot.py</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">3</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 28 minutes</span>
+        <h3>Replace main.py — sensor + 3-condition algorithm + updated dashboard</h3>
+        <p>File → New in Thonny. This replaces your Lesson 1 <code>main.py</code>. The first thing to do is set the <code>SENSOR</code> variable to match your module.</p>
+
+        <div class="teacher-note" style="margin:0.6rem 0">
+          <strong>⚠️ Set this line first — it controls everything else</strong>
+          <p style="margin-top:0.3rem;color:var(--warn-text)">Find the sensor label on your module. Change the line below to match — <code>'DHT11'</code>, <code>'DHT22'</code>, or <code>'DHT20'</code>. Capital letters matter.</p>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-fname">main.py — save to MicroPython device (replaces Lesson 1)</span>
+            <span class="code-lang">MicroPython · ESP32</span>
+          </div>
+          <div class="code-body"><pre><span class="cm"># main.py — Temperature + Humidity + PIR Rest Monitor
+# FireBeetle 2 ESP32-E | EEDU IoT Kit | Lesson 2
+# Builds on Lesson 1 (PIR) — adds temp &amp; humidity sensor
+#
+# SENSORS:
+#   PIR           → D3 port on IO Shield  (GPIO26)  ← from Lesson 1
+#   DHT11 / DHT22 → D2 port on IO Shield  (GPIO25)  ← OR
+#   DHT20         → I²C port on IO Shield (0x38)    ← choose below</span>
+
+<span class="cm"># ── SET YOUR SENSOR ─────────────────────────────────────────────
+# Change this to match your sensor label</span>
+SENSOR = <span class="st">'DHT11'</span>   <span class="cm"># options: 'DHT11'  'DHT22'  'DHT20'</span>
+<span class="cm"># ────────────────────────────────────────────────────────────────</span>
+
+<span class="kw">from</span> machine <span class="kw">import</span> Pin
+<span class="kw">import</span> socket, time
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════════
+# SECTION 1 — Temp &amp; Humidity Sensor
+# read_sensor() always returns (temp_float, hum_float) or
+# (None, None) regardless of which sensor type you chose above.
+# ════════════════════════════════════════════════════════════════</span>
+
+<span class="kw">if</span> SENSOR <span class="kw">in</span> (<span class="st">'DHT11'</span>, <span class="st">'DHT22'</span>):
+    <span class="cm"># 3-pin Gravity cable → D2 port → GPIO25
+    # Uses MicroPython's built-in dht library — no install needed</span>
+    <span class="kw">import</span> dht
+    _d = dht.DHT11(Pin(<span class="nm">25</span>)) <span class="kw">if</span> SENSOR == <span class="st">'DHT11'</span> <span class="kw">else</span> dht.DHT22(Pin(<span class="nm">25</span>))
+
+    <span class="kw">def</span> <span class="fn">read_sensor</span>():
+        <span class="kw">try</span>:
+            _d.measure()
+            <span class="kw">return</span> float(_d.temperature()), float(_d.humidity())
+        <span class="kw">except</span> OSError:
+            <span class="kw">return</span> <span class="nm">None</span>, <span class="nm">None</span>
+
+<span class="kw">else</span>:
+    <span class="cm"># DHT20 — 4-pin Gravity cable → I²C port → GPIO21 (SDA) / GPIO22 (SCL)
+    # Uses I²C protocol at address 0x38
+    # Inline driver — no external library needed</span>
+    <span class="kw">from</span> machine <span class="kw">import</span> I2C
+    _i = I2C(<span class="nm">0</span>, scl=Pin(<span class="nm">22</span>), sda=Pin(<span class="nm">21</span>), freq=<span class="nm">400000</span>)
+    _A = <span class="nm">0x38</span>
+    time.sleep_ms(<span class="nm">100</span>)
+    <span class="kw">try</span>:
+        s = _i.readfrom(_A, <span class="nm">1</span>)[<span class="nm">0</span>]
+        <span class="kw">if</span> (s &amp; <span class="nm">0x18</span>) != <span class="nm">0x18</span>:
+            <span class="kw">for</span> c <span class="kw">in</span> (<span class="nm">b</span><span class="st">'\x1B\x00\x00'</span>, <span class="nm">b</span><span class="st">'\x1C\x00\x00'</span>, <span class="nm">b</span><span class="st">'\x1E\x00\x00'</span>):
+                _i.writeto(_A, c)
+        print(<span class="st">'DHT20 ready at 0x38'</span>)
+    <span class="kw">except</span> Exception <span class="kw">as</span> e:
+        print(<span class="st">'DHT20 error:'</span>, e, <span class="st">'— check I2C port'</span>)
+
+    <span class="kw">def</span> <span class="fn">read_sensor</span>():
+        <span class="kw">try</span>:
+            _i.writeto(_A, <span class="nm">b</span><span class="st">'\xAC\x33\x00'</span>)
+            time.sleep_ms(<span class="nm">80</span>)
+            d = _i.readfrom(_A, <span class="nm">6</span>)
+            <span class="kw">if</span> d[<span class="nm">0</span>] &amp; <span class="nm">0x80</span>: <span class="kw">return</span> <span class="nm">None</span>, <span class="nm">None</span>
+            h = round(((d[<span class="nm">1</span>]&lt;&lt;<span class="nm">12</span>)|(d[<span class="nm">2</span>]&lt;&lt;<span class="nm">4</span>)|(d[<span class="nm">3</span>]&gt;&gt;<span class="nm">4</span>))/<span class="nm">1048576</span>*<span class="nm">100</span>, <span class="nm">1</span>)
+            t = round(((d[<span class="nm">3</span>]&amp;<span class="nm">0x0F</span>)&lt;&lt;<span class="nm">16</span>|d[<span class="nm">4</span>]&lt;&lt;<span class="nm">8</span>|d[<span class="nm">5</span>])/<span class="nm">1048576</span>*<span class="nm">200</span>-<span class="nm">50</span>, <span class="nm">1</span>)
+            <span class="kw">return</span> t, h
+        <span class="kw">except</span>:
+            <span class="kw">return</span> <span class="nm">None</span>, <span class="nm">None</span>
+
+print(<span class="st">'Sensor:'</span>, SENSOR, <span class="st">'ready'</span>)
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════════
+# SECTION 2 — PIR Setup (unchanged from Lesson 1)
+# ════════════════════════════════════════════════════════════════</span>
+
+pir = Pin(<span class="nm">26</span>, Pin.IN)              <span class="cm"># D3 port = GPIO26</span>
+last_motion_ms = time.ticks_add(time.ticks_ms(), -<span class="nm">61000</span>)
+CALM_SECONDS   = <span class="nm">60</span>
+WARMUP_MS      = <span class="nm">30000</span>
+startup_ms     = time.ticks_ms()
+
+<span class="kw">def</span> <span class="fn">check_pir</span>():
+    <span class="kw">global</span> last_motion_ms
+    <span class="kw">if</span> pir.value() == <span class="nm">1</span>:
+        last_motion_ms = time.ticks_ms()
+    <span class="kw">return</span> pir.value() == <span class="nm">1</span>
+
+<span class="kw">def</span> <span class="fn">seconds_since_motion</span>():
+    <span class="kw">return</span> time.ticks_diff(time.ticks_ms(), last_motion_ms) // <span class="nm">1000</span>
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════════
+# SECTION 3 — 3-Condition Rest Algorithm
+#
+# SELECTION evaluates all three conditions independently:
+#   A) Motion   — room calm for ≥60 s
+#   B) Temp     — 16.0°C to 22.0°C
+#   C) Humidity — below 70%
+#
+# Score 0–3 → specific status message for Daniel
+# ════════════════════════════════════════════════════════════════</span>
+
+TEMP_MIN = <span class="nm">16.0</span>   <span class="cm"># °C — sleep research: below this is too cold</span>
+TEMP_MAX = <span class="nm">22.0</span>   <span class="cm"># °C — above this disrupts sleep onset</span>
+HUM_MAX  = <span class="nm">70.0</span>   <span class="cm"># %  — above this feels stuffy</span>
+
+<span class="kw">def</span> <span class="fn">evaluate_rest</span>(temp, hum):
+    <span class="st">"""
+    Evaluate 3 conditions and return status for Daniel.
+    Returns (status, advice, score, motion_ok, temp_ok, hum_ok, secs)
+    """</span>
+    motion_now = check_pir()
+    secs       = seconds_since_motion()
+    warmup     = time.ticks_diff(time.ticks_ms(), startup_ms) &lt; WARMUP_MS
+
+    <span class="cm"># SELECTION — evaluate each condition as True or False</span>
+    motion_ok = (not motion_now) and (secs &gt;= CALM_SECONDS) and (not warmup)
+    temp_ok   = temp is not <span class="nm">None</span> and TEMP_MIN &lt;= temp &lt;= TEMP_MAX
+    hum_ok    = hum  is not <span class="nm">None</span> and hum &lt;= HUM_MAX
+
+    score = (1 if motion_ok else 0) + (1 if temp_ok else 0) + (1 if hum_ok else 0)
+
+    <span class="cm"># Calm timer display</span>
+    mins   = secs // 60
+    sec_r  = secs % 60
+    t_str  = <span class="st">'{}m {}s'</span>.format(mins, sec_r) <span class="kw">if</span> mins &gt; 0 <span class="kw">else</span> <span class="st">'{}s'</span>.format(secs)
+
+    <span class="cm"># SELECTION — pick the most useful message for Daniel</span>
+    <span class="kw">if</span> warmup:
+        status = <span class="st">'STARTING UP'</span>
+        advice = <span class="st">'Sensors warming up — please wait 30 seconds.'</span>
+
+    <span class="kw">elif</span> score == 3:
+        status = <span class="st">'SUITABLE FOR REST'</span>
+        advice = <span class="st">'All conditions met. Room is ready, Daniel.'</span>
+
+    <span class="kw">elif</span> score == 0:
+        status = <span class="st">'NOT SUITABLE'</span>
+        advice = <span class="st">'Motion, temperature and humidity all need attention.'</span>
+
+    <span class="kw">else</span>:
+        issues = []
+        <span class="kw">if not</span> motion_ok:
+            issues.append(<span class="st">'motion {}.'</span>.format(<span class="st">'now'</span> if motion_now else t_str + <span class="st">' ago (need {}s calm)'</span>.format(CALM_SECONDS)))
+        <span class="kw">if not</span> temp_ok and temp is not <span class="nm">None</span>:
+            direction = <span class="st">'too cold'</span> if temp &lt; TEMP_MIN else <span class="st">'too warm'</span>
+            issues.append(<span class="st">'temp {:.1f}°C ({})'</span>.format(temp, direction))
+        <span class="kw">if not</span> hum_ok and hum is not <span class="nm">None</span>:
+            issues.append(<span class="st">'humidity {:.0f}% (above 70% threshold)'</span>.format(hum))
+        status = <span class="st">'NEEDS ADJUSTMENT'</span>
+        advice = <span class="st">'Fix: '</span> + <span class="st">', '</span>.join(issues) <span class="kw">if</span> issues else <span class="st">'Sensor error — check connections.'</span>
+
+    <span class="kw">return</span> status, advice, score, motion_ok, temp_ok, hum_ok, secs
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════════
+# SECTION 4 — Build HTML Dashboard
+# Blue-tinted dark design for Daniel:
+#   - High contrast: #0a1628 bg / #bfdbfe text
+#   - [OK] / [--] badges — accessible without colour alone
+#   - Three tiles: Motion, Temperature, Humidity
+#   - Progress bar and 3-condition score
+#   - Auto-refresh every 5 seconds
+# ════════════════════════════════════════════════════════════════</span>
+
+<span class="kw">def</span> <span class="fn">build_page</span>(temp, hum, status, advice, score, m_ok, t_ok, h_ok, secs):
+    t_s = <span class="st">'{:.1f}°C'</span>.format(temp) if temp is not <span class="nm">None</span> else <span class="st">'---'</span>
+    h_s = <span class="st">'{:.0f}%'</span>.format(hum)  if hum  is not <span class="nm">None</span> else <span class="st">'---'</span>
+
+    syms  = {3:<span class="st">'\u2713'</span>, 2:<span class="st">'~'</span>, 1:<span class="st">'!'</span>, 0:<span class="st">'\u2717'</span>}
+    brds  = {3:<span class="st">'border:3px solid #93c5fd'</span>, 2:<span class="st">'border:3px dashed #60a5fa'</span>,
+             1:<span class="st">'border:3px dotted #3b82f6'</span>, 0:<span class="st">'border:3px dotted #1d4ed8'</span>}
+    sym, brd = syms.get(score, <span class="st">'?'</span>), brds.get(score, <span class="st">'border:3px dotted #1d4ed8'</span>)
+
+    ok_b, fail_b = <span class="st">'[OK]'</span>, <span class="st">'[--]'</span>
+    mb = ok_b if m_ok else fail_b
+    tb = ok_b if t_ok else fail_b
+    hb = ok_b if h_ok else fail_b
+
+    filled = min(10, secs * 10 // CALM_SECONDS)
+    bar    = <span class="st">'\u2588'</span> * filled + <span class="st">'\u2591'</span> * (10 - filled)
+
+    <span class="kw">return</span> <span class="st">"""&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;meta name="viewport" content="width=device-width,initial-scale=1"&gt;
+&lt;meta http-equiv="refresh" content="5"&gt;
+&lt;title&gt;Rest Monitor&lt;/title&gt;
+&lt;style&gt;
+*{{box-sizing:border-box;margin:0;padding:0}}
+body{{background:#0a1628;color:#bfdbfe;font-family:monospace;
+     display:flex;flex-direction:column;align-items:center;
+     min-height:100vh;padding:18px 12px;gap:12px}}
+h1{{font-size:.72rem;letter-spacing:4px;color:#1e3a8a;text-transform:uppercase}}
+.card{{background:#0f2044;border-radius:10px;
+       padding:20px 22px;text-align:center;width:100%;max-width:420px}}
+.sym{{font-size:3.8rem;line-height:1.1;color:#93c5fd}}
+.status{{font-size:1.1rem;font-weight:bold;letter-spacing:1px;
+         color:#bfdbfe;margin:7px 0 4px}}
+.advice{{font-size:.8rem;color:#1e3a8a;line-height:1.55}}
+.bwrap{{background:#0c1a38;border:1px solid #1e3a8a;border-radius:7px;
+        padding:8px 10px;width:100%;max-width:420px}}
+.bl{{font-size:.55rem;letter-spacing:2px;color:#1e3a8a;text-transform:uppercase}}
+.bar{{font-size:1rem;letter-spacing:4px;color:#3b82f6;margin:4px 0 2px}}
+.bs{{font-size:.6rem;color:#1a3566}}
+.grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+       width:100%;max-width:420px}}
+.tile{{background:#0c1a38;border:1px solid #1a3566;
+       border-radius:7px;padding:10px 6px;text-align:center}}
+.tl{{font-size:.54rem;letter-spacing:1.5px;color:#1e3a8a;text-transform:uppercase}}
+.tv{{font-size:.88rem;font-weight:bold;margin:4px 0 2px;color:#93c5fd}}
+.ok{{color:#86efac}}.fail{{color:#f87171}}
+.bdg{{font-size:.72rem;padding:1px 5px;border-radius:3px}}
+.ok-bg{{background:#0a2e1a;color:#86efac}}.fail-bg{{background:#2e0a0a;color:#f87171}}
+footer{{font-size:.6rem;color:#0f2044;text-align:center}}
+&lt;/style&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;&amp;#9632; REST ENVIRONMENT MONITOR&lt;/h1&gt;
+  &lt;div class="card" style="{brd};background:#0f2044;border-radius:10px;
+                            padding:20px 22px;text-align:center;width:100%;max-width:420px"&gt;
+    &lt;div class="sym"&gt;{sym}&lt;/div&gt;
+    &lt;div class="status"&gt;{status}&lt;/div&gt;
+    &lt;div class="advice"&gt;{advice}&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="bwrap"&gt;
+    &lt;div class="bl"&gt;CALM TIMER&lt;/div&gt;
+    &lt;div class="bar"&gt;{bar}&lt;/div&gt;
+    &lt;div class="bs"&gt;{secs}s / {thresh}s threshold&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="grid"&gt;
+    &lt;div class="tile"&gt;
+      &lt;div class="tl"&gt;Motion&lt;/div&gt;
+      &lt;div class="tv"&gt;&lt;span class="bdg {mc}"&gt;{mb}&lt;/span&gt;&lt;/div&gt;
+      &lt;div style="font-size:.58rem;color:#1a3566"&gt;PIR · D3&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="tile"&gt;
+      &lt;div class="tl"&gt;Temp&lt;/div&gt;
+      &lt;div class="tv"&gt;{t}&lt;/div&gt;
+      &lt;div&gt;&lt;span class="bdg {tc}"&gt;{tb}&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="tile"&gt;
+      &lt;div class="tl"&gt;Humidity&lt;/div&gt;
+      &lt;div class="tv"&gt;{h}&lt;/div&gt;
+      &lt;div&gt;&lt;span class="bdg {hc}"&gt;{hb}&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;footer&gt;Updates every 5 s · no interaction needed · {snr}&lt;/footer&gt;
+&lt;/body&gt;&lt;/html&gt;"""</span>.format(
+        sym=sym, brd=brd, status=status, advice=advice,
+        bar=bar, secs=min(secs,CALM_SECONDS), thresh=CALM_SECONDS,
+        t=t_s, h=h_s, mb=mb, tb=tb, hb=hb,
+        mc=<span class="st">'ok-bg'</span> if m_ok else <span class="st">'fail-bg'</span>,
+        tc=<span class="st">'ok-bg'</span> if t_ok else <span class="st">'fail-bg'</span>,
+        hc=<span class="st">'ok-bg'</span> if h_ok else <span class="st">'fail-bg'</span>,
+        snr=SENSOR
+    )
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════════
+# SECTION 5 — Web Server (ITERATION)
+# ════════════════════════════════════════════════════════════════</span>
+
+srv = socket.socket()
+srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+srv.bind((<span class="st">''</span>, 80)); srv.listen(3)
+print(<span class="st">'Server ready | Sensor: {} | PIR: GPIO26 | T/H: {}'</span>.format(
+    SENSOR, <span class="st">'GPIO25 D2'</span> if SENSOR != <span class="st">'DHT20'</span> else <span class="st">'I2C 0x38'</span>))
+
+<span class="kw">while True</span>:                  <span class="cm"># ITERATION</span>
+    <span class="kw">try</span>:
+        conn, _ = srv.accept()
+        conn.recv(1024)
+        temp, hum = read_sensor()
+        status, advice, score, m_ok, t_ok, h_ok, secs = evaluate_rest(temp, hum)
+        print(<span class="st">'[{}] T:{} H:{} Calm:{}s → {}'</span>.format(SENSOR, temp, hum, secs, status))
+        html = build_page(temp, hum, status, advice, score, m_ok, t_ok, h_ok, secs)
+        conn.sendall((<span class="st">'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n'</span> + html).encode())
+        conn.close()
+        time.sleep(2)         <span class="cm"># DHT22 needs 2 s between reads</span>
+    <span class="kw">except</span> Exception <span class="kw">as</span> e:
+        print(<span class="st">'Error:'</span>, e)
+        <span class="kw">try</span>: conn.close()
+        <span class="kw">except</span>: <span class="kw">pass</span></pre></div>
+        </div>
+
+        <ol style="margin-top:0.6rem">
+          <li>File → Save as… → <strong>MicroPython device</strong> → filename: <code>main.py</code> → OK</li>
+          <li>Press the <strong>RST button</strong></li>
+          <li>Shell should show sensor type confirmed and <code>Server ready</code></li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">4</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 12 minutes</span>
+        <h3>Test all three conditions in the browser</h3>
+
+        <p>Open a browser on the same WiFi network and navigate to <code>http://&lt;your IP&gt;</code>. The dashboard now shows three tiles — Motion, Temperature, and Humidity.</p>
+
+        <!-- UX preview -->
+        <div class="ux-preview">
+          <div class="ux-chrome">
+            <div class="ux-dot"></div><div class="ux-dot"></div><div class="ux-dot"></div>
+            <span class="ux-url">http://192.168.1.55/ — Rest Monitor</span>
+            <span class="ux-badge">Dashboard states</span>
+          </div>
+          <div class="ux-states">
+            <!-- All OK -->
+            <div class="ux-state" style="border-top:3px solid #93c5fd">
+              <div class="ux-tiny">■ REST MONITOR</div>
+              <div class="ux-sym">✓</div>
+              <div class="ux-status">SUITABLE FOR REST</div>
+              <div class="ux-msg">All conditions met. Room is ready, Daniel.</div>
+              <div class="ux-tiles">
+                <div class="ux-tile"><div class="ux-tl">Motion</div><div class="ux-tv ux-ok">[OK]</div></div>
+                <div class="ux-tile"><div class="ux-tl">Temp</div><div class="ux-tv ux-neutral">20.4°C</div><div class="ux-tv ux-ok" style="font-size:0.72rem">[OK]</div></div>
+              </div>
+              <div class="ux-state-label">All 3 conditions met</div>
+            </div>
+            <!-- Motion only fail -->
+            <div class="ux-state" style="border-top:3px dashed #60a5fa">
+              <div class="ux-tiny">■ REST MONITOR</div>
+              <div class="ux-sym" style="color:#60a5fa">~</div>
+              <div class="ux-status" style="color:#93c5fd">NEEDS ADJUSTMENT</div>
+              <div class="ux-msg" style="color:#1e3a8a">Fix: motion 12s ago (need 60s calm)</div>
+              <div class="ux-tiles">
+                <div class="ux-tile"><div class="ux-tl">Motion</div><div class="ux-tv" style="color:#f87171">[--]</div></div>
+                <div class="ux-tile"><div class="ux-tl">Temp</div><div class="ux-tv ux-neutral">21.0°C</div><div class="ux-tv ux-ok" style="font-size:0.72rem">[OK]</div></div>
+              </div>
+              <div class="ux-state-label">2 of 3 met — motion failing</div>
+            </div>
+            <!-- Temp/hum fail -->
+            <div class="ux-state" style="border-top:3px dotted #3b82f6">
+              <div class="ux-tiny">■ REST MONITOR</div>
+              <div class="ux-sym" style="color:#3b82f6">!</div>
+              <div class="ux-status" style="color:#7fb3f5">NEEDS ADJUSTMENT</div>
+              <div class="ux-msg" style="color:#1a3566">Fix: temp 26.5°C (too warm), humidity 75% (above 70%)</div>
+              <div class="ux-tiles">
+                <div class="ux-tile"><div class="ux-tl">Temp</div><div class="ux-tv ux-neutral">26.5°C</div><div class="ux-tv" style="font-size:0.72rem;color:#f87171">[--]</div></div>
+                <div class="ux-tile"><div class="ux-tl">Humid</div><div class="ux-tv ux-neutral">75%</div><div class="ux-tv" style="font-size:0.72rem;color:#f87171">[--]</div></div>
+              </div>
+              <div class="ux-state-label">1 of 3 met — temp &amp; hum failing</div>
+            </div>
+          </div>
+        </div>
+
+        <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.5rem"><strong>Tests to try:</strong></p>
+        <ul>
+          <li><strong>Breathe on the sensor</strong> — warm moist breath raises temperature and humidity. Watch the [OK] badges flip to [--].</li>
+          <li><strong>Wave at PIR</strong> — Motion tile should show [--] and the advice message should tell Daniel to wait.</li>
+          <li><strong>Temporary test shortcut:</strong> change <code>CALM_SECONDS = 60</code> to <code>CALM_SECONDS = 10</code> to see SUITABLE FOR REST faster during testing. Reset to 60 when done.</li>
+          <li><strong>Thonny Shell</strong> — every page visit prints the sensor type, readings, and status.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">5</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 7 minutes</span>
+        <h3>Journal entry — document and connect to assessment</h3>
+        <ol>
+          <li>Screenshot the dashboard showing <strong>SUITABLE FOR REST ✓</strong></li>
+          <li>Screenshot showing <strong>NEEDS ADJUSTMENT</strong> with a specific sensor failing</li>
+          <li>In your journal, answer <strong>both</strong> questions below</li>
+        </ol>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:0.85rem 1rem;margin-top:0.6rem">
+          <p style="font-weight:700;color:var(--primary-dark);margin:0 0 0.4rem;font-size:0.9rem">📓 Journal questions</p>
+          <p style="font-size:0.88rem;color:var(--text);margin:0 0 0.4rem"><strong>Q1.</strong> The code sets <code>TEMP_MIN = 16.0</code> and <code>TEMP_MAX = 22.0</code>. Find one real-world source (website, article, health guide) that supports or challenges these values. Record it as a reference. Would you change the threshold for a home in Logan, QLD in summer?</p>
+          <p style="font-size:0.88rem;color:var(--text);margin:0"><strong>Q2.</strong> The <code>if SENSOR in ('DHT11', 'DHT22'):</code> block means the same <code>read_sensor()</code> function name is used for all three sensors. What programming concept does this demonstrate? Why is it better design than writing three completely separate programs?</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /step-list -->
+
+  <!-- ALGORITHM TABLE -->
+  <p class="section-label">How the 3-condition algorithm makes decisions</p>
+  <div class="assessment-prep">
+    <h2>🔀 Decision table — what Daniel sees for each combination</h2>
+    <p class="assessment-intro">The <code>evaluate_rest()</code> function uses selection to map from three condition results to one status message. Use this table in your journal to trace through the logic.</p>
+    <table class="algo-table">
+      <thead>
+        <tr><th>Motion OK</th><th>Temp OK</th><th>Humidity OK</th><th>Score</th><th>Status</th><th>What Daniel reads</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>✓</td><td>✓</td><td>✓</td><td><span class="score-badge full">3/3</span></td><td>SUITABLE FOR REST ✓</td><td>"All conditions met. Room is ready."</td></tr>
+        <tr><td>✗</td><td>✓</td><td>✓</td><td><span class="score-badge part">2/3</span></td><td>NEEDS ADJUSTMENT ~</td><td>"Fix: motion Xs ago (need 60s calm)"</td></tr>
+        <tr><td>✓</td><td>✗</td><td>✓</td><td><span class="score-badge part">2/3</span></td><td>NEEDS ADJUSTMENT ~</td><td>"Fix: temp 25.0°C (too warm)"</td></tr>
+        <tr><td>✓</td><td>✓</td><td>✗</td><td><span class="score-badge part">2/3</span></td><td>NEEDS ADJUSTMENT ~</td><td>"Fix: humidity 74% (above 70%)"</td></tr>
+        <tr><td>✗</td><td>✗</td><td>✗</td><td><span class="score-badge none">0/3</span></td><td>NOT SUITABLE ✗</td><td>"Motion, temperature and humidity all need attention."</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- EXTENSION CARDS -->
+  <p class="section-label">Extending your starting point — FIA2 ideas</p>
+  <div class="extend-grid">
+    <div class="extend-card">
+      <h4>📊 Justify your thresholds</h4>
+      <p>Find and cite one reference that supports the 16–22°C and &lt;70% humidity thresholds. Would you adjust them for a Logan QLD home in summer? Record your justification — this is the Determining criterion.</p>
+    </div>
+    <div class="extend-card">
+      <h4>🎨 Redesign the dashboard</h4>
+      <p>Modify <code>build_page()</code> to change the colour scheme, layout, or information shown. Apply CARP design principles and explain each decision in your journal using QCAA Topic 2 vocabulary.</p>
+    </div>
+    <div class="extend-card">
+      <h4>⚖️ Weighted scoring</h4>
+      <p>Currently all three conditions count equally. Should motion matter more than humidity? Add a weighted score — e.g. motion = 2 points, temp = 2 points, humidity = 1 point. Justify the weighting.</p>
+    </div>
+    <div class="extend-card">
+      <h4>📈 Add /data JSON endpoint</h4>
+      <p>Add a second route <code>/data</code> that returns all readings as JSON. This enables future data logging — connect to the FIA2 <em>data repositories</em> requirement in Lesson 3.</p>
+    </div>
+  </div>
+
+  <!-- TUTORIAL VIDEOS -->
+  <p class="section-label">Tutorial videos — watch if you need help or finish early</p>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="video-wrap">
+        <iframe src="https://www.youtube-nocookie.com/embed/DV--xQTVflI"
+          title="DHT11 DHT22 MicroPython" allowfullscreen loading="lazy"
+          allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+      </div>
+      <div class="video-info">
+        <h4>DHT11 / DHT22 with MicroPython</h4>
+        <p>Reading temperature and humidity in MicroPython — directly covers the DHT11/22 wiring and library used in this lesson.</p>
+        <span class="vtag">DHT sensor · Jan 2025</span>
+      </div>
+    </div>
+    <div class="video-card">
+      <div class="video-wrap">
+        <iframe src="https://www.youtube-nocookie.com/embed/X_-095XJvp4"
+          title="MicroPython ESP32 Thonny" allowfullscreen loading="lazy"
+          allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+      </div>
+      <div class="video-info">
+        <h4>MicroPython on ESP32 with Thonny</h4>
+        <p>ESP32 setup reference — firmware and first code in Thonny. Watch if your board needs firmware installed.</p>
+        <span class="vtag">ESP32 setup · Dec 2024</span>
+      </div>
+    </div>
+    <div class="video-card">
+      <div class="video-wrap">
+        <iframe src="https://www.youtube-nocookie.com/embed/CPkzcNIVqPQ"
+          title="Getting Started MicroPython Thonny" allowfullscreen loading="lazy"
+          allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+      </div>
+      <div class="video-info">
+        <h4>Getting Started: MicroPython &amp; Thonny</h4>
+        <p>Shell, REPL and saving files to the device. Student catch-up reference for MicroPython basics.</p>
+        <span class="vtag">Student reference</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- troubleshooting -->
+  <div class="teacher-note" style="margin-top:0.25rem">
+    <strong>🚨 Troubleshooting</strong>
+    <ul style="margin-top:0.4rem;padding-left:1.1rem;color:var(--warn-text)">
+      <li><strong>Sensor reads None</strong> — wrong SENSOR = value? DHT11/22 must be on D2 port; DHT20 must be on I²C port</li>
+      <li><strong>DHT20 init error</strong> — check the 4-pin cable is in an I²C port, not a D-port or A-port</li>
+      <li><strong>Page not loading</strong> — same WiFi network as the board? IP typed correctly?</li>
+      <li><strong>WiFi fails</strong> — 2.4 GHz network? Exact SSID/password in boot.py?</li>
+      <li><strong>Saved to wrong place</strong> — choose "MicroPython device" not "This computer" in the save dialog</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>Digital Solutions Unit 1 · FIA2 Project · Lesson 2 · St Peters Lutheran College Springfield · Ms Baessler</p>
+    <p style="margin-top:0.3rem;font-size:0.82rem">EEDU IoT Kit (TEM2022B-EN-1) · FireBeetle 2 ESP32-E · DHT11 / DHT22 / DHT20 · MicroPython · Thonny IDE</p>
+  </footer>
+
+</div>
+
+<script>
+function switchTab(group, id, el) {
+  document.querySelectorAll('#' + group + 'Tabs .sensor-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('[id^="' + group + '-"]').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  var panel = document.getElementById(group + '-' + id);
+  if (panel) panel.classList.add('active');
+}
+</script>
+</body>
+</html>
