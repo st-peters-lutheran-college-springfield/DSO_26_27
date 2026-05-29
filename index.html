@@ -69,35 +69,20 @@
     }
 
     .unit-card p {
-      margin: 0;
+      margin: 0 0 0.85rem;
       color: var(--muted);
       font-size: 0.95rem;
     }
 
-    .unit-sub-links {
-      margin: 0.65rem 0 0;
-      padding-left: 1.1rem;
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-
-    .unit-sub-links li {
-      margin-top: 0.35rem;
-    }
-
-    .unit-sub-links a {
-      color: var(--primary);
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .unit-sub-links a:hover {
-      text-decoration: underline;
+    .unit-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 1rem;
     }
 
     .unit-link {
       display: inline-block;
-      margin-top: 0.85rem;
       color: var(--primary);
       font-weight: 700;
       text-decoration: none;
@@ -126,17 +111,10 @@
       <article class="unit-card">
         <h2>Unit 1</h2>
         <p>Explore data and create digital solutions using foundational computational thinking.</p>
-        <a class="unit-link" href="./unit1-creating-with-code.html">Open Unit 1 resources →</a>
-        <ul class="unit-sub-links" aria-label="Unit 1 learning pathway links">
-          <li><a href="./Unit%201/Suggested%20Learning%20Sequence/index.html">Suggested Learning Sequence</a></li>
-          <li><a href="./Unit%201/Suggested%20Learning%20Sequence/student_hub.html">Student Hub</a></li>
-          <li><a href="./Unit%201/Suggested%20Learning%20Sequence/lesson_today_pir.html">Lesson Today: PIR Motion Sensor Rest Monitor</a></li>
-          <li><a href="./Unit%201/Suggested%20Learning%20Sequence/rust-esp32-flipped-classroom-hub.html">Step 1: Rust on ESP32 Flipped Classroom Hub</a></li>
-          <li><a href="./Unit%201/Suggested%20Learning%20Sequence/using-simulation-platform-fia2.html">Step 3: Using the Simulation Platform for FIA2</a></li>
-          <li><a href="./Unit%201/Assessment%20exemplar/fia2_aband_exemplar.html">Assessment Exemplar: A-Band Exemplar</a></li>
-          <li><a href="./Unit%201/Assessment%20exemplar/fia2_student_scaffold.html">Assessment Support: Student Scaffold</a></li>
-          <li><a href="./Unit%201/Assessment%20exemplar/fia2_original_teacher_exemplar.html">Assessment Exemplar: Original Teacher Exemplar</a></li>
-        </ul>
+        <div class="unit-actions">
+          <a class="unit-link" href="./Unit%201/Suggested%20Learning%20Sequence/index.html">Learning Resources →</a>
+          <a class="unit-link" href="./Unit%201/Assessment%20exemplar/index.html">Assessment Support →</a>
+        </div>
       </article>
       <article class="unit-card">
         <h2>Unit 2</h2>
