@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pico W Setup — Mac M4 | Digital Solutions Unit 1</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f4f7fb; --surface: #ffffff; --primary: #1d4ed8; --primary-dark: #1e3a8a;
+    --accent: #c8102e; --text: #1f2937; --muted: #6b7280; --border: #dbe2f0;
+    --success-bg: #ecfdf5; --success-border: #a7f3d0; --success-text: #047857;
+    --warn-bg: #fef3c7; --warn-border: #fcd34d; --warn-text: #92400e;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 15px; }
+
+  /* ── SITE HEADER ── */
+  .site-header { background: var(--primary-dark); color: #fff; padding: 0.6rem 1rem; font-size: 0.82rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .site-header span { opacity: 0.55; }
+  .site-header a { color: rgba(255,255,255,0.65); text-decoration: none; margin-left: auto; font-size: 0.8rem; }
+
+  /* ── LESSON BANNER ── */
+  .lesson-banner { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: #fff; padding: 2.4rem 1rem 2rem; position: relative; overflow: hidden; }
+  .lesson-banner::before { content: ''; position: absolute; top: -40px; right: -40px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.06); pointer-events: none; }
+  .lesson-banner-inner { max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
+  .lesson-eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; padding: 0.3rem 0.85rem; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 0.85rem; }
+  .lesson-banner h1 { color: #fff; font-size: clamp(1.6rem,4vw,2.7rem); line-height: 1.15; margin: 0 0 0.55rem; }
+  .lesson-banner h1 em { opacity: 0.72; font-style: normal; font-weight: 400; }
+  .lesson-banner p { color: rgba(255,255,255,0.75); font-size: 0.96rem; max-width: 60ch; margin: 0 0 1.1rem; line-height: 1.6; }
+  .lesson-meta-row { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .lmeta { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.22); border-radius: 999px; padding: 0.22rem 0.7rem; font-size: 0.77rem; font-weight: 600; color: rgba(255,255,255,0.92); }
+
+  /* ── CONTAINER ── */
+  .container { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+  .top-nav { margin-bottom: 1.25rem; }
+  .top-nav a { color: var(--primary); text-decoration: none; font-weight: 700; }
+  .crumb-current { color: var(--muted); font-weight: 600; }
+
+  /* ── CALLOUTS ── */
+  .callout { border-radius: 10px; padding: 0.9rem 1.1rem; margin: 0.85rem 0; display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.88rem; }
+  .callout .icon { font-size: 1.15rem; flex-shrink: 0; margin-top: 0.05rem; }
+  .callout.green { background: var(--success-bg); border: 1px solid var(--success-border); border-left: 4px solid var(--success-text); }
+  .callout.blue { background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid var(--primary); }
+  .callout.amber { background: var(--warn-bg); border: 1px solid var(--warn-border); border-left: 4px solid #d97706; }
+  .callout.red { background: #fff1f2; border: 1px solid #fecdd3; border-left: 4px solid var(--accent); }
+  .callout h4 { margin: 0 0 0.3rem; font-size: 0.9rem; font-weight: 700; color: var(--text); }
+  .callout p, .callout li { margin: 0.2rem 0; color: var(--text); }
+  .callout ul { padding-left: 1.1rem; }
+
+  /* ── SECTION LABEL ── */
+  .section-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 1.75rem 0 0.7rem; display: flex; align-items: center; gap: 0.5rem; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── CARDS ── */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 0.75rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1rem; box-shadow: 0 4px 14px rgba(15,23,42,0.04); }
+  .card h3 { margin-top: 0; margin-bottom: 0.5rem; font-size: 1.02rem; color: var(--primary-dark); }
+
+  /* ── WHY IT WORKS EXPLAINER ── */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 0.75rem 0; }
+  .compare-card { border-radius: 10px; padding: 0.9rem 1rem; }
+  .compare-card.old { background: #fff1f2; border: 1px solid #fecdd3; border-top: 3px solid var(--accent); }
+  .compare-card.new { background: var(--success-bg); border: 1px solid var(--success-border); border-top: 3px solid var(--success-text); }
+  .compare-card h4 { font-size: 0.88rem; font-weight: 700; margin: 0 0 0.4rem; }
+  .compare-card.old h4 { color: var(--accent); }
+  .compare-card.new h4 { color: var(--success-text); }
+  .compare-card ul { font-size: 0.83rem; color: var(--text); padding-left: 1.1rem; margin: 0; }
+  .compare-card li { margin: 0.25rem 0; }
+
+  /* ── STEP CARDS ── */
+  .step-list { display: flex; flex-direction: column; gap: 0; }
+  .step-item { display: grid; grid-template-columns: 52px 1fr; border: 1px solid var(--border); border-top: none; background: var(--surface); }
+  .step-item:first-child { border-top: 1px solid var(--border); border-radius: 12px 12px 0 0; }
+  .step-item:last-child { border-radius: 0 0 12px 12px; }
+  .step-num-col { background: #eff6ff; border-right: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: center; padding-top: 1.1rem; }
+  .step-circle { width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+  .step-body { padding: 1rem 1.1rem; }
+  .step-body h3 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--primary-dark); }
+  .step-body p { margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--muted); }
+  .step-body ol, .step-body ul { font-size: 0.88rem; color: var(--text); padding-left: 1.15rem; margin: 0.3rem 0; }
+  .step-body li { margin-bottom: 0.3rem; }
+  .step-body strong { color: var(--text); }
+  .step-time { display: inline-block; font-size: 0.72rem; font-weight: 700; background: #eff6ff; color: var(--primary); border: 1px solid #bfdbfe; border-radius: 999px; padding: 0.1rem 0.6rem; margin-bottom: 0.5rem; }
+
+  /* ── PIN DIAGRAM ── */
+  .pin-diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin: 0.75rem 0; }
+  .pin-diagram h4 { font-size: 0.9rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 0.9rem; }
+  .pin-board { display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap; }
+  .pico-visual {
+    background: #1a1a2e;
+    border-radius: 8px;
+    padding: 10px 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.62rem;
+    color: #93c5fd;
+    min-width: 220px;
+    border: 2px solid #1e3a8a;
+  }
+  .pico-row { display: flex; justify-content: space-between; align-items: center; padding: 2px 0; }
+  .pico-pin { display: flex; align-items: center; gap: 4px; }
+  .pico-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .pd-gnd { background: #374151; border: 1px solid #6b7280; }
+  .pd-3v3 { background: #dc2626; }
+  .pd-gp { background: #1d4ed8; }
+  .pd-hl { background: #059669; }
+  .pd-pir { background: #7c3aed; }
+  .pd-neutral { background: #374151; border: 1px solid #374151; }
+  .pin-label { color: #4b5563; }
+  .pico-label { text-align: center; color: #3b5fc0; font-size: 0.65rem; margin-bottom: 5px; letter-spacing: 1px; }
+  .pin-legend { display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; }
+  .pin-legend-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; }
+  .pin-legend-item.dht { background: #ecfdf5; border: 1px solid var(--success-border); }
+  .pin-legend-item.pir { background: #f5f3ff; border: 1px solid #ddd6fe; }
+  .pin-legend-item.pwr { background: #eff6ff; border: 1px solid #bfdbfe; }
+  .pill { display: inline-block; border-radius: 5px; padding: 2px 9px; font-family: 'Courier New', monospace; font-size: 0.8rem; font-weight: 700; }
+  .pill.gp { background: #1d4ed8; color: #fff; }
+  .pill.pwr { background: #dc2626; color: #fff; }
+  .pill.gnd { background: #374151; color: #fff; }
+  .pill.hl { background: #059669; color: #fff; }
+  .pill.pir { background: #7c3aed; color: #fff; }
+
+  /* ── WIRING TABLE ── */
+  .wire-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; margin: 0.6rem 0; }
+  .wire-table th { background: #eff6ff; color: var(--primary-dark); text-align: left; padding: 0.5rem 0.75rem; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border); }
+  .wire-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--bg); color: var(--text); vertical-align: middle; }
+  .wire-table tr:hover td { background: var(--bg); }
+  .ptag { display: inline-block; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 4px; padding: 1px 7px; font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--primary-dark); font-weight: 700; }
+  .ptag.gnd { background: #f1f5f9; border-color: #cbd5e1; color: #374151; }
+  .ptag.v33 { background: #fff1f2; border-color: #fecdd3; color: var(--accent); }
+  .wire-dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+
+  /* ── CODE BLOCKS ── */
+  .code-block { background: #0c1a3a; border-radius: 12px; overflow: hidden; margin: 0.75rem 0; border: 1px solid #1e3a8a; }
+  .code-header { background: #132047; padding: 0.5rem 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e3a8a; }
+  .code-fname { font-family: 'Courier New', monospace; font-size: 0.75rem; color: #93c5fd; }
+  .code-lang { font-family: 'Courier New', monospace; font-size: 0.65rem; color: #3b5fc0; text-transform: uppercase; letter-spacing: 1px; }
+  .code-body { padding: 1rem 1.1rem; overflow-x: auto; }
+  .code-body pre { font-family: 'Courier New', monospace; font-size: 0.82rem; color: #bfdbfe; white-space: pre; line-height: 1.75; margin: 0; }
+  .kw { color: #93c5fd; font-weight: 600; } .cm { color: #3b5fc0; font-style: italic; }
+  .st { color: #86efac; } .fn { color: #e0f2fe; } .nm { color: #fbbf24; }
+
+  /* ── CONTINUE TABLE ── */
+  .continue-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; margin: 0.6rem 0; }
+  .continue-table th { background: #eff6ff; color: var(--primary-dark); text-align: left; padding: 0.5rem 0.75rem; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border); }
+  .continue-table td { padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--bg); color: var(--text); }
+
+  /* ── VIDEO GRID ── */
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 0.75rem 0; }
+  .video-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .video-wrap { position: relative; padding-bottom: 56.25%; height: 0; background: var(--primary-dark); }
+  .video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+  .video-info { padding: 0.75rem 0.9rem; }
+  .video-info h4 { margin: 0 0 0.25rem; font-size: 0.88rem; color: var(--primary-dark); line-height: 1.35; }
+  .video-info p { margin: 0; font-size: 0.77rem; color: var(--muted); }
+  .vtag { display: inline-block; margin-top: 5px; background: #eff6ff; border: 1px solid #bfdbfe; color: var(--primary); border-radius: 4px; padding: 1px 7px; font-size: 0.68rem; font-family: 'Courier New', monospace; }
+
+  .concept-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.5rem; }
+  .ctag { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 0.15rem 0.55rem; font-size: 0.75rem; color: var(--primary); font-weight: 600; }
+
+  footer { margin-top: 2rem; text-align: center; color: var(--muted); font-size: 0.88rem; padding: 1rem; border-top: 1px solid var(--border); }
+
+  @media (max-width: 600px) {
+    .compare-grid { grid-template-columns: 1fr; }
+    .step-item { grid-template-columns: 40px 1fr; }
+    .pin-board { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <strong>St Peters Lutheran College Springfield</strong>
+  <span>·</span><span>Digital Solutions — Unit 1</span>
+  <span>·</span><span>Ms Baessler</span>
+  <a href="index.html">← Back to Hub</a>
+</div>
+
+<div class="lesson-banner">
+  <div class="lesson-banner-inner">
+    <div class="lesson-eyebrow">🍎 Mac M4 Setup Guide &nbsp;·&nbsp; Raspberry Pi Pico W</div>
+    <h1>Pico W Setup <em>— Mac M4 &amp; DHT22 + PIR</em></h1>
+    <p>Your Mac M4 can't connect to the FireBeetle 2 ESP32-E because of a USB driver issue on Apple Silicon. The <strong>Raspberry Pi Pico W</strong> uses a completely different USB system that works on Mac M4 with <strong>no drivers needed</strong>. Your DHT22 and PIR sensors from the kit connect directly to the Pico W with jumper wires. The MicroPython code is almost identical.</p>
+    <div class="lesson-meta-row">
+      <span class="lmeta">🍎 Mac M4 — no drivers needed</span>
+      <span class="lmeta">🐍 MicroPython v1.24+ — same language</span>
+      <span class="lmeta">🌡️ DHT22 → GP15</span>
+      <span class="lmeta">👁 PIR → GP14</span>
+      <span class="lmeta">📡 Built-in 2.4 GHz WiFi</span>
+      <span class="lmeta">⏱ ~30 minutes setup</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <nav class="top-nav">
+    <a href="index.html">FIA2 Project Hub</a> &rsaquo;
+    <span class="crumb-current">Pico W Setup — Mac M4</span>
+  </nav>
+
+  <!-- WHY THIS WORKS -->
+  <div class="section-label">Why your Mac M4 couldn't connect to the FireBeetle 2</div>
+  <div class="compare-grid">
+    <div class="compare-card old">
+      <h4>❌ FireBeetle 2 ESP32-E (old board)</h4>
+      <ul>
+        <li>Uses a <strong>CH340G USB-to-serial chip</strong> to connect to computers</li>
+        <li>CH340G requires a <strong>third-party driver</strong> to be installed</li>
+        <li>That driver has known compatibility issues with <strong>macOS on Apple Silicon (M1/M2/M3/M4)</strong></li>
+        <li>Result: Mac can't see the board in Thonny</li>
+      </ul>
+    </div>
+    <div class="compare-card new">
+      <h4>✅ Raspberry Pi Pico W (your new board)</h4>
+      <ul>
+        <li>Uses a <strong>built-in USB interface</strong> on the RP2040 chip — no external chip</li>
+        <li><strong>No driver installation needed on any OS</strong> — Mac, Windows, Linux</li>
+        <li>Mac M4 recognises it immediately as a serial device (<code>/dev/cu.usbmodem…</code>)</li>
+        <li>Same MicroPython language — almost all your code is identical</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WHAT YOU NEED -->
+  <div class="section-label">What you need</div>
+  <div class="grid">
+    <div class="card">
+      <h3>🖥️ Mac M4</h3>
+      <ul style="font-size:0.87rem;color:var(--text)">
+        <li>Thonny IDE (ARM64 build for Apple Silicon)</li>
+        <li>Safari, Chrome, or Firefox</li>
+        <li>OneNote app or browser</li>
+        <li>No drivers to install</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🔬 Raspberry Pi Pico W</h3>
+      <ul style="font-size:0.87rem;color:var(--text)">
+        <li>RP2040 chip — dual-core 133 MHz</li>
+        <li>Built-in 2.4 GHz WiFi (same frequency as ESP32)</li>
+        <li>Micro-USB port only</li>
+        <li>MicroPython v1.24+ — latest stable</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🧰 From Your EEDU Kit</h3>
+      <ul style="font-size:0.87rem;color:var(--text)">
+        <li>Gravity DHT22 temperature &amp; humidity sensor</li>
+        <li>Gravity PIR motion sensor</li>
+        <li>USB data cable (USB-C to micro-USB or USB-A)</li>
+        <li>6× female-to-male Dupont jumper wires</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>⚠️ Not Needed for Pico W</h3>
+      <ul style="font-size:0.87rem;color:var(--text)">
+        <li>❌ Gravity IO Shield (FireBeetle 2 only)</li>
+        <li>❌ Gravity I²C Hub</li>
+        <li>❌ CH340 driver</li>
+        <li>❌ Gravity-to-Gravity cables (use jumper wires instead)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout amber">
+    <div class="icon">🔌</div>
+    <div>
+      <h4>About the Gravity connectors</h4>
+      <p>The DHT22 and PIR sensors use Gravity connectors designed for the IO Shield. Without the IO Shield, you need to connect directly to the Pico W pins using <strong>female-to-male Dupont jumper wires</strong>. The Gravity cable has three wires: <strong>black = GND, red = VCC, yellow/white = SIG (data signal)</strong>. If your Gravity cable has female ends on both sides, plug one female end into the sensor and use the individual female connectors on the other end to connect to the Pico W male pins.</p>
+    </div>
+  </div>
+
+  <!-- STEP BY STEP -->
+  <div class="section-label">Setup steps — do these in order</div>
+
+  <div class="step-list">
+
+    <!-- STEP 1 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">1</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 3 minutes</span>
+        <h3>Download the Pico W MicroPython firmware</h3>
+        <p>You must download the firmware for the <strong>Pico W specifically</strong> — the standard Pico firmware will not work (it lacks the WiFi driver).</p>
+        <ol>
+          <li>Go to <a href="https://micropython.org/download/RPI_PICO_W/" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700">micropython.org/download/RPI_PICO_W/ ↗</a></li>
+          <li>Under <strong>"Releases"</strong>, click the <strong>first .uf2 link</strong> — this is the latest stable version (v1.28.0 or newer)</li>
+          <li>Save the <code>.uf2</code> file to your Downloads folder</li>
+        </ol>
+        <div class="callout red" style="margin-top:0.6rem">
+          <div class="icon">⚠️</div>
+          <div><p><strong>Do not download the plain Pico or Pico 2 firmware</strong> — only <code>RPI_PICO_W</code>. Getting the wrong firmware is the most common error — the file must disappear from the drive after copying. If it stays there, you have the wrong firmware.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">2</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 3 minutes</span>
+        <h3>Flash MicroPython onto your Pico W</h3>
+        <p>This only needs to be done <strong>once</strong>. The firmware stays on the board permanently.</p>
+        <ol>
+          <li>Locate the small <strong>BOOTSEL button</strong> on top of the Pico W — it is the only button on the board</li>
+          <li><strong>Hold the BOOTSEL button down</strong> with your finger</li>
+          <li>While still holding BOOTSEL, plug the USB cable into your Mac — keep holding for 2 more seconds, then release</li>
+          <li>A drive called <strong>RPI-RP2</strong> should appear on your Mac desktop (in Finder)</li>
+          <li>Drag and drop the <code>.uf2</code> file you downloaded in Step 1 into the <strong>RPI-RP2</strong> drive</li>
+          <li>The drive will <strong>disappear automatically</strong> — this means it worked ✅</li>
+          <li>The Pico W reboots with MicroPython installed</li>
+        </ol>
+        <div class="callout green" style="margin-top:0.6rem">
+          <div class="icon">✅</div>
+          <div><p><strong>If the drive disappears after copying:</strong> firmware installed successfully. If the drive stays visible and the file is still there, you downloaded the wrong firmware — go back to Step 1 and make sure you chose <code>RPI_PICO_W</code>.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">3</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 3 minutes</span>
+        <h3>Install or check Thonny on your Mac M4</h3>
+        <p>Thonny must be the <strong>Apple Silicon (ARM64) version</strong> — the Intel version may not work correctly on Mac M4.</p>
+        <ol>
+          <li>Go to <a href="https://thonny.org" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700">thonny.org ↗</a></li>
+          <li>Click the <strong>Mac</strong> download button — ensure it says <strong>Apple Silicon</strong> or <strong>ARM64</strong> in the filename (e.g. <code>thonny-x.x.x-arm64.pkg</code>)</li>
+          <li>Open the downloaded <code>.pkg</code> file and follow the install steps</li>
+          <li>If you already have Thonny, check: <strong>Thonny → About Thonny</strong> — version should be 4.1 or newer</li>
+        </ol>
+        <div class="callout blue" style="margin-top:0.5rem">
+          <div class="icon">ℹ️</div>
+          <div><p>If macOS shows <em>"cannot be opened because the developer cannot be verified"</em>, go to <strong>System Settings → Privacy &amp; Security</strong> and click <strong>"Open Anyway"</strong> next to the Thonny message.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">4</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 2 minutes</span>
+        <h3>Connect Thonny to the Pico W</h3>
+        <p>Plug in your Pico W (without holding BOOTSEL this time — just plug in normally).</p>
+        <ol>
+          <li>Open <strong>Thonny</strong></li>
+          <li>Click <strong>Run → Configure interpreter…</strong></li>
+          <li>From the dropdown, select <strong>MicroPython (Raspberry Pi Pico)</strong></li>
+          <li>Under <strong>Port</strong>, select the option that contains <strong>usbmodem</strong> — e.g. <code>/dev/cu.usbmodem1101</code></li>
+          <li>Click <strong>OK</strong></li>
+        </ol>
+        <p>You should see <code>MicroPython v1.24.x; Raspberry Pi PicoW with RP2040</code> and a <code>&gt;&gt;&gt;</code> prompt in the Thonny Shell at the bottom. ✅</p>
+        <div class="callout amber" style="margin-top:0.5rem">
+          <div class="icon">⚠️</div>
+          <div>
+            <p><strong>If no port appears in the list:</strong> Unplug and replug the USB cable. Try a different USB port on your Mac. Make sure you are NOT holding BOOTSEL when plugging in — that puts it in firmware mode, not serial mode. If still nothing, restart Thonny.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">5</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 8 minutes</span>
+        <h3>Wire the DHT22 and PIR sensors</h3>
+        <p>Connect both sensors directly to the Pico W pins using jumper wires. There is no IO Shield — each Gravity connector's three wires connect one-to-one to Pico W pins.</p>
+
+        <!-- Pin diagram -->
+        <div class="pin-diagram">
+          <h4>Pico W pin connections — top view (USB port at bottom-left)</h4>
+          <div class="pin-board">
+
+            <!-- Visual pinout -->
+            <div>
+              <div class="pico-visual">
+                <div class="pico-label">RASPBERRY PI PICO W</div>
+                <div class="pico-row">
+                  <div class="pico-pin"><div class="pico-dot pd-neutral"></div><span>GP0 (pin 1)</span></div>
+                  <div class="pico-pin"><span>(pin 40)</span> <div class="pico-dot pd-neutral" style="background:#1f2937;border:1px solid #4b5563"></div></div>
+                </div>
+                <div class="pico-row">
+                  <div class="pico-pin"><div class="pico-dot pd-neutral"></div><span>GP1</span></div>
+                  <div class="pico-pin"><span>VBUS 5V</span><div class="pico-dot" style="background:#f59e0b"></div></div>
+                </div>
+                <div class="pico-row">
+                  <div class="pico-pin"><div class="pico-dot pd-gnd"></div><span style="color:#9ca3af">GND</span></div>
+                  <div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pico-dot pd-gnd"></div></div>
+                </div>
+                <div style="border-top:1px dashed #1e3a8a;margin:4px 0;"></div>
+                <div class="pico-row">
+                  <div class="pico-pin"><div class="pico-dot pd-neutral"></div><span>GP10</span></div>
+                  <div class="pico-pin"><span>3V3 OUT</span><div class="pico-dot pd-3v3"></div></div>
+                </div>
+                <div class="pico-row" style="background:rgba(124,58,237,0.15);border-radius:3px">
+                  <div class="pico-pin"><div class="pico-dot pd-pir"></div><span style="color:#a78bfa"><strong>GP14 ← PIR SIG</strong></span></div>
+                  <div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pico-dot pd-gnd"></div></div>
+                </div>
+                <div class="pico-row" style="background:rgba(5,150,105,0.15);border-radius:3px">
+                  <div class="pico-pin"><div class="pico-dot pd-hl"></div><span style="color:#6ee7b7"><strong>GP15 ← DHT22 SIG</strong></span></div>
+                  <div class="pico-pin"><span>3V3 OUT</span><div class="pico-dot pd-3v3"></div></div>
+                </div>
+                <div style="border-top:1px dashed #1e3a8a;margin:4px 0;"></div>
+                <div class="pico-row">
+                  <div class="pico-pin"><div class="pico-dot pd-neutral"></div><span>GP16</span></div>
+                  <div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pico-dot pd-gnd"></div></div>
+                </div>
+                <div class="pico-row">
+                  <div class="pico-pin"><div class="pico-dot pd-gnd"></div><span style="color:#9ca3af">GND</span></div>
+                  <div class="pico-pin"><span>GP22</span><div class="pico-dot pd-neutral"></div></div>
+                </div>
+                <div class="pico-row">
+                  <div class="pico-pin" style="opacity:0.4"><div class="pico-dot pd-neutral"></div><span>GP26 ADC</span></div>
+                  <div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pico-dot pd-gnd"></div></div>
+                </div>
+                <div class="pico-row">
+                  <div class="pico-pin" style="opacity:0.4"><div class="pico-dot pd-neutral"></div><span>GP28 ADC</span></div>
+                  <div class="pico-pin"><span style="color:#9ca3af">3V3 REF</span><div class="pico-dot pd-3v3" style="opacity:0.6"></div></div>
+                </div>
+              </div>
+              <p style="font-size:0.72rem;color:var(--muted);margin-top:6px;text-align:center">USB port is bottom-left · only used pins highlighted</p>
+            </div>
+
+            <!-- Legend -->
+            <div class="pin-legend">
+              <div class="pin-legend-item dht">
+                <div>
+                  <div style="font-size:0.72rem;font-weight:700;color:var(--success-text);margin-bottom:4px">🌡️ DHT22 (Gravity 3-pin)</div>
+                  <div style="font-size:0.84rem">Black wire → <span class="pill gnd">GND</span> any GND pin</div>
+                  <div style="font-size:0.84rem;margin-top:3px">Red wire &nbsp; → <span class="pill pwr">3V3 OUT</span> pin 36</div>
+                  <div style="font-size:0.84rem;margin-top:3px">Yellow wire → <span class="pill hl">GP15</span> pin 20</div>
+                </div>
+              </div>
+              <div class="pin-legend-item pir">
+                <div>
+                  <div style="font-size:0.72rem;font-weight:700;color:#7c3aed;margin-bottom:4px">👁 PIR Motion Sensor (Gravity 3-pin)</div>
+                  <div style="font-size:0.84rem">Black wire → <span class="pill gnd">GND</span> any GND pin</div>
+                  <div style="font-size:0.84rem;margin-top:3px">Red wire &nbsp; → <span class="pill pwr">3V3 OUT</span> pin 36</div>
+                  <div style="font-size:0.84rem;margin-top:3px">Yellow wire → <span class="pill pir">GP14</span> pin 19</div>
+                </div>
+              </div>
+              <div class="pin-legend-item pwr">
+                <div>
+                  <div style="font-size:0.72rem;font-weight:700;color:var(--primary);margin-bottom:4px">⚡ Power notes</div>
+                  <div style="font-size:0.83rem;color:var(--text)">Both sensors run at <strong>3.3V</strong> — use the <code>3V3 OUT</code> pin, not VBUS (5V). The Gravity PIR operates correctly at 3.3V. Two sensors share the same 3V3 pin — use a breadboard or Y-splitter.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full wiring table -->
+        <table class="wire-table">
+          <thead>
+            <tr><th>Sensor</th><th>Wire Colour</th><th>Pico W Pin</th><th>Physical Pin #</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="3"><strong>DHT22</strong></td>
+              <td><span class="wire-dot" style="background:#1f2937;border:1px solid #6b7280"></span>Black</td>
+              <td><span class="ptag gnd">GND</span></td>
+              <td>Pin 38</td>
+              <td>Ground</td>
+            </tr>
+            <tr>
+              <td><span class="wire-dot" style="background:#ef4444"></span>Red</td>
+              <td><span class="ptag v33">3V3 OUT</span></td>
+              <td>Pin 36</td>
+              <td>3.3V power</td>
+            </tr>
+            <tr>
+              <td><span class="wire-dot" style="background:#d97706"></span>Yellow</td>
+              <td><span class="ptag">GP15</span></td>
+              <td>Pin 20</td>
+              <td>Data signal — <code>dht.DHT22(Pin(15))</code></td>
+            </tr>
+            <tr style="border-top:2px solid var(--border)">
+              <td rowspan="3"><strong>PIR</strong></td>
+              <td><span class="wire-dot" style="background:#1f2937;border:1px solid #6b7280"></span>Black</td>
+              <td><span class="ptag gnd">GND</span></td>
+              <td>Pin 3 or 38</td>
+              <td>Ground — any GND pin works</td>
+            </tr>
+            <tr>
+              <td><span class="wire-dot" style="background:#ef4444"></span>Red</td>
+              <td><span class="ptag v33">3V3 OUT</span></td>
+              <td>Pin 36</td>
+              <td>3.3V power — share with DHT22 via breadboard</td>
+            </tr>
+            <tr>
+              <td><span class="wire-dot" style="background:#d97706"></span>Yellow</td>
+              <td><span class="ptag">GP14</span></td>
+              <td>Pin 19</td>
+              <td>Signal — <code>Pin(14, Pin.IN)</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout amber">
+          <div class="icon">💡</div>
+          <div>
+            <h4>Sharing the 3V3 pin between two sensors</h4>
+            <p>Both sensors need 3.3V power but the Pico W has only one labelled 3V3 OUT pin (pin 36). Use a mini breadboard from the kit to connect both red wires to the same 3.3V rail, or use a female-to-two-female splitter wire. Alternatively, <strong>GP16's 3V3 pin (pin 36)</strong> is the same as pin 36 — check your specific Pico board for multiple 3V3 pins, as some boards have two.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6 boot.py -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">6</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 5 minutes</span>
+        <h3>Write boot.py — WiFi connection (identical to other boards)</h3>
+        <p>The WiFi code for Pico W is <strong>exactly the same</strong> as the ESP32 version. Just change your network details.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-fname">boot.py — File → Save as → MicroPython device → boot.py</span>
+            <span class="code-lang">MicroPython · Pico W</span>
+          </div>
+          <div class="code-body"><pre><span class="cm"># boot.py — Raspberry Pi Pico W
+# Runs on startup before main.py
+# WiFi code is identical to ESP32 version</span>
+
+<span class="kw">import</span> network, time
+
+WIFI_NAME     = <span class="st">'YourNetworkName'</span>   <span class="cm"># ← change this</span>
+WIFI_PASSWORD = <span class="st">'YourPassword'</span>       <span class="cm"># ← change this</span>
+
+wlan = network.WLAN(network.STA_IF)
+wlan.active(<span class="nm">True</span>)
+wlan.connect(WIFI_NAME, WIFI_PASSWORD)
+
+timeout = <span class="nm">15</span>
+<span class="kw">while not</span> wlan.isconnected() <span class="kw">and</span> timeout > <span class="nm">0</span>:
+    time.sleep(<span class="nm">1</span>)
+    timeout -= <span class="nm">1</span>
+
+<span class="kw">if</span> wlan.isconnected():
+    print(<span class="st">'Connected! Open in browser:'</span>)
+    print(<span class="st">'  http://'</span> + wlan.ifconfig()[<span class="nm">0</span>])
+<span class="kw">else</span>:
+    print(<span class="st">'WiFi failed — check name and password (2.4 GHz only)'</span>)</pre></div>
+        </div>
+
+        <ol>
+          <li>File → New in Thonny</li>
+          <li>Paste the code above and change your WiFi details</li>
+          <li><strong>File → Save as… → MicroPython device → </strong><code>boot.py</code></li>
+          <li>Press the small <strong>RUN button (▶)</strong> in Thonny or press the <strong>RST/RUN button</strong> on the Pico</li>
+          <li>Look for your IP address in the Shell, e.g. <code>http://192.168.1.42</code> — write it down</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- STEP 7 main.py -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">7</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 10 minutes</span>
+        <h3>Write main.py — DHT22 + PIR + web server</h3>
+        <p>This code covers <strong>both Lesson 1 (PIR) and Lesson 2 (temperature &amp; humidity)</strong> combined, so you can catch up to the rest of the class. The only differences from the class code are the pin numbers: <code>GP15</code> for DHT22 and <code>GP14</code> for PIR.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-fname">main.py — save to MicroPython device</span>
+            <span class="code-lang">MicroPython · Pico W · DHT22 GP15 · PIR GP14</span>
+          </div>
+          <div class="code-body"><pre><span class="cm"># ─────────────────────────────────────────────────────────────
+# main.py  |  Raspberry Pi Pico W  |  MicroPython v1.28
+# FIA2 Project — Rest Environment Monitor
+# Sensors: DHT22 → GP15  |  PIR → GP14
+#
+# PIN DIFFERENCES from class FireBeetle 2 code:
+#   FireBeetle 2: DHT11/22 → GPIO25 (D2)  PIR → GPIO26 (D3)
+#   Pico W:     DHT22    → GP15         PIR → GP14
+#   Everything else is IDENTICAL
+# ─────────────────────────────────────────────────────────────</span>
+
+<span class="kw">from</span> machine <span class="kw">import</span> Pin
+<span class="kw">import</span> socket, time, dht
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════
+# SECTION 1 — Sensor Setup
+# DHT22 on GP15 (physical pin 20)
+# PIR   on GP14 (physical pin 19)
+# ════════════════════════════════════════════════════════════</span>
+
+<span class="cm"># DHT22 — digital single-wire protocol
+# Built-in MicroPython dht library works identically on Pico W</span>
+_dht = dht.DHT22(Pin(<span class="nm">15</span>))           <span class="cm"># GP15</span>
+
+<span class="kw">def</span> <span class="fn">read_sensor</span>():
+    <span class="st">"""Read temperature (°C) and humidity (%) from DHT22."""</span>
+    <span class="kw">try</span>:
+        _dht.measure()
+        <span class="kw">return</span> float(_dht.temperature()), float(_dht.humidity())
+    <span class="kw">except</span> OSError:
+        <span class="kw">return</span> <span class="nm">None</span>, <span class="nm">None</span>
+
+<span class="cm"># PIR motion sensor — digital input</span>
+pir            = Pin(<span class="nm">14</span>, Pin.IN)     <span class="cm"># GP14</span>
+last_motion_ms = time.ticks_add(time.ticks_ms(), -<span class="nm">61000</span>)
+CALM_SECONDS   = <span class="nm">60</span>
+WARMUP_MS      = <span class="nm">30000</span>
+startup_ms     = time.ticks_ms()
+
+<span class="kw">def</span> <span class="fn">check_pir</span>():
+    <span class="kw">global</span> last_motion_ms
+    <span class="kw">if</span> pir.value() == <span class="nm">1</span>: last_motion_ms = time.ticks_ms()
+    <span class="kw">return</span> pir.value() == <span class="nm">1</span>
+
+<span class="kw">def</span> <span class="fn">seconds_since_motion</span>():
+    <span class="kw">return</span> time.ticks_diff(time.ticks_ms(), last_motion_ms) // <span class="nm">1000</span>
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════
+# SECTION 2 — 3-Condition Rest Algorithm (same as class code)
+# Condition A: PIR calm for ≥ 60 s
+# Condition B: Temperature 16–22 °C
+# Condition C: Humidity &lt; 70 %
+# ════════════════════════════════════════════════════════════</span>
+
+TEMP_MIN, TEMP_MAX, HUM_MAX = <span class="nm">16.0</span>, <span class="nm">22.0</span>, <span class="nm">70.0</span>
+
+<span class="kw">def</span> <span class="fn">evaluate_rest</span>(temp, hum):
+    motion_now = check_pir()
+    secs       = seconds_since_motion()
+    warmup     = time.ticks_diff(time.ticks_ms(), startup_ms) &lt; WARMUP_MS
+    motion_ok  = (not motion_now) and (secs &gt;= CALM_SECONDS) and (not warmup)
+    temp_ok    = temp is not <span class="nm">None</span> and TEMP_MIN &lt;= temp &lt;= TEMP_MAX
+    hum_ok     = hum  is not <span class="nm">None</span> and hum &lt;= HUM_MAX
+    score      = (1 if motion_ok else 0) + (1 if temp_ok else 0) + (1 if hum_ok else 0)
+    secs_str   = <span class="st">'{}m {}s'</span>.format(secs//<span class="nm">60</span>, secs%<span class="nm">60</span>) <span class="kw">if</span> secs &gt;= <span class="nm">60</span> <span class="kw">else</span> <span class="st">'{}s'</span>.format(secs)
+
+    <span class="kw">if</span>   warmup:       status, advice = <span class="st">'STARTING UP'</span>,       <span class="st">'Sensors warming up — wait 30 s.'</span>
+    <span class="kw">elif</span> score == <span class="nm">3</span>:  status, advice = <span class="st">'SUITABLE FOR REST'</span>, <span class="st">'All conditions met. Room is ready.'</span>
+    <span class="kw">elif</span> score == <span class="nm">0</span>:  status, advice = <span class="st">'NOT SUITABLE'</span>,      <span class="st">'Motion, temp and humidity all need attention.'</span>
+    <span class="kw">else</span>:
+        issues = []
+        <span class="kw">if not</span> motion_ok: issues.append(<span class="st">'motion {}' </span>.format(<span class="st">'now'</span> <span class="kw">if</span> motion_now <span class="kw">else</span> secs_str + <span class="st">' ago'</span>))
+        <span class="kw">if not</span> temp_ok <span class="kw">and</span> temp is not <span class="nm">None</span>: issues.append(<span class="st">'temp {:.1f}C'</span>.format(temp))
+        <span class="kw">if not</span> hum_ok  <span class="kw">and</span> hum  is not <span class="nm">None</span>: issues.append(<span class="st">'hum {:.0f}%'</span>.format(hum))
+        status = <span class="st">'NEEDS ADJUSTMENT'</span>
+        advice = <span class="st">'Fix: '</span> + <span class="st">', '</span>.join(issues)
+
+    <span class="kw">return</span> status, advice, score, motion_ok, temp_ok, hum_ok, secs
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════
+# SECTION 3 — HTML Dashboard (identical to class version)
+# ════════════════════════════════════════════════════════════</span>
+
+<span class="kw">def</span> <span class="fn">build_page</span>(temp, hum, status, advice, score, m_ok, t_ok, h_ok, secs):
+    t_s = <span class="st">'{:.1f}°C'</span>.format(temp) <span class="kw">if</span> temp <span class="kw">is not</span> <span class="nm">None</span> <span class="kw">else</span> <span class="st">'---'</span>
+    h_s = <span class="st">'{:.0f}%'</span>.format(hum)  <span class="kw">if</span> hum  <span class="kw">is not</span> <span class="nm">None</span> <span class="kw">else</span> <span class="st">'---'</span>
+    syms  = {<span class="nm">3</span>:<span class="st">'\u2713'</span>, <span class="nm">2</span>:<span class="st">'~'</span>, <span class="nm">1</span>:<span class="st">'!'</span>, <span class="nm">0</span>:<span class="st">'\u2717'</span>}
+    brds  = {<span class="nm">3</span>:<span class="st">'border:3px solid #93c5fd'</span>, <span class="nm">2</span>:<span class="st">'border:3px dashed #60a5fa'</span>,
+             <span class="nm">1</span>:<span class="st">'border:3px dotted #3b82f6'</span>, <span class="nm">0</span>:<span class="st">'border:3px dotted #1d4ed8'</span>}
+    sym, brd = syms.get(score, <span class="st">'?'</span>), brds.get(score, <span class="st">'border:3px dotted #1d4ed8'</span>)
+    filled = min(<span class="nm">10</span>, secs * <span class="nm">10</span> // CALM_SECONDS)
+    bar    = <span class="st">'\u2588'</span> * filled + <span class="st">'\u2591'</span> * (<span class="nm">10</span> - filled)
+    mb, tb, hb = (<span class="st">'[OK]'</span> <span class="kw">if</span> m_ok <span class="kw">else</span> <span class="st">'[--]'</span>), (<span class="st">'[OK]'</span> <span class="kw">if</span> t_ok <span class="kw">else</span> <span class="st">'[--]'</span>), (<span class="st">'[OK]'</span> <span class="kw">if</span> h_ok <span class="kw">else</span> <span class="st">'[--]'</span>)
+
+    <span class="kw">return</span> <span class="st">"""&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;&lt;meta name="viewport" content="width=device-width,initial-scale=1"&gt;
+&lt;meta http-equiv="refresh" content="5"&gt;&lt;title&gt;Rest Monitor&lt;/title&gt;
+&lt;style&gt;
+*{{box-sizing:border-box;margin:0;padding:0}}
+body{{background:#0a1628;color:#bfdbfe;font-family:monospace;
+     display:flex;flex-direction:column;align-items:center;
+     min-height:100vh;padding:18px 12px;gap:12px}}
+h1{{font-size:.72rem;letter-spacing:4px;color:#1e3a8a;text-transform:uppercase}}
+.card{{background:#0f2044;border-radius:10px;padding:20px 22px;
+       text-align:center;width:100%;max-width:420px}}
+.sym{{font-size:3.8rem;line-height:1.1;color:#93c5fd}}
+.status{{font-size:1.1rem;font-weight:bold;letter-spacing:1px;color:#bfdbfe;margin:7px 0 4px}}
+.advice{{font-size:.8rem;color:#1e3a8a;line-height:1.55}}
+.bwrap{{background:#0c1a38;border:1px solid #1e3a8a;border-radius:7px;padding:8px 10px;width:100%;max-width:420px}}
+.bl{{font-size:.55rem;letter-spacing:2px;color:#1e3a8a;text-transform:uppercase}}
+.bar{{font-size:1rem;letter-spacing:4px;color:#3b82f6;margin:4px 0 2px}}
+.bs{{font-size:.6rem;color:#1a3566}}
+.grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:420px}}
+.tile{{background:#0c1a38;border:1px solid #1a3566;border-radius:7px;padding:10px 6px;text-align:center}}
+.tl{{font-size:.54rem;letter-spacing:1.5px;color:#1e3a8a;text-transform:uppercase}}
+.tv{{font-size:.88rem;font-weight:bold;margin:4px 0 2px;color:#93c5fd}}
+.bdg{{font-size:.72rem;padding:1px 5px;border-radius:3px}}
+.ok{{background:#0a2e1a;color:#86efac}}.fail{{background:#2e0a0a;color:#f87171}}
+footer{{font-size:.6rem;color:#1a3566;text-align:center}}
+&lt;/style&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;&amp;#9632; REST ENVIRONMENT MONITOR&lt;/h1&gt;
+  &lt;div class="card" style="{brd};background:#0f2044;border-radius:10px;padding:20px 22px;text-align:center;width:100%;max-width:420px"&gt;
+    &lt;div class="sym"&gt;{sym}&lt;/div&gt;
+    &lt;div class="status"&gt;{status}&lt;/div&gt;
+    &lt;div class="advice"&gt;{advice}&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="bwrap"&gt;
+    &lt;div class="bl"&gt;CALM TIMER&lt;/div&gt;
+    &lt;div class="bar"&gt;{bar}&lt;/div&gt;
+    &lt;div class="bs"&gt;{secs}s / {thresh}s&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="grid"&gt;
+    &lt;div class="tile"&gt;&lt;div class="tl"&gt;Motion&lt;/div&gt;&lt;div class="tv"&gt;&lt;span class="bdg {mc}"&gt;{mb}&lt;/span&gt;&lt;/div&gt;&lt;div style="font-size:.55rem;color:#1a3566"&gt;GP14&lt;/div&gt;&lt;/div&gt;
+    &lt;div class="tile"&gt;&lt;div class="tl"&gt;Temp&lt;/div&gt;&lt;div class="tv"&gt;{t}&lt;/div&gt;&lt;span class="bdg {tc}"&gt;{tb}&lt;/span&gt;&lt;/div&gt;
+    &lt;div class="tile"&gt;&lt;div class="tl"&gt;Humidity&lt;/div&gt;&lt;div class="tv"&gt;{h}&lt;/div&gt;&lt;span class="bdg {hc}"&gt;{hb}&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;footer&gt;Updates every 5 s · Pico W · DHT22 GP15 · PIR GP14&lt;/footer&gt;
+&lt;/body&gt;&lt;/html&gt;"""</span>.format(
+        sym=sym, brd=brd, status=status, advice=advice,
+        bar=bar, secs=min(secs,CALM_SECONDS), thresh=CALM_SECONDS,
+        t=t_s, h=h_s, mb=mb, tb=tb, hb=hb,
+        mc=<span class="st">'ok'</span> <span class="kw">if</span> m_ok <span class="kw">else</span> <span class="st">'fail'</span>,
+        tc=<span class="st">'ok'</span> <span class="kw">if</span> t_ok <span class="kw">else</span> <span class="st">'fail'</span>,
+        hc=<span class="st">'ok'</span> <span class="kw">if</span> h_ok <span class="kw">else</span> <span class="st">'fail'</span>
+    )
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════
+# SECTION 4 — Web Server (identical to class version)
+# ════════════════════════════════════════════════════════════</span>
+
+srv = socket.socket()
+srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="nm">1</span>)
+srv.bind((<span class="st">''</span>, <span class="nm">80</span>)); srv.listen(<span class="nm">3</span>)
+print(<span class="st">'Server ready | DHT22:GP15 | PIR:GP14 | Pico W'</span>)
+
+<span class="kw">while True</span>:
+    <span class="kw">try</span>:
+        conn, _ = srv.accept()
+        conn.recv(<span class="nm">1024</span>)
+        temp, hum = read_sensor()
+        status, advice, score, m_ok, t_ok, h_ok, secs = evaluate_rest(temp, hum)
+        print(<span class="st">'T:{} H:{} Calm:{}s → {}'</span>.format(temp, hum, secs, status))
+        html = build_page(temp, hum, status, advice, score, m_ok, t_ok, h_ok, secs)
+        conn.sendall((<span class="st">'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n'</span> + html).encode())
+        conn.close()
+        time.sleep(<span class="nm">2</span>)     <span class="cm"># DHT22 needs 2 s between reads</span>
+    <span class="kw">except</span> Exception <span class="kw">as</span> e:
+        print(<span class="st">'Error:'</span>, e)
+        <span class="kw">try</span>: conn.close()
+        <span class="kw">except</span>: <span class="kw">pass</span></pre></div>
+        </div>
+
+        <ol style="margin-top:0.6rem">
+          <li>File → New → paste code above</li>
+          <li><strong>File → Save as… → MicroPython device → </strong><code>main.py</code></li>
+          <li>Click the green <strong>Run ▶</strong> button or press the RST button</li>
+          <li>Shell should show: <code>Server ready | DHT22:GP15 | PIR:GP14 | Pico W</code></li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- STEP 8 TEST -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">8</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 5 minutes</span>
+        <h3>Test the dashboard in your browser</h3>
+        <ol>
+          <li>Open Safari, Chrome, or Firefox on your Mac</li>
+          <li>Type <code>http://</code> followed by the IP address from Step 6 — e.g. <code>http://192.168.1.42</code></li>
+          <li>You should see the rest monitor dashboard with three tiles: Motion, Temp, Humidity ✅</li>
+          <li><strong>Test motion:</strong> wave your hand near the PIR — Motion tile shows <code>[--]</code></li>
+          <li><strong>Test DHT22:</strong> breathe on the sensor — temperature and humidity should change</li>
+          <li><strong>Check the Shell:</strong> every page visit prints current readings</li>
+        </ol>
+        <div class="callout amber">
+          <div class="icon">⚠️</div>
+          <div>
+            <h4>Your Mac and the Pico W must be on the same WiFi network</h4>
+            <p>If your browser can't load the page, check: (1) both devices on the same network — usually the school WiFi or your phone hotspot; (2) the IP address is exactly what was printed in the Shell; (3) type <code>http://</code> not <code>https://</code>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /step-list -->
+
+  <!-- CONTINUE WITH CLASS LESSONS -->
+  <div class="section-label">Continuing with class lessons — what changes, what stays the same</div>
+  <div class="callout green">
+    <div class="icon">✅</div>
+    <div>
+      <h4>Good news — you can follow all four class lessons with minor adjustments</h4>
+      <p>Your Pico W setup is equivalent to Lessons 1 + 2 combined. For Lesson 3 (Data Logging) you will need the RTC SD2405 — this connects via I²C (SDA=GP4, SCL=GP5 on the Pico W). Ask your teacher for the specific Lesson 3 pin update.</p>
+    </div>
+  </div>
+
+  <table class="continue-table">
+    <thead>
+      <tr><th>Lesson</th><th>Class uses</th><th>Your Pico W equivalent</th><th>Code change needed</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Lesson 1</strong> PIR</td>
+        <td>ESP32 GPIO26 (D3)</td>
+        <td>Pico W GP14</td>
+        <td><strong>Done ✅</strong> — in your main.py above</td>
+      </tr>
+      <tr>
+        <td><strong>Lesson 2</strong> DHT22</td>
+        <td>ESP32 GPIO25 (D2)</td>
+        <td>Pico W GP15</td>
+        <td><strong>Done ✅</strong> — in your main.py above</td>
+      </tr>
+      <tr>
+        <td><strong>Lesson 3</strong> RTC SD2405</td>
+        <td>I²C via IO Shield (SDA=21, SCL=22)</td>
+        <td>I²C default: SDA=<strong>GP4</strong>, SCL=<strong>GP5</strong></td>
+        <td>Change <code>I2C(0, scl=Pin(5), sda=Pin(4))</code></td>
+      </tr>
+      <tr>
+        <td><strong>Lesson 4</strong> UX / Video</td>
+        <td>Theory lesson — no hardware</td>
+        <td>Identical — no pin changes</td>
+        <td><strong>No change needed</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- VIDEOS -->
+  <div class="section-label">Tutorial videos — Pico W on Mac</div>
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="video-wrap">
+        <iframe src="https://www.youtube-nocookie.com/embed/CPkzcNIVqPQ"
+          title="Getting Started MicroPython Thonny Pico" allowfullscreen loading="lazy"
+          allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+      </div>
+      <div class="video-info">
+        <h4>Getting Started: MicroPython &amp; Thonny (Pico)</h4>
+        <p>Firmware install and Thonny setup for Raspberry Pi Pico — BOOTSEL method, drag-and-drop UF2.</p>
+        <span class="vtag">PICO SETUP</span>
+      </div>
+    </div>
+    <div class="video-card">
+      <div class="video-wrap">
+        <iframe src="https://www.youtube-nocookie.com/embed/DV--xQTVflI"
+          title="DHT22 MicroPython" allowfullscreen loading="lazy"
+          allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+      </div>
+      <div class="video-info">
+        <h4>DHT22 with MicroPython</h4>
+        <p>Reading temp &amp; humidity from DHT22 in MicroPython — same <code>dht</code> library used on both Pico W and ESP32.</p>
+        <span class="vtag">DHT22 · Jan 2025</span>
+      </div>
+    </div>
+    <div class="video-card">
+      <div class="video-wrap">
+        <iframe src="https://www.youtube-nocookie.com/embed/X_-095XJvp4"
+          title="MicroPython ESP32 Thonny" allowfullscreen loading="lazy"
+          allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+      </div>
+      <div class="video-info">
+        <h4>MicroPython Web Server Reference</h4>
+        <p>Web server and WiFi concepts — identical between Pico W and ESP32 in MicroPython.</p>
+        <span class="vtag">WEB SERVER REFERENCE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Troubleshooting -->
+  <div class="section-label">Troubleshooting — Mac M4 specific</div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:0.6rem 0">
+    <table style="width:100%;border-collapse:collapse;font-size:0.86rem">
+      <thead><tr>
+        <th style="background:#eff6ff;color:var(--primary-dark);text-align:left;padding:0.6rem 0.9rem;font-size:0.74rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--border)">Problem</th>
+        <th style="background:#eff6ff;color:var(--primary-dark);text-align:left;padding:0.6rem 0.9rem;font-size:0.74rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--border)">Fix</th>
+      </tr></thead>
+      <tbody>
+        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">RPI-RP2 drive doesn't appear after holding BOOTSEL</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Try a different cable — must be a <strong>data</strong> micro-USB cable, not a charge-only cable. Try a different USB port on your Mac.</td></tr>
+        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">UF2 file copies but RPI-RP2 drive stays visible (doesn't disappear)</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Wrong firmware downloaded. Make sure you downloaded <code>RPI_PICO_W</code> — not the plain Pico or Pico W. Re-download from <code>micropython.org/download/RPI_PICO_W/</code></td></tr>
+        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Thonny shows no port / "Could not connect"</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Unplug and replug (without BOOTSEL). In Thonny interpreter settings, select the port containing <code>usbmodem</code>. Restart Thonny.</td></tr>
+        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">macOS says "Thonny cannot be opened"</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Go to <strong>System Settings → Privacy &amp; Security → Open Anyway</strong> next to Thonny.</td></tr>
+        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">DHT22 reads <code>None</code></td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Check yellow/SIG wire is on GP15 (pin 20). Check red wire is on 3V3 OUT (pin 36), not VBUS. The DHT22 Gravity module includes a pull-up resistor — no external resistor needed.</td></tr>
+        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">PIR never detects motion (always LOW)</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">PIR needs ~30 s warm-up. Check yellow/SIG wire is on GP14 (pin 19). The PIR has a warm-up period — false readings in the first 30 s are normal.</td></tr>
+        <tr><td style="padding:0.6rem 0.9rem">Browser can't load the page</td><td style="padding:0.6rem 0.9rem">Mac and Pico must be on the same WiFi network (same hotspot or school network). Type <code>http://</code> (not https). Use exact IP from Shell.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    Digital Solutions Unit 1 · FIA2 Project · St Peters Lutheran College Springfield · Ms Baessler
+    <br style="margin-top:0.3rem">
+    Raspberry Pi Pico W · RP2040 · MicroPython v1.24+ · DHT22 GP15 · PIR GP14 · Mac M4 (Apple Silicon)
+  </footer>
+
+</div>
+</body>
+</html>
