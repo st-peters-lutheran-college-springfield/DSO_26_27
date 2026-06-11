@@ -2,492 +2,1592 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pico W Setup Walkthrough — student_name | Digital Solutions Unit 1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Year 11 Digital Solutions — FIA2 Code &amp; Design Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    color-scheme: light;
-    --bg:#f4f7fb; --surface:#ffffff; --primary:#1d4ed8; --primary-dark:#1e3a8a;
-    --accent:#c8102e; --text:#1f2937; --muted:#6b7280; --border:#dbe2f0;
-    --success-bg:#ecfdf5; --success-border:#a7f3d0; --success-text:#047857;
-    --warn-bg:#fef3c7; --warn-border:#fcd34d; --warn-text:#92400e;
-  }
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;}
+:root{
+  --bg:#F5F8FC;--white:#FFFFFF;--navy:#0D1B2A;--navy-mid:#1A3A5C;
+  --navy-light:#EDF4FB;--blue:#2B8BE0;--blue-light:#D6E8FB;--blue-dark:#1A5C9E;
+  --green:#1E6B42;--green-light:#D4EAE0;--red:#9E2B22;--red-light:#F5D5D2;
+  --amber:#7A5000;--amber-light:#FFF8E6;--purple:#4D2472;--purple-light:#EBE0F5;
+  --teal:#0F5C5C;--teal-light:#D4EDED;
+  --text:#0D1B2A;--muted:#3D5A78;--border:#C4D8EE;
+  --code-bg:#0D1B2A;--code-text:#D6E8FB;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;}
 
-  .site-header{background:var(--primary-dark);color:#fff;padding:0.6rem 1rem;font-size:0.82rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;}
-  .site-header span{opacity:0.55;}
-  .site-header a{color:rgba(255,255,255,0.65);text-decoration:none;margin-left:auto;font-size:0.8rem;}
+/* NAV */
+.nav{position:sticky;top:0;z-index:200;background:var(--navy);border-bottom:3px solid var(--blue);display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-brand{font-family:'Playfair Display',serif;font-size:13px;color:var(--blue);padding:0 16px;display:flex;align-items:center;gap:7px;border-right:1px solid rgba(255,255,255,0.15);flex-shrink:0;white-space:nowrap;}
+.nav-btn{background:none;border:none;color:rgba(255,255,255,0.6);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:13px 13px;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-3px;transition:color .15s,border-color .15s;line-height:1.3;}
+.nav-btn small{display:block;font-size:10px;opacity:.7;font-weight:400;}
+.nav-btn:hover{color:#fff;}
+.nav-btn.active{color:var(--blue);border-bottom-color:var(--blue);}
 
-  .lesson-banner{background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 100%);color:#fff;padding:2.4rem 1rem 2rem;position:relative;overflow:hidden;}
-  .lesson-banner::before{content:'';position:absolute;top:-40px;right:-40px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,0.06);pointer-events:none;}
-  .lesson-banner-inner{max-width:1000px;margin:0 auto;position:relative;z-index:1;}
-  .lesson-eyebrow{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:999px;padding:0.3rem 0.85rem;font-size:0.78rem;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:0.85rem;}
-  .lesson-banner h1{color:#fff;font-size:clamp(1.5rem,4vw,2.5rem);line-height:1.15;margin:0 0 0.55rem;}
-  .lesson-banner p{color:rgba(255,255,255,0.75);font-size:0.96rem;max-width:60ch;margin:0 0 1.1rem;line-height:1.6;}
-  .lesson-meta-row{display:flex;flex-wrap:wrap;gap:0.45rem;}
-  .lmeta{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.22);border-radius:999px;padding:0.22rem 0.7rem;font-size:0.77rem;font-weight:600;color:rgba(255,255,255,0.92);}
+/* PANELS */
+.panel{display:none;max-width:940px;margin:0 auto;padding:32px 22px 80px;}
+.panel.active{display:block;}
 
-  .container{max-width:1000px;margin:0 auto;padding:2rem 1rem 3rem;}
-  .top-nav{margin-bottom:1.25rem;font-size:0.88rem;}
-  .top-nav a{color:var(--primary);text-decoration:none;font-weight:700;}
+/* HERO */
+.hero{background:linear-gradient(145deg,#0D1B2A 0%,#1A3A5C 55%,#1E5799 100%);color:#fff;border-radius:16px;padding:34px 38px 30px;margin-bottom:28px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-50px;right:-50px;width:240px;height:240px;border-radius:50%;border:2px solid rgba(43,139,224,0.25);pointer-events:none;}
+.hero-tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:10px;position:relative;}
+.hero h1{font-family:'Playfair Display',serif;font-size:27px;line-height:1.2;margin-bottom:8px;color:#fff;position:relative;}
+.hero p{font-size:14px;color:rgba(255,255,255,0.72);max-width:600px;position:relative;}
+.hero-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;position:relative;}
+.chip{background:rgba(43,139,224,0.12);border:1px solid rgba(43,139,224,0.35);border-radius:20px;padding:3px 11px;font-size:12px;font-weight:500;color:rgba(255,255,255,0.85);}
+.chip-hi{border-color:var(--blue);color:var(--blue);font-weight:700;}
 
-  .callout{border-radius:10px;padding:0.9rem 1.1rem;margin:0.85rem 0;display:flex;gap:0.75rem;align-items:flex-start;font-size:0.88rem;}
-  .callout .icon{font-size:1.15rem;flex-shrink:0;margin-top:0.05rem;}
-  .callout.green{background:var(--success-bg);border:1px solid var(--success-border);border-left:4px solid var(--success-text);}
-  .callout.blue{background:#eff6ff;border:1px solid #bfdbfe;border-left:4px solid var(--primary);}
-  .callout.amber{background:var(--warn-bg);border:1px solid var(--warn-border);border-left:4px solid #d97706;}
-  .callout.red{background:#fff1f2;border:1px solid #fecdd3;border-left:4px solid var(--accent);}
-  .callout h4{margin:0 0 0.3rem;font-size:0.9rem;font-weight:700;}
-  .callout p,.callout li{margin:0.2rem 0;color:var(--text);}
-  .callout ul,.callout ol{padding-left:1.1rem;}
+/* HEADINGS */
+h2{font-family:'Playfair Display',serif;font-size:21px;color:var(--navy-mid);margin:34px 0 10px;padding-bottom:7px;border-bottom:2px solid var(--blue-light);}
+h3{font-size:15px;font-weight:600;color:var(--navy);margin:18px 0 7px;}
+h4{font-size:13px;font-weight:600;color:var(--navy-mid);margin:12px 0 5px;}
 
-  .section-label{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:1.75rem 0 0.7rem;display:flex;align-items:center;gap:0.5rem;}
-  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+/* BOXES */
+.box{border-radius:9px;padding:13px 16px;margin:12px 0;font-size:14px;border-left:4px solid;}
+.box .bt{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.box p,.box li{color:var(--muted);line-height:1.6;}
+.box p+p{margin-top:5px;}
+.box strong{color:var(--text);}
+.box a{color:var(--blue);}
+.box ul,.box ol{padding-left:18px;margin-top:4px;}
+.box li{margin-bottom:3px;}
+.box-blue{background:var(--blue-light);border-color:var(--blue);}
+.box-blue .bt{color:var(--blue-dark);}
+.box-green{background:var(--green-light);border-color:var(--green);}
+.box-green .bt{color:var(--green);}
+.box-amber{background:var(--amber-light);border-color:#C4900A;}
+.box-amber .bt{color:var(--amber);}
+.box-red{background:var(--red-light);border-color:var(--red);}
+.box-red .bt{color:var(--red);}
+.box-purple{background:var(--purple-light);border-color:var(--purple);}
+.box-purple .bt{color:var(--purple);}
+.box-teal{background:var(--teal-light);border-color:var(--teal);}
+.box-teal .bt{color:var(--teal);}
+.box-navy{background:var(--navy-light);border-color:var(--navy-mid);}
+.box-navy .bt{color:var(--navy-mid);}
 
-  .step-list{display:flex;flex-direction:column;gap:0;}
-  .step-item{display:grid;grid-template-columns:52px 1fr;border:1px solid var(--border);border-top:none;background:var(--surface);}
-  .step-item:first-child{border-top:1px solid var(--border);border-radius:12px 12px 0 0;}
-  .step-item:last-child{border-radius:0 0 12px 12px;}
-  .step-num-col{background:#eff6ff;border-right:1px solid var(--border);display:flex;align-items:flex-start;justify-content:center;padding-top:1.1rem;}
-  .step-circle{width:30px;height:30px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;}
-  .step-body{padding:1rem 1.1rem;}
-  .step-body h3{margin:0 0 0.4rem;font-size:1rem;color:var(--primary-dark);}
-  .step-body p{margin:0 0 0.5rem;font-size:0.9rem;color:var(--muted);}
-  .step-body ol,.step-body ul{font-size:0.88rem;color:var(--text);padding-left:1.15rem;margin:0.3rem 0;}
-  .step-body li{margin-bottom:0.3rem;}
-  .step-time{display:inline-block;font-size:0.72rem;font-weight:700;background:#eff6ff;color:var(--primary);border:1px solid #bfdbfe;border-radius:999px;padding:0.1rem 0.6rem;margin-bottom:0.5rem;}
+/* CODE */
+.cw{background:var(--code-bg);border:1px solid #1A3A5C;border-radius:10px;margin:12px 0;overflow:hidden;}
+.ch{background:#0A1520;border-bottom:1px solid #1A3A5C;padding:7px 14px;display:flex;align-items:center;justify-content:space-between;}
+.cf{font-family:'DM Mono',monospace;font-size:11px;color:var(--blue);}
+.cb{background:none;border:1px solid #1A3A5C;border-radius:4px;color:rgba(255,255,255,0.4);font-size:11px;font-family:'DM Sans',sans-serif;padding:2px 8px;cursor:pointer;transition:all .15s;}
+.cb:hover{color:var(--blue);border-color:var(--blue);}
+pre{padding:16px 18px;overflow-x:auto;font-family:'DM Mono',monospace;font-size:12.5px;line-height:1.75;color:var(--code-text);margin:0;}
+.ck{color:#79C0A8;}.cf2{color:#E3B27A;}.cs{color:#A5C8E8;}.cn{color:#C8DDB0;}.cm{color:#5A7A9A;}.ct{color:#F5E6CC;}.ca{color:#79C0A8;}
 
-  .wire-table{width:100%;border-collapse:collapse;font-size:0.87rem;margin:0.6rem 0;}
-  .wire-table th{background:#eff6ff;color:var(--primary-dark);text-align:left;padding:0.5rem 0.75rem;font-size:0.74rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--border);}
-  .wire-table td{padding:0.55rem 0.75rem;border-bottom:1px solid var(--bg);color:var(--text);vertical-align:middle;}
-  .ptag{display:inline-block;background:#eff6ff;border:1px solid #bfdbfe;border-radius:4px;padding:1px 7px;font-family:'Courier New',monospace;font-size:0.8rem;color:var(--primary-dark);font-weight:700;}
-  .ptag.gnd{background:#f1f5f9;border-color:#cbd5e1;color:#374151;}
-  .ptag.pwr{background:#fff1f2;border-color:#fecdd3;color:var(--accent);}
-  .wire-dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+/* ANNOTATION BLOCK — inline code explanation */
+.ann{display:flex;gap:0;margin:8px 0;border-radius:9px;overflow:hidden;border:1px solid #1A3A5C;}
+.ann-code{background:var(--code-bg);padding:12px 16px;font-family:'DM Mono',monospace;font-size:12px;color:var(--code-text);flex:1;min-width:0;}
+.ann-explain{background:var(--navy-light);border-left:1px solid var(--border);padding:12px 14px;font-size:13px;color:var(--muted);flex:1;min-width:160px;}
+.ann-explain strong{color:var(--navy);display:block;margin-bottom:3px;}
+@media(max-width:600px){.ann{flex-direction:column;}.ann-explain{border-left:none;border-top:1px solid var(--border);}}
 
-  /* Pin diagram */
-  .pico-visual{background:#1a1a2e;border-radius:8px;padding:12px 10px;font-family:'Courier New',monospace;font-size:0.62rem;color:#93c5fd;min-width:240px;border:2px solid #1e3a8a;display:inline-block;}
-  .pico-label{text-align:center;color:#3b5fc0;font-size:0.65rem;margin-bottom:6px;letter-spacing:1px;}
-  .pico-row{display:flex;justify-content:space-between;align-items:center;padding:2px 0;}
-  .pico-pin{display:flex;align-items:center;gap:4px;}
-  .pdot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
-  .pd-gnd{background:#374151;border:1px solid #6b7280;}
-  .pd-3v3{background:#dc2626;}
-  .pd-gp{background:#1d4ed8;}
-  .pd-dht{background:#059669;}
-  .pd-pir{background:#7c3aed;}
-  .pd-n{background:#1f2937;border:1px solid #374151;}
-  .pin-hi{background:rgba(5,150,105,0.12);border-radius:3px;}
-  .pin-hi-pir{background:rgba(124,58,237,0.12);border-radius:3px;}
+/* TABLE */
+.tbl{overflow-x:auto;border-radius:9px;border:1px solid var(--border);margin:12px 0;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--blue-light);color:var(--blue-dark);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:7px 11px;text-align:left;border-bottom:1px solid var(--border);}
+td{padding:8px 11px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top;}
+td:first-child{font-weight:500;}
+tr:last-child td{border-bottom:none;}
+tr:nth-child(even) td{background:#F8FBFF;}
+.ok{color:var(--green);font-weight:600;}
+.no{color:var(--red);font-weight:600;}
+.partial{color:var(--amber);font-weight:600;}
 
-  .cw{background:#0c1a3a;border-radius:12px;overflow:hidden;margin:0.75rem 0;border:1px solid #1e3a8a;}
-  .ch{background:#0a1520;border-bottom:1px solid #1e3a8a;padding:7px 14px;display:flex;align-items:center;justify-content:space-between;}
-  .cf{font-family:'Courier New',monospace;font-size:11px;color:#93c5fd;}
-  .cb{background:none;border:1px solid #1e3a8a;border-radius:4px;color:rgba(255,255,255,0.4);font-size:11px;padding:2px 8px;cursor:pointer;transition:all .15s;}
-  .cb:hover{color:#93c5fd;border-color:#93c5fd;}
-  pre{padding:14px 16px;overflow-x:auto;font-family:'Courier New',monospace;font-size:12px;line-height:1.75;color:#bfdbfe;margin:0;}
-  .ck{color:#79c0a8;font-weight:600;}.cm{color:#5a7a9a;font-style:italic;}
+/* SC BADGE */
+.sc{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 8px;border-radius:4px;background:var(--blue-light);color:var(--blue-dark);margin-bottom:4px;}
 
-  .tbl{overflow-x:auto;border-radius:9px;border:1px solid var(--border);margin:12px 0;}
-  table.plain{width:100%;border-collapse:collapse;font-size:13px;}
-  table.plain th{background:#eff6ff;color:var(--primary-dark);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:7px 11px;text-align:left;border-bottom:1px solid var(--border);}
-  table.plain td{padding:8px 11px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top;}
-  tr:last-child td{border-bottom:none;}
+/* INLINE CODE */
+code{font-family:'DM Mono',monospace;font-size:11px;background:var(--blue-light);border:1px solid #A8CCEE;border-radius:3px;padding:1px 5px;color:var(--blue-dark);}
 
-  footer{margin-top:2rem;text-align:center;color:var(--muted);font-size:0.88rem;padding:1rem;border-top:1px solid var(--border);}
-  @media(max-width:600px){.step-item{grid-template-columns:40px 1fr;}}
+/* TASK CARD */
+.task-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin:10px 0;}
+.task-card .tc-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.task-badge{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:3px 9px;border-radius:4px;}
+.tb-det{background:var(--blue-light);color:var(--blue-dark);}
+.tb-syn{background:var(--purple-light);color:var(--purple);}
+.tb-gen{background:var(--green-light);color:var(--green);}
+.tb-eval{background:var(--amber-light);color:var(--amber);}
+.task-card h4{margin:0;font-size:14px;color:var(--navy);}
+.task-card p{font-size:13px;color:var(--muted);}
+.task-card ul{padding-left:16px;margin-top:6px;}
+.task-card li{font-size:13px;color:var(--muted);margin-bottom:3px;}
+
+/* CHECKLIST */
+.chklist{list-style:none;padding:0;margin:10px 0;}
+.chklist li{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);}
+.chklist li:last-child{border-bottom:none;}
+.ck-box{width:18px;height:18px;border:2px solid var(--border);border-radius:3px;flex-shrink:0;margin-top:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.ck-box.done{background:var(--green);border-color:var(--green);}
+.ck-box.done::after{content:'✓';color:#fff;font-size:11px;font-weight:700;}
+.chklist li.ci span{color:var(--muted);text-decoration:line-through;}
+
+/* PERSONA CARD */
+.persona{background:var(--navy);color:#fff;border-radius:12px;padding:18px 20px;margin:14px 0;display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;}
+.persona-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#1A3A5C,#2B8BE0);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;}
+.persona-info{flex:1;min-width:200px;}
+.persona-name{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:3px;}
+.persona-meta{font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:10px;}
+.persona-needs{display:flex;flex-wrap:wrap;gap:6px;}
+.pn{background:rgba(43,139,224,0.2);border:1px solid rgba(43,139,224,0.35);border-radius:4px;padding:2px 8px;font-size:11px;color:rgba(255,255,255,0.9);}
+.pn-red{background:rgba(158,43,34,0.25);border-color:rgba(220,60,50,0.4);color:#FFB5B0;}
+
+/* CARP GRID */
+.carp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0;}
+.carp-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.carp-letter{font-family:'Playfair Display',serif;font-size:36px;color:var(--blue);line-height:1;margin-bottom:4px;}
+.carp-word{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.carp-desc{font-size:13px;color:var(--muted);line-height:1.55;}
+.carp-daniel{margin-top:10px;background:var(--navy-light);border-radius:6px;padding:7px 10px;font-size:12px;color:var(--navy-mid);}
+.carp-daniel strong{color:var(--navy);}
+
+/* SC TABLE highlight */
+.sc-row-met td:last-child{background:var(--green-light);color:var(--green);font-weight:600;}
+.sc-row-partial td:last-child{background:var(--amber-light);color:var(--amber);font-weight:600;}
+
+/* FOOTER */
+.footer{text-align:center;padding:24px 0 14px;border-top:1px solid var(--border);margin-top:40px;}
+.footer p{color:var(--muted);font-size:12px;line-height:1.8;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 </style>
 </head>
 <body>
+<nav class="nav">
+  <div class="nav-brand">📡 FIA2 Guide</div>
+  <button class="nav-btn active" onclick="show('overview',this)">Overview<br><small>Daniel + context</small></button>
+  <button class="nav-btn" onclick="show('carp',this)">CARP + WCAG<br><small>Design principles</small></button>
+  <button class="nav-btn" onclick="show('sc',this)">Success Criteria<br><small>8 criteria + tests</small></button>
+  <button class="nav-btn" onclick="show('code',this)">Code Guide<br><small>Pico W / ESP32</small></button>
+  <button class="nav-btn" onclick="show('ui',this)">UI Examples<br><small>HTML templates</small></button>
+  <button class="nav-btn" onclick="show('journal',this)">Journal Guide<br><small>FIA2 documentation</small></button>
+  <button class="nav-btn" onclick="show('checklist',this)">✅ Task Sheets<br><small>Checkpoints</small></button>
+  <button class="nav-btn" onclick="show('resources',this)">🧰 Learning Resources<br><small>UX · icons · AI tools</small></button>
+  <button class="nav-btn" onclick="show('tools',this)">🛠 Tools &amp; Setup<br><small>Thonny · naming · IoT</small></button>
+</nav>
 
-<div class="site-header">
-  <strong>St Peters Lutheran College Springfield</strong>
-  <span>·</span><span>Digital Solutions — Unit 1</span>
-  <span>·</span><span>Ms Baessler</span>
-  <a href="student_hub.html">← Back to Hub</a>
-</div>
-
-<div class="lesson-banner">
-  <div class="lesson-banner-inner">
-    <div class="lesson-eyebrow">🍓 Pico W Setup Walkthrough · student_name · Mac M4</div>
-    <h1>Pico W — Step by Step <em>Mac M4 Pathway</em></h1>
-    <p>Your personal setup guide for the Raspberry Pi Pico W (2022, RP2040) using your MacBook. DHT22 on GP15, PIR on GP14, standalone WiFi hotspot. Follow every step in order — do not skip ahead.</p>
-    <div class="lesson-meta-row">
-      <span class="lmeta">🍓 Pico W 2022 · RP2040</span>
-      <span class="lmeta">🍎 Mac M4 — no drivers needed</span>
-      <span class="lmeta">🌡️ DHT22 → GP15 (pin 20)</span>
-      <span class="lmeta">👁 PIR → GP14 (pin 19)</span>
-      <span class="lmeta">📡 Hotspot AP mode</span>
-      <span class="lmeta">⏱ ~40 minutes</span>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-
-  <nav class="top-nav">
-    <a href="student_hub.html">FIA2 Project Hub</a> ›
-    <span style="color:var(--muted);font-weight:600;">Pico W Setup — student_name</span>
-  </nav>
-
-  <!-- GPIO24 WARNING — must be first thing they read -->
-  <div class="callout red">
-    <div class="icon">🚨</div>
-    <div>
-      <h4>Important — GPIO24 is NOT available on the Pico W</h4>
-      <p>GPIO24 is used internally by the Pico W's WiFi chip (CYW43439). If you wire the PIR to GPIO24 and call <code>Pin(24, Pin.IN)</code>, it will <strong>not work as a sensor input</strong> and may interfere with your WiFi hotspot.</p>
-      <p style="margin-top:0.4rem;"><strong>Your PIR sensor goes on GP14 (physical pin 19)</strong> — the files generated for you already use <code>Pin(14, Pin.IN)</code>. GP14 is a standard GPIO pin with no internal conflicts. If you have already wired to a different pin, update <code>pir = Pin(14, Pin.IN)</code> in <code>main.py</code> to match.</p>
+<!-- ═══════════════════ OVERVIEW ═══════════════════ -->
+<div id="panel-overview" class="panel active">
+  <div class="hero">
+    <div class="hero-tag">Year 11 Digital Solutions · FIA2 · Unit 1 · Due 12 June 2026</div>
+    <h1>Home Rest &amp; Recovery<br>Monitoring System</h1>
+    <p>Code explanations, UI design resources, CARP/WCAG guidance, and FIA2 journal documentation — all tailored to Daniel Foster's needs and your 8 success criteria.</p>
+    <div class="hero-chips">
+      <span class="chip chip-hi">Stakeholder: Daniel Foster</span>
+      <span class="chip">ESP8266 + ESP32 or Pico W</span>
+      <span class="chip">MicroPython</span>
+      <span class="chip">CARP principles</span>
+      <span class="chip">WCAG 2 / WebAIM</span>
+      <span class="chip">8 success criteria</span>
+      <span class="chip">25 marks total</span>
     </div>
   </div>
 
-  <!-- WHAT YOU HAVE -->
-  <div class="section-label">Your setup at a glance</div>
-  <div class="tbl"><table class="plain">
-    <tr><th>Item</th><th>Detail</th><th>Notes</th></tr>
-    <tr><td>Board</td><td>Raspberry Pi Pico W (2022) · RP2040 chip</td><td>Micro-USB connector · no drivers needed on Mac M4</td></tr>
-    <tr><td>Computer</td><td>MacBook (Apple Silicon)</td><td>Thonny ARM64 build required — see Step 3</td></tr>
-    <tr><td>DHT22</td><td>Gravity 3-pin · GP15 (physical pin 20)</td><td>Temperature + humidity · yellow SIG wire → GP15</td></tr>
-    <tr><td>PIR</td><td>Gravity 3-pin · GP14 (physical pin 19)</td><td>Motion detection · yellow SIG wire → GP14</td></tr>
-    <tr><td>WiFi mode</td><td>Access Point (hotspot)</td><td>Board creates its own network · always 192.168.4.1</td></tr>
-    <tr><td>Files</td><td><code>boot.py</code> + <code>main.py</code></td><td>Both saved to MicroPython device · not to MacBook</td></tr>
+  <h2>Who is Daniel Foster?</h2>
+  <div class="persona">
+    <div class="persona-avatar">👨</div>
+    <div class="persona-info">
+      <div class="persona-name">Daniel Foster</div>
+      <div class="persona-meta">Age 46 · Logan, QLD · Regional delivery driver · Lives alone</div>
+      <div class="persona-needs">
+        <span class="pn">Shift worker — irregular sleep</span>
+        <span class="pn">Passive viewer — no interaction</span>
+        <span class="pn">Older tablet as display</span>
+        <span class="pn">Browser-based only</span>
+        <span class="pn-red">⚠️ Mild colour-vision deficiency</span>
+        <span class="pn-red">⚠️ Low cognitive load when tired</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="box box-red">
+    <div class="bt">⚠️ Most important design constraint — impacts every decision</div>
+    <p>Daniel has <strong>mild colour-vision deficiency</strong>. He cannot rely on colour alone to understand status. This means <strong>every status must also use text labels and symbols</strong> — not just a green/red indicator. This directly drives SC1 and underpins every WCAG and CARP decision in this project.</p>
+  </div>
+
+  <h2>The system architecture</h2>
+  <div class="tbl"><table>
+    <tr><th>Component</th><th>Role</th><th>Board option</th><th>Notes</th></tr>
+    <tr><td>Sensor node</td><td>Collect temperature, light, motion data</td><td>ESP8266 NodeMCU</td><td>Runs MicroPython; sends data via WiFi or serial</td></tr>
+    <tr><td>Display node</td><td>Host the web interface Daniel views</td><td>ESP32 or Raspberry Pi Pico W</td><td>Runs the HTTP web server; Daniel connects his tablet to this</td></tr>
+    <tr><td>Daniel's tablet</td><td>Passive display only</td><td>Any browser</td><td>Auto-refreshes — Daniel never interacts with it</td></tr>
   </table></div>
 
-  <!-- PIN DIAGRAM -->
-  <div class="section-label">Pin connections — Pico W (USB at bottom-left)</div>
-
-  <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:flex-start;margin:0.75rem 0;">
-    <div>
-      <div class="pico-visual">
-        <div class="pico-label">RASPBERRY PI PICO W (2022)</div>
-        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP0 (pin 1)</span></div><div class="pico-pin"><span>(pin 40)</span><div class="pdot pd-n"></div></div></div>
-        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP1</span></div><div class="pico-pin"><span style="color:#f59e0b">VBUS 5V</span><div class="pdot" style="background:#f59e0b"></div></div></div>
-        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-gnd"></div><span style="color:#9ca3af">GND</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
-        <div style="border-top:1px dashed #1e3a8a;margin:4px 0;"></div>
-        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP10</span></div><div class="pico-pin"><span style="color:#dc2626">3V3 OUT</span><div class="pdot pd-3v3"></div></div></div>
-        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP11 (pin 15)</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
-        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP12</span></div><div class="pico-pin"><span style="color:#9ca3af">GND (pin 18)</span><div class="pdot pd-gnd"></div></div></div>
-        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP13</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
-        <div class="pico-row pin-hi-pir"><div class="pico-pin"><div class="pdot pd-pir"></div><span style="color:#a78bfa"><strong>GP14 ← PIR SIG</strong></span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
-        <div class="pico-row pin-hi"><div class="pico-pin"><div class="pdot pd-dht"></div><span style="color:#6ee7b7"><strong>GP15 ← DHT22 SIG</strong></span></div><div class="pico-pin"><span style="color:#dc2626">3V3 OUT ← pin 36</span><div class="pdot pd-3v3"></div></div></div>
-        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP16</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
-        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP17</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
-        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP18</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
-        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP19</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
-        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP20</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
-        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP21 (pin 27)</span></div><div class="pico-pin"><span style="color:#9ca3af">GND (pin 28)</span><div class="pdot pd-gnd"></div></div></div>
-        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP22 (pin 29)</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
-        <div style="border-top:1px dashed #1e3a8a;margin:4px 0;"></div>
-        <div class="pico-row" style="opacity:0.65"><div class="pico-pin"><div class="pdot" style="background:#1d4ed8"></div><span style="color:#93c5fd">GP26 ADC ← LDR SIG (optional)</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
-      </div>
-      <p style="font-size:0.7rem;color:var(--muted);margin-top:6px;text-align:center">USB (micro) at bottom · highlighted pins in use</p>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:0.75rem;font-size:0.85rem;">
-      <div style="background:var(--success-bg);border:1px solid var(--success-border);border-radius:8px;padding:0.75rem 1rem;">
-        <div style="font-size:0.72rem;font-weight:700;color:var(--success-text);margin-bottom:6px">🌡️ DHT22 — GP15 (pin 20)</div>
-        <div>Black → <span class="ptag gnd">GND</span> any GND pin</div>
-        <div style="margin-top:3px">Red &nbsp;&nbsp; → <span class="ptag pwr">3V3 OUT</span> pin 36</div>
-        <div style="margin-top:3px">Yellow → <span class="ptag">GP15</span> pin 20</div>
-      </div>
-      <div style="background:#f5f3ff;border:1px solid #ddd6fe;border-radius:8px;padding:0.75rem 1rem;">
-        <div style="font-size:0.72rem;font-weight:700;color:#4d2472;margin-bottom:6px">👁 PIR — GP14 (pin 19)</div>
-        <div>Black → <span class="ptag gnd">GND</span> any GND pin</div>
-        <div style="margin-top:3px">Red &nbsp;&nbsp; → <span class="ptag pwr">3V3 OUT</span> pin 36</div>
-        <div style="margin-top:3px">Yellow → <span class="ptag">GP14</span> pin 19</div>
-      </div>
-      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:0.75rem 1rem;">
-        <div style="font-size:0.72rem;font-weight:700;color:var(--primary-dark);margin-bottom:4px">⚡ Power notes</div>
-        <div style="font-size:0.82rem;color:var(--text)">Both sensors at <strong>3.3V</strong> — pin 36 only. Share via mini breadboard if needed. Never use VBUS (5V pin 40).</div>
-      </div>
-      <div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:0.75rem 1rem;">
-        <div style="font-size:0.72rem;font-weight:700;color:var(--accent);margin-bottom:4px">🚫 GPIO24 — do not use</div>
-        <div style="font-size:0.82rem;color:var(--text)">Reserved by WiFi chip internally. Not a usable GPIO pin on Pico W.</div>
-      </div>
-    </div>
+  <div class="box box-blue">
+    <div class="bt">💡 Why two boards?</div>
+    <p>The ESP8266 is a sensor collection node. The ESP32 (or Pico W) hosts the web server. Separating them means the display stays responsive even when the sensor is busy taking readings. They communicate over your local WiFi network — the display board receives JSON data from the sensor board.</p>
+    <p style="margin-top:6px;">If you are using a <strong>single Pico W</strong>: connect all sensors to the Pico W directly and skip the two-board communication. This is simpler and still meets all 8 success criteria.</p>
   </div>
 
-  <!-- STEP BY STEP -->
-  <div class="section-label">Setup steps — follow in order</div>
+  <h2>Assessment at a glance</h2>
+  <div class="tbl"><table>
+    <tr><th>Criterion</th><th>Marks</th><th>What the marker looks for</th></tr>
+    <tr><td>Determining &amp; Synthesising</td><td>7</td><td>Astute success criteria + logical solutions for UI, data, programmed components</td></tr>
+    <tr><td>Generating</td><td>9</td><td>Proficient prototype combining UI + data + programmed components</td></tr>
+    <tr><td>Evaluating</td><td>7</td><td>Critical evaluation against criteria, user feedback, testing, impacts</td></tr>
+    <tr><td>Communicating</td><td>2</td><td>Fluent visual + written + spoken, technical language, referencing</td></tr>
+    <tr><td><strong>Total</strong></td><td><strong>25</strong></td><td></td></tr>
+  </table></div>
 
-  <div class="step-list">
-
-    <!-- STEP 1 -->
-    <div class="step-item">
-      <div class="step-num-col"><div class="step-circle">1</div></div>
-      <div class="step-body">
-        <span class="step-time">⏱ 5 minutes</span>
-        <h3>Download MicroPython firmware for the Pico W</h3>
-        <p>The Pico W (2022) uses the <code>RPI_PICO_W</code> firmware — not Pico 2 W, not plain Pico.</p>
-        <ol>
-          <li>Go to <a href="https://micropython.org/download/RPI_PICO_W/" target="_blank" style="color:var(--primary);font-weight:700">micropython.org/download/RPI_PICO_W/ ↗</a></li>
-          <li>Under <strong>Releases</strong>, click the first <code>.uf2</code> link — latest stable version</li>
-          <li>Save to your Downloads folder</li>
-        </ol>
-        <div class="callout red" style="margin-top:0.6rem">
-          <div class="icon">⚠️</div>
-          <div><p>Download <code>RPI_PICO_W</code> only — not <code>RPI_PICO2_W</code> (Pico 2 W) and not <code>RPI_PICO</code> (no WiFi). Wrong firmware = WiFi won't work.</p></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 2 -->
-    <div class="step-item">
-      <div class="step-num-col"><div class="step-circle">2</div></div>
-      <div class="step-body">
-        <span class="step-time">⏱ 3 minutes</span>
-        <h3>Flash MicroPython onto the Pico W</h3>
-        <ol>
-          <li>Locate the small <strong>BOOTSEL button</strong> on top of the board</li>
-          <li><strong>Hold BOOTSEL down</strong> with your finger</li>
-          <li>While still holding, plug the <strong>micro-USB cable</strong> into your Mac — hold for 2 more seconds, then release</li>
-          <li>A drive called <strong>RPI-RP2</strong> appears on your Mac desktop (in Finder)</li>
-          <li>Drag the <code>.uf2</code> file from Downloads into the <strong>RPI-RP2</strong> drive</li>
-          <li>The drive <strong>disappears automatically</strong> — this means it worked ✅</li>
-        </ol>
-        <div class="callout green" style="margin-top:0.5rem">
-          <div class="icon">✅</div>
-          <div><p>Drive disappears = firmware installed. If the drive stays and the file is still there, you downloaded the wrong firmware — go back to Step 1.</p></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 3 -->
-    <div class="step-item">
-      <div class="step-num-col"><div class="step-circle">3</div></div>
-      <div class="step-body">
-        <span class="step-time">⏱ 4 minutes</span>
-        <h3>Install or check Thonny — Apple Silicon (ARM64) version</h3>
-        <ol>
-          <li>Go to <a href="https://thonny.org" target="_blank" style="color:var(--primary);font-weight:700">thonny.org ↗</a></li>
-          <li>Click the <strong>Mac</strong> download — check the filename contains <strong>arm64</strong> (e.g. <code>thonny-4.x.x-arm64.pkg</code>)</li>
-          <li>Open the <code>.pkg</code> and follow the installer</li>
-          <li>If macOS says "cannot be opened because the developer cannot be verified": <strong>System Settings → Privacy &amp; Security → Open Anyway</strong></li>
-        </ol>
-        <div class="callout amber" style="margin-top:0.5rem">
-          <div class="icon">⚠️</div>
-          <div><p>If you already have Thonny, check <strong>Thonny → About Thonny</strong> — version must be 4.1 or newer and the filename must say <strong>arm64</strong>. The Intel (x86_64) build may not connect correctly on Mac M4.</p></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 4 -->
-    <div class="step-item">
-      <div class="step-num-col"><div class="step-circle">4</div></div>
-      <div class="step-body">
-        <span class="step-time">⏱ 3 minutes</span>
-        <h3>Connect Thonny to the Pico W</h3>
-        <p>Plug in your Pico W normally — <strong>do NOT hold BOOTSEL</strong> this time.</p>
-        <ol>
-          <li>Open <strong>Thonny</strong></li>
-          <li>Click <strong>Run → Configure interpreter…</strong></li>
-          <li>Select <strong>MicroPython (Raspberry Pi Pico)</strong></li>
-          <li>Under <strong>Port</strong>, choose the entry containing <strong>usbmodem</strong> — e.g. <code>/dev/cu.usbmodem1101</code></li>
-          <li>Click <strong>OK</strong></li>
-        </ol>
-        <p style="margin-top:0.5rem;font-size:0.88rem;">You should see <code>MicroPython v1.24.x; Raspberry Pi PicoW with RP2040</code> and a <code>&gt;&gt;&gt;</code> prompt in the Shell. ✅</p>
-        <div class="callout amber" style="margin-top:0.5rem">
-          <div class="icon">⚠️</div>
-          <div>
-            <h4>Port locked / Errno 35 error?</h4>
-            <p>Another Thonny instance may be holding the port. <strong>Cmd+Q Thonny completely</strong>, unplug the Pico W, plug back in, reopen Thonny. To open a second Thonny for a second device: open <strong>Terminal</strong> and run:</p>
-            <div class="cw" style="margin-top:0.5rem">
-              <div class="ch"><span class="cf">Terminal</span></div>
-              <pre>open -n /Applications/Thonny.app</pre>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 5 -->
-    <div class="step-item">
-      <div class="step-num-col"><div class="step-circle">5</div></div>
-      <div class="step-body">
-        <span class="step-time">⏱ 8 minutes</span>
-        <h3>Wire the DHT22 and PIR sensors</h3>
-        <p>Use the wiring table and pin diagram above. Both sensors connect with Gravity 3-pin cables via female-to-male Dupont jumper wires — no IO Shield needed.</p>
-
-        <table class="wire-table">
-          <thead><tr><th>Sensor</th><th>Wire</th><th>Pico W pin</th><th>Physical #</th></tr></thead>
-          <tbody>
-            <tr><td rowspan="3"><strong>DHT22</strong></td>
-                <td><span class="wire-dot" style="background:#1f2937;border:1px solid #6b7280"></span>Black</td>
-                <td><span class="ptag gnd">GND</span></td><td>Pin 38 (or any GND)</td></tr>
-            <tr><td><span class="wire-dot" style="background:#ef4444"></span>Red</td>
-                <td><span class="ptag pwr">3V3 OUT</span></td><td>Pin 36</td></tr>
-            <tr><td><span class="wire-dot" style="background:#d97706"></span>Yellow</td>
-                <td><span class="ptag">GP15</span></td><td>Pin 20</td></tr>
-            <tr style="border-top:2px solid var(--border)">
-                <td rowspan="3"><strong>PIR</strong></td>
-                <td><span class="wire-dot" style="background:#1f2937;border:1px solid #6b7280"></span>Black</td>
-                <td><span class="ptag gnd">GND</span></td><td>Pin 28 (or any GND)</td></tr>
-            <tr><td><span class="wire-dot" style="background:#ef4444"></span>Red</td>
-                <td><span class="ptag pwr">3V3 OUT</span></td><td>Pin 36 (share with DHT22)</td></tr>
-            <tr><td><span class="wire-dot" style="background:#d97706"></span>Yellow</td>
-                <td><span class="ptag">GP14</span></td><td>Pin 19</td></tr>
-          </tbody>
-        </table>
-
-        <div class="callout amber">
-          <div class="icon">⚠️</div>
-          <div><p>Both sensors need 3V3 OUT (pin 36) for power. If both red wires need to share pin 36, use a small breadboard to split one 3V3 pin into two connections. Never use VBUS (5V, pin 40).</p></div>
-        </div>
-        <div class="callout blue">
-          <div class="icon">⏱</div>
-          <div><p>The PIR sensor needs <strong>~30 seconds warm-up</strong> after first powering on. It will fire false motion detections during this time — this is normal. Wait 30 s before testing motion detection.</p></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 6 -->
-    <div class="step-item">
-      <div class="step-num-col"><div class="step-circle">6</div></div>
-      <div class="step-body">
-        <span class="step-time">⏱ 5 minutes</span>
-        <h3>Save boot.py to the Pico W</h3>
-        <p>Your generated <code>boot.py</code> file is in the downloaded files. This handles the WiFi hotspot.</p>
-        <ol>
-          <li>In Thonny: <strong>File → Open</strong> → navigate to your downloaded <code>boot.py</code></li>
-          <li>Read the comments — understand what each section does before saving</li>
-          <li><strong>File → Save as…</strong></li>
-          <li>In the dialog, click <strong>"MicroPython device"</strong> (not "This computer")</li>
-          <li>Filename: type exactly <code>boot.py</code> → click <strong>OK</strong></li>
-          <li>Press the <strong>RST button</strong> on the Pico W</li>
-          <li>Watch the Thonny Shell — you should see:</li>
-        </ol>
-        <div class="cw" style="margin-top:0.5rem">
-          <div class="ch"><span class="cf">Thonny Shell — expected output after RST</span></div>
-          <pre><span class="ck">boot.py: starting WiFi hotspot...</span>
-========================================
-Hotspot ready!
-Network name : RestMonitor
-Password     : rest1234
-Dashboard URL: http://192.168.4.1
-========================================
-Connect your MacBook or tablet to "RestMonitor"
-Then open http://192.168.4.1 in a browser</pre>
-        </div>
-        <div class="callout red" style="margin-top:0.5rem">
-          <div class="icon">🚨</div>
-          <div>
-            <h4>Naming convention — critical</h4>
-            <p>Save your working backup on your MacBook as <code>student_name_boot_v1.py</code>. Save to the <strong>board</strong> as exactly <code>boot.py</code> — no prefix, no suffix. MicroPython only runs a file named exactly <code>boot.py</code>.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 7 -->
-    <div class="step-item">
-      <div class="step-num-col"><div class="step-circle">7</div></div>
-      <div class="step-body">
-        <span class="step-time">⏱ 5 minutes</span>
-        <h3>Save main.py to the Pico W</h3>
-        <ol>
-          <li>In Thonny: <strong>File → Open</strong> → navigate to your downloaded <code>main.py</code></li>
-          <li>Read the section comments — identify which lines are SELECTION, ITERATION, DATA OUTPUT</li>
-          <li><strong>File → Save as… → MicroPython device</strong></li>
-          <li>Filename: type exactly <code>main.py</code> → <strong>OK</strong></li>
-          <li>Click the green <strong>Run ▶</strong> button</li>
-          <li>Shell should show:</li>
-        </ol>
-        <div class="cw" style="margin-top:0.5rem">
-          <div class="ch"><span class="cf">Thonny Shell — expected output when main.py runs</span></div>
-          <pre>Server ready | DHT22:GP15 | PIR:GP14 | hotspot:RestMonitor
-Open browser: http://192.168.4.1
-<span class="cm">... then after each browser request:</span>
-T:21.4 H:58.0 Calm:12.0s Motion:False → MONITOR CONDITIONS</pre>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 8 -->
-    <div class="step-item">
-      <div class="step-num-col"><div class="step-circle">8</div></div>
-      <div class="step-body">
-        <span class="step-time">⏱ 5 minutes</span>
-        <h3>Connect your MacBook to the Pico W hotspot and open the dashboard</h3>
-        <ol>
-          <li>On your MacBook: click the <strong>WiFi icon</strong> in the menu bar</li>
-          <li>Find <strong>RestMonitor</strong> in the network list — click it</li>
-          <li>Enter password: <code>rest1234</code></li>
-          <li>Open Safari, Chrome, or Firefox</li>
-          <li>Type <strong>exactly</strong>: <code>http://192.168.4.1</code> — include <code>http://</code> not <code>https://</code></li>
-          <li>Daniel's dashboard should appear ✅</li>
-        </ol>
-        <div class="callout blue">
-          <div class="icon">💡</div>
-          <div>
-            <h4>Testing your sensors</h4>
-            <ul>
-              <li><strong>DHT22:</strong> breathe gently on the sensor — temperature or humidity tile should change within 10 s</li>
-              <li><strong>PIR:</strong> wave your hand near the sensor — status should change to MONITOR or NOT SUITABLE. Wait 30 s still — should return to SUITABLE</li>
-              <li><strong>Shell:</strong> every browser refresh prints current readings — watch values change as you test</li>
-            </ul>
-          </div>
-        </div>
-        <div class="callout amber">
-          <div class="icon">⚠️</div>
-          <div><p>While connected to <strong>RestMonitor</strong>, your MacBook has no internet. This is normal — the Pico W hotspot is a local network only. To use the internet, switch back to your normal WiFi. You can swap between them any time.</p></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 9 JOURNAL -->
-    <div class="step-item">
-      <div class="step-num-col"><div class="step-circle">9</div></div>
-      <div class="step-body">
-        <span class="step-time">⏱ 5 minutes</span>
-        <h3>Document in your OneNote journal — do this before the lesson ends</h3>
-        <ol>
-          <li>Screenshot the Thonny Shell showing "Server ready" — paste into OneNote with today's date and duration</li>
-          <li>Screenshot the working dashboard in your browser — paste into OneNote</li>
-          <li>In <code>main.py</code>, identify and label in your journal: one line that is <strong>SELECTION</strong>, one that is <strong>ITERATION</strong>, one that is <strong>DATA OUTPUT</strong></li>
-          <li>Note the IP address (<code>192.168.4.1</code>) and explain in one sentence why it is always the same in AP mode</li>
-          <li>Save backup copies on your MacBook: <code>student_name_boot_v1.py</code> and <code>student_name_main_v1.py</code></li>
-        </ol>
-        <div class="callout blue">
-          <div class="icon">📓</div>
-          <div><p>This is Checkpoint I evidence. The more you document now, the less you have to reconstruct later. A quick screenshot with a one-sentence caption is better than a long write-up done from memory the night before submission.</p></div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /step-list -->
-
-  <!-- TROUBLESHOOTING -->
-  <div class="section-label">Troubleshooting — Mac M4 specific</div>
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:0.6rem 0;">
-    <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
-      <thead><tr>
-        <th style="background:#eff6ff;color:var(--primary-dark);text-align:left;padding:0.6rem 0.9rem;font-size:0.74rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--border)">Problem</th>
-        <th style="background:#eff6ff;color:var(--primary-dark);text-align:left;padding:0.6rem 0.9rem;font-size:0.74rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--border)">Fix</th>
-      </tr></thead>
-      <tbody>
-        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">RPI-RP2 drive doesn't appear after holding BOOTSEL</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Try a different cable — must be a <strong>data</strong> micro-USB cable, not charge-only. Try a different USB-A port on your Mac or hub.</td></tr>
-        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">UF2 copies but RPI-RP2 drive stays visible</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Wrong firmware. Re-download <code>RPI_PICO_W</code> — not Pico 2 W, not plain Pico.</td></tr>
-        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Thonny shows no port / "Could not connect" / Errno 35</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Cmd+Q Thonny, unplug, replug (no BOOTSEL), reopen Thonny. Select port with <code>usbmodem</code>.</td></tr>
-        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Shell shows nothing after RST — no "Hotspot ready"</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">boot.py may not be saved to the device. In Thonny: View → Files → check MicroPython device panel shows <code>boot.py</code>.</td></tr>
-        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">DHT22 reads None or raises exception</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Check yellow wire is on <strong>GP15 (pin 20)</strong>. Red wire on 3V3 OUT (pin 36) — not VBUS. DHT22 needs 2 s between reads — <code>time.sleep(2)</code> in server loop handles this.</td></tr>
-        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">PIR never detects / always detects</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Confirm yellow wire is on <strong>GP14 (pin 19)</strong> — not GPIO24. Wait 30 s warm-up. Check code uses <code>Pin(14, Pin.IN)</code>.</td></tr>
-        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">RestMonitor network not visible on MacBook</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Confirm main.py is running (Shell shows "Server ready"). AP_SSID in boot.py must match what you're searching for. Try turning MacBook WiFi off then on.</td></tr>
-        <tr><td style="padding:0.6rem 0.9rem">Browser can't load 192.168.4.1</td><td style="padding:0.6rem 0.9rem">MacBook must be connected to RestMonitor (not school WiFi). Type <code>http://</code> not <code>https://</code>. Use exact address — no www.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <footer>
-    Digital Solutions Unit 1 · FIA2 Project · St Peters Lutheran College Springfield · Ms Baessler<br>
-    Raspberry Pi Pico W (2022) · RP2040 · MicroPython · DHT22 GP15 · PIR GP14 · Mac M4 Pathway · 
-  </footer>
-
+  <h2>Three checkpoints</h2>
+  <div class="tbl"><table>
+    <tr><th>Checkpoint</th><th>When</th><th>What to submit</th></tr>
+    <tr><td>I</td><td>Term 2 Week 5</td><td>Exploration of solutions, algorithms identified, UI sketches</td></tr>
+    <tr><td>II</td><td>Term 2 Week 7</td><td>Complete draft: journal documentation + draft video script</td></tr>
+    <tr><td>III</td><td>Term 2 Week 8 — 12 June 3PM</td><td>Final submission via Turnitin + OneNote journal</td></tr>
+  </table></div>
 </div>
+
+<!-- ═══════════════════ CARP + WCAG ═══════════════════ -->
+<div id="panel-carp" class="panel">
+  <div class="hero">
+    <div class="hero-tag">Design Principles</div>
+    <h1>CARP + WCAG 2<br>Applied to Daniel's Interface</h1>
+    <p>Every design decision must trace back to Daniel's needs. Use this section to justify your UI choices in your journal.</p>
+  </div>
+
+  <h2>The four CARP principles</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:14px;">CARP stands for Contrast, Alignment, Repetition, Proximity. These are the core visual communication principles from your textbook (Table 3.2.2). For Daniel, <strong>Contrast</strong> is the most critical because of his colour-vision deficiency.</p>
+
+  <div class="carp-grid">
+    <div class="carp-card">
+      <div class="carp-letter">C</div>
+      <div class="carp-word">Contrast</div>
+      <div class="carp-desc">Use markedly different colours, sizes or weights to emphasise elements. High contrast improves readability — especially for colour-vision deficiency and low-light conditions.</div>
+      <div class="carp-daniel"><strong>Daniel's interface:</strong> Dark text (#0D1B2A) on light background (#F5F8FC). Status text ≥48px bold. WCAG ratio ≥4.5:1. Status never relies on colour alone — always paired with a symbol and text label.</div>
+    </div>
+    <div class="carp-card">
+      <div class="carp-letter">A</div>
+      <div class="carp-word">Alignment</div>
+      <div class="carp-desc">Align elements to create visual order and connections. Clean alignment aids readability and shows connections between different elements.</div>
+      <div class="carp-daniel"><strong>Daniel's interface:</strong> All content centred on a single column. Status block, sensor readings, and timestamp stacked vertically — clear reading order top to bottom. No sidebar or columns to scan.</div>
+    </div>
+    <div class="carp-card">
+      <div class="carp-letter">R</div>
+      <div class="carp-word">Repetition</div>
+      <div class="carp-desc">Repeat visual elements (colours, shapes, icons, fonts) throughout the design for consistency. Reduces cognitive load by making the interface predictable.</div>
+      <div class="carp-daniel"><strong>Daniel's interface:</strong> Same font (Arial), same status box shape, same icon set used consistently. Three statuses (SUITABLE / MONITOR / UNSUITABLE) always appear in the same position and format.</div>
+    </div>
+    <div class="carp-card">
+      <div class="carp-letter">P</div>
+      <div class="carp-word">Proximity</div>
+      <div class="carp-desc">Position related elements close together to show they belong to a group. Improves learnability and reduces visual clutter.</div>
+      <div class="carp-daniel"><strong>Daniel's interface:</strong> All sensor readings (temp, light, motion) grouped in one card. The primary status is visually separated from raw data — Daniel sees the verdict first, details second.</div>
+    </div>
+  </div>
+
+  <h2>WCAG 2 — WebAIM checklist applied to Daniel</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:12px;">WCAG 2 is organised around four principles: <strong>Perceivable, Operable, Understandable, Robust</strong> (POUR). The most relevant for Daniel are Perceivable (colour, contrast) and Understandable (clear language, status words).</p>
+
+  <div class="tbl"><table>
+    <tr><th>WCAG Principle</th><th>Guideline</th><th>How to apply for Daniel</th><th>How to test</th></tr>
+    <tr>
+      <td>Perceivable 1.1</td>
+      <td>Text alternatives</td>
+      <td>Every icon must have a text label. Don't use ✅ alone — write "SUITABLE ✅" so screen readers and colour-blind users both understand it.</td>
+      <td>Remove all CSS — does the meaning still come through as plain text?</td>
+    </tr>
+    <tr>
+      <td>Perceivable 1.3</td>
+      <td>Colour is not the only signal</td>
+      <td>The status box background colour (red/amber/green) must also show different text labels and symbols. Print the page in greyscale — is each status still distinguishable?</td>
+      <td>Screenshot → convert to greyscale in any image editor → can you read each status?</td>
+    </tr>
+    <tr>
+      <td>Perceivable 1.4.3</td>
+      <td>Contrast ratio ≥ 4.5:1</td>
+      <td>Check all text against its background using the WebAIM Contrast Checker. SC4 requires ≥4.5:1 for primary text.</td>
+      <td><a href="https://webaim.org/resources/contrastchecker/" target="_blank" style="color:var(--blue);">webaim.org/resources/contrastchecker</a></td>
+    </tr>
+    <tr>
+      <td>Understandable 3.1</td>
+      <td>Readable language</td>
+      <td>Use plain English status words: "SUITABLE FOR REST", "MONITOR CONDITIONS", "NOT SUITABLE". Avoid jargon or abbreviations.</td>
+      <td>Ask: if Daniel checks this at 6:30am after a night shift, can he understand it in under 3 seconds?</td>
+    </tr>
+    <tr>
+      <td>Understandable 3.3</td>
+      <td>Error identification</td>
+      <td>If the sensor disconnects, show "SENSOR OFFLINE — last update X seconds ago". Never show no status at all — Daniel needs to know if the data is stale (SC8).</td>
+      <td>Disconnect the sensor board. Does the interface show a clear error state within 15 seconds?</td>
+    </tr>
+    <tr>
+      <td>Robust 4.1</td>
+      <td>Compatible with assistive technology</td>
+      <td>Use semantic HTML elements. <code>&lt;main&gt;</code>, <code>&lt;h1&gt;</code>, <code>&lt;p&gt;</code> — not just <code>&lt;div&gt;</code> for everything.</td>
+      <td>Validate HTML at validator.w3.org</td>
+    </tr>
+  </table></div>
+
+  <h2>Colour choice for colour-vision deficiency</h2>
+  <div class="box box-amber">
+    <div class="bt">⚠️ Do not use red + green as your only distinguisher</div>
+    <p>The most common form of colour-vision deficiency (deuteranopia) makes red and green look similar. <strong>Never rely on red vs green alone.</strong> Add a pattern, icon, or text label as an additional signal.</p>
+  </div>
+
+  <div class="tbl"><table>
+    <tr><th>Status</th><th>Accessible colour pair</th><th>Symbol</th><th>Text label</th><th>Why accessible</th></tr>
+    <tr><td>SUITABLE</td><td>Dark blue text on light blue bg<br><code>#0D1B2A</code> on <code>#D4EAE0</code></td><td>✅</td><td>SUITABLE FOR REST</td><td>Blue/teal distinguishable even with red-green deficiency</td></tr>
+    <tr><td>MONITOR</td><td>Dark text on amber bg<br><code>#0D1B2A</code> on <code>#FFF3CD</code></td><td>🟡</td><td>MONITOR CONDITIONS</td><td>Yellow-amber distinguishable from both blue and red</td></tr>
+    <tr><td>UNSUITABLE</td><td>White text on dark navy bg<br><code>#FFFFFF</code> on <code>#2A1A0E</code> or dark bg</td><td>⚠️</td><td>NOT SUITABLE FOR REST</td><td>High-contrast, not reliant on red hue</td></tr>
+    <tr><td>OFFLINE</td><td>Light on dark grey<br><code>#F5F8FC</code> on <code>#3D5A78</code></td><td>📡</td><td>SENSOR OFFLINE</td><td>Clearly different from all three status states</td></tr>
+  </table></div>
+
+  <h2>Journal entry: how to apply CARP in writing</h2>
+  <div class="box box-navy">
+    <div class="bt">📓 Model journal sentence structure for Design decisions</div>
+    <p>Instead of: <em>"I used big text because it is easier to read."</em></p>
+    <p style="margin-top:6px;">Write: <em>"The primary status label uses a font size of 56px and font-weight 700 to apply the CARP principle of Contrast (size contrast) and address Daniel's need to read the interface from 2 metres while fatigued (SC4). The text-to-background contrast ratio of 7.2:1 exceeds the WCAG 2 Level AA requirement of 4.5:1 (Perceivable 1.4.3), verified using the WebAIM Contrast Checker."</em></p>
+  </div>
+</div>
+
+<!-- ═══════════════════ SUCCESS CRITERIA ═══════════════════ -->
+<div id="panel-sc" class="panel">
+  <div class="hero">
+    <div class="hero-tag">Determining &amp; Synthesising — 7 marks</div>
+    <h1>8 Success Criteria<br>with Desk-Check Tests</h1>
+    <p>For each criterion: what it means, how to implement it in code, and how to test and document it in your journal.</p>
+  </div>
+
+  <div class="tbl"><table>
+    <tr><th>SC</th><th>Criterion</th><th>Source</th><th>Measurable threshold</th><th>How to test</th></tr>
+    <tr>
+      <td><span class="sc">SC1</span></td>
+      <td>Status shown as text + symbol, never colour alone</td>
+      <td>Colour-vision deficiency</td>
+      <td>Greyscale screenshot still readable</td>
+      <td>Screenshot the live page → File → Print → Greyscale. Can you identify each state?</td>
+    </tr>
+    <tr>
+      <td><span class="sc">SC2</span></td>
+      <td>Display auto-updates, no manual refresh</td>
+      <td>Hands-off interaction</td>
+      <td>Auto-refresh ≤ 5 seconds</td>
+      <td>Use <code>&lt;meta http-equiv="refresh" content="5"&gt;</code> or WebSocket. Time with stopwatch.</td>
+    </tr>
+    <tr>
+      <td><span class="sc">SC3</span></td>
+      <td>Status words shown, not raw numbers in primary area</td>
+      <td>Low cognitive load</td>
+      <td>No numbers in primary status box</td>
+      <td>Check HTML: primary <code>&lt;div class="status-box"&gt;</code> contains only text labels and symbols.</td>
+    </tr>
+    <tr>
+      <td><span class="sc">SC4</span></td>
+      <td>High-contrast layout readable at 2 metres</td>
+      <td>Passive viewing, tired</td>
+      <td>Primary text ≥ 48px, contrast ≥ 4.5:1</td>
+      <td>WebAIM Contrast Checker. Measure font-size in browser dev tools (Inspect → Computed).</td>
+    </tr>
+    <tr>
+      <td><span class="sc">SC5</span></td>
+      <td>Temperature 18–22°C = suitable for rest</td>
+      <td>Comfort thresholds</td>
+      <td>Algorithm classifies correctly in desk check</td>
+      <td>Desk check: test inputs 17, 18, 22, 23, 30°C against your algorithm. All 5 must classify correctly.</td>
+    </tr>
+    <tr>
+      <td><span class="sc">SC6</span></td>
+      <td>Low light = suitable for rest</td>
+      <td>Sleep environment</td>
+      <td>LDR maps to correct classification</td>
+      <td>Desk check: test 3 LDR values (low / medium / high). Document expected vs actual output.</td>
+    </tr>
+    <tr>
+      <td><span class="sc">SC7</span></td>
+      <td>No motion for ≥30s = suitable</td>
+      <td>Unpredictable environment</td>
+      <td>PIR logic tested with 3 input scenarios</td>
+      <td>Test: motion_clear=True for 29s (not suitable yet), 30s (suitable), motion_clear=False (resets timer).</td>
+    </tr>
+    <tr>
+      <td><span class="sc">SC8</span></td>
+      <td>Error state shown if sensor disconnects</td>
+      <td>Reliability / trust</td>
+      <td>Last-update timestamp visible; stale flag after 15s</td>
+      <td>Disconnect sensor board. Within 15s the interface must show "SENSOR OFFLINE" and last-seen time.</td>
+    </tr>
+  </table></div>
+
+  <h2>SC5 desk check — temperature algorithm</h2>
+  <div class="box box-blue">
+    <div class="bt">💡 What a desk check is</div>
+    <p>A desk check is a manual trace through your algorithm using specific test inputs, recording what the algorithm would output at each step. It proves your algorithm is correct before coding it. Include a desk check table in your journal for SC5, SC6, and SC7.</p>
+  </div>
+
+  <div class="tbl"><table>
+    <tr><th>Test #</th><th>Input temp (°C)</th><th>Input hum (%)</th><th>Expected output</th><th>Algorithm trace</th></tr>
+    <tr><td>1</td><td>17</td><td>55</td><td>UNSUITABLE (too cold)</td><td>17 &lt; 18 → first condition false → falls to else → UNSUITABLE</td></tr>
+    <tr><td>2</td><td>18</td><td>55</td><td>SUITABLE</td><td>18 ≥ 18 AND 18 ≤ 22 AND 55 ≤ 65 → all true → SUITABLE</td></tr>
+    <tr><td>3</td><td>22</td><td>65</td><td>SUITABLE (boundary)</td><td>22 ≤ 22 AND 65 ≤ 65 → boundary values → SUITABLE</td></tr>
+    <tr><td>4</td><td>23</td><td>55</td><td>MONITOR (too warm)</td><td>23 &gt; 22 → first branch false → 23 ≤ 26 → MONITOR</td></tr>
+    <tr><td>5</td><td>31</td><td>75</td><td>UNSUITABLE</td><td>31 &gt; 26 OR 75 &gt; 70 → UNSUITABLE</td></tr>
+  </table></div>
+
+  <h2>SC7 desk check — motion timer logic</h2>
+  <div class="tbl"><table>
+    <tr><th>Test #</th><th>PIR reading</th><th>Time since last motion</th><th>Expected output</th></tr>
+    <tr><td>1</td><td>Motion detected</td><td>0 seconds (just triggered)</td><td>MONITOR — motion_timer resets to 0</td></tr>
+    <tr><td>2</td><td>No motion</td><td>29 seconds</td><td>MONITOR — timer has not yet reached 30s threshold</td></tr>
+    <tr><td>3</td><td>No motion</td><td>30 seconds</td><td>SUITABLE — threshold reached, environment is still</td></tr>
+  </table></div>
+
+  <h2>MoSCoW method — requirements prioritisation</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:10px;">From your textbook (Table 3.2.1): use MoSCoW to prioritise your features in your journal. This shows "astute determination of success criteria" for 6–7 marks.</p>
+  <div class="tbl"><table>
+    <tr><th>MUST</th><th>SHOULD</th><th>COULD</th><th>WON'T (this version)</th></tr>
+    <tr><td>Status text + symbol (SC1)</td><td>Sensor readings shown below status (SC3)</td><td>Historical readings log</td><td>User login or authentication</td></tr>
+    <tr><td>Auto-refresh ≤5s (SC2)</td><td>Timestamp / stale warning (SC8)</td><td>Recommendation text ("open a window")</td><td>Push notifications to phone</td></tr>
+    <tr><td>Temperature algorithm (SC5)</td><td>Light sensor integration (SC6)</td><td>Dark mode toggle</td><td>Cloud data storage</td></tr>
+    <tr><td>High contrast ≥4.5:1 (SC4)</td><td>Motion timer (SC7)</td><td>Sound alerts</td><td>User-configurable thresholds</td></tr>
+  </table></div>
+</div>
+
+<!-- ═══════════════════ CODE GUIDE ═══════════════════ -->
+<div id="panel-code" class="panel">
+  <div class="hero">
+    <div class="hero-tag">Generating — 9 marks</div>
+    <h1>MicroPython Code Guide<br>Pico W + ESP8266 / ESP32</h1>
+    <p>Annotated code blocks for each programmed component. Use these in your journal with your own annotations explaining what each section does and why.</p>
+  </div>
+
+  <h2>Option A — Single Pico W (simpler, recommended for most students)</h2>
+  <div class="box box-green">
+    <div class="bt">✅ Use this if you have one Pico W with all sensors attached</div>
+    <p>All sensors connect directly to the Pico W GPIO pins. The Pico W runs both the sensor reading code and the web server. Students connect their tablet to the Pico W's WiFi hotspot.</p>
+  </div>
+
+  <h3>Sensor + server structure (Pico W)</h3>
+  <div class="cw">
+    <div class="ch"><span class="cf">main.py — Pico W single-board version</span><button class="cb" onclick="cc(this)">Copy</button></div>
+    <pre><span class="cm"># ============================================================</span>
+<span class="cm">#  Home Rest &amp; Recovery Monitor — Pico W single-board version</span>
+<span class="cm">#  Sensors: DHT22 (GP13)  LDR → ADC (GP26)  PIR (GP14)</span>
+<span class="cm"># ============================================================</span>
+<span class="ck">import</span> network, socket, dht, time
+<span class="ck">from</span> machine <span class="ck">import</span> Pin, ADC
+
+<span class="cm"># ── WiFi hotspot settings ────────────────────────────────</span>
+AP_SSID     = <span class="cs">'RestMonitor'</span>
+AP_PASSWORD = <span class="cs">'rest1234'</span>
+
+ap = network.WLAN(network.AP_IF)
+ap.active(<span class="ck">True</span>)
+ap.config(essid=AP_SSID, password=AP_PASSWORD)
+<span class="ck">while</span> <span class="ck">not</span> ap.active():
+    time.sleep(<span class="cn">0.5</span>)
+ip = ap.ifconfig()[<span class="cn">0</span>]   <span class="cm"># Always 192.168.4.1</span>
+<span class="ck">print</span>(<span class="cs">"Hotspot ready: connect to"</span>, AP_SSID)
+<span class="ck">print</span>(<span class="cs">"Open browser:  http://"</span>, ip)
+
+<span class="cm"># ── Hardware setup ───────────────────────────────────────</span>
+dht_sensor = dht.DHT22(Pin(<span class="cn">13</span>))    <span class="cm"># Temperature + humidity</span>
+ldr        = ADC(Pin(<span class="cn">26</span>))           <span class="cm"># Light-dependent resistor</span>
+pir        = Pin(<span class="cn">14</span>, Pin.IN)        <span class="cm"># Passive infrared motion</span>
+
+<span class="cm"># Motion timer — tracks how long since last motion</span>
+last_motion_time = time.time()
+
+<span class="cm"># ── Classification algorithm ─────────────────────────────</span>
+<span class="ck">def</span> <span class="cf2">classify_environment</span>(temp, hum, ldr_val, motion_clear):
+    <span class="cm"># Returns: label, symbol, bg_color, detail</span>
+    <span class="cm"># Addresses SC1, SC3, SC5, SC6, SC7</span>
+    reasons = []
+
+    <span class="cm"># SC5 — temperature check</span>
+    temp_ok = <span class="cn">18</span> &lt;= temp &lt;= <span class="cn">22</span>
+    <span class="ck">if</span> temp &lt; <span class="cn">18</span>: reasons.append(<span class="cs">"Too cold"</span>)
+    <span class="ck">if</span> temp &gt; <span class="cn">22</span>: reasons.append(<span class="cs">"Too warm"</span>)
+
+    <span class="cm"># SC6 — light check (LDR: lower value = brighter; threshold tested)</span>
+    light_ok = ldr_val &lt; <span class="cn">20000</span>  <span class="cm"># adjust threshold for your LDR</span>
+    <span class="ck">if</span> <span class="ck">not</span> light_ok: reasons.append(<span class="cs">"Too bright"</span>)
+
+    <span class="cm"># SC7 — motion check</span>
+    motion_ok = motion_clear
+    <span class="ck">if</span> <span class="ck">not</span> motion_ok: reasons.append(<span class="cs">"Motion detected"</span>)
+
+    <span class="cm"># Classify overall status</span>
+    all_ok = temp_ok <span class="ck">and</span> light_ok <span class="ck">and</span> motion_ok
+
+    <span class="ck">if</span> all_ok:
+        <span class="ck">return</span> <span class="cs">"SUITABLE FOR REST"</span>, <span class="cs">"✅"</span>, <span class="cs">"#1B4332"</span>, <span class="cs">"Conditions are good"</span>
+    <span class="ck">elif</span> len(reasons) == <span class="cn">1</span>:
+        <span class="ck">return</span> <span class="cs">"MONITOR CONDITIONS"</span>, <span class="cs">"🟡"</span>, <span class="cs">"#7A5000"</span>, reasons[<span class="cn">0</span>]
+    <span class="ck">else</span>:
+        <span class="ck">return</span> <span class="cs">"NOT SUITABLE FOR REST"</span>, <span class="cs">"⚠️"</span>, <span class="cs">"#2C1A0E"</span>, <span class="cs">", "</span>.join(reasons)
+
+<span class="cm"># ── Web page generator ───────────────────────────────────</span>
+<span class="ck">def</span> <span class="cf2">build_page</span>(temp, hum, ldr_val, motion_clear, last_update):
+    label, symbol, bg_color, detail = classify_environment(
+        temp, hum, ldr_val, motion_clear)
+
+    <span class="cm"># SC3: sensor readings shown BELOW status, not inside it</span>
+    <span class="cm"># SC4: status text 56px bold</span>
+    <span class="cm"># SC1: symbol + text always together</span>
+    <span class="cm"># SC2: auto-refresh every 5 seconds</span>
+    <span class="ck">return</span> <span class="cs">f"""&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta http-equiv="refresh" content="5"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Rest Monitor&lt;/title&gt;
+  &lt;style&gt;
+    body {{ font-family: Arial, sans-serif; background: #F5F8FC;
+            margin: 0; padding: 20px; text-align: center; }}
+    .status-box {{ background: {bg_color}; color: #FFFFFF;
+                   border-radius: 16px; padding: 30px 20px;
+                   margin: 20px auto; max-width: 480px; }}
+    .status-symbol {{ font-size: 64px; display: block; margin-bottom: 10px; }}
+    .status-label  {{ font-size: 52px; font-weight: 700; display: block; }}
+    .status-detail {{ font-size: 20px; margin-top: 12px; opacity: 0.9; }}
+    .readings {{ background: #FFFFFF; border-radius: 12px;
+                 padding: 16px; margin: 16px auto; max-width: 480px;
+                 border: 1px solid #C4D8EE; font-size: 18px; color: #0D1B2A; }}
+    .readings p {{ margin: 8px 0; }}
+    .timestamp {{ font-size: 14px; color: #3D5A78; margin-top: 12px; }}
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1 style="font-size:24px; color:#0D1B2A;"&gt;Home Rest Monitor&lt;/h1&gt;
+
+  &lt;div class="status-box"&gt;
+    &lt;span class="status-symbol"&gt;{symbol}&lt;/span&gt;
+    &lt;span class="status-label"&gt;{label}&lt;/span&gt;
+    &lt;div class="status-detail"&gt;{detail}&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class="readings"&gt;
+    &lt;p&gt;🌡️ Temperature: &lt;strong&gt;{temp:.1f} °C&lt;/strong&gt;&lt;/p&gt;
+    &lt;p&gt;💧 Humidity: &lt;strong&gt;{hum:.0f} %&lt;/strong&gt;&lt;/p&gt;
+    &lt;p&gt;💡 Light: &lt;strong&gt;{"Low" if ldr_val &lt; 20000 else "High"}&lt;/strong&gt;&lt;/p&gt;
+    &lt;p&gt;👁️ Motion: &lt;strong&gt;{"None detected" if motion_clear else "Detected"}&lt;/strong&gt;&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;p class="timestamp"&gt;Last updated: {last_update}&lt;/p&gt;
+  &lt;p class="timestamp"&gt;Auto-refreshes every 5 seconds&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;"""</span>
+
+<span class="cm"># ── Web server setup ─────────────────────────────────────</span>
+addr   = socket.getaddrinfo(<span class="cs">'0.0.0.0'</span>, <span class="cn">80</span>)[<span class="cn">0</span>][-<span class="cn">1</span>]
+server = socket.socket()
+server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="cn">1</span>)
+server.bind(addr)
+server.listen(<span class="cn">1</span>)
+server.settimeout(<span class="cn">2</span>)
+<span class="ck">print</span>(<span class="cs">"Server running at http://"</span>, ip)
+
+<span class="cm"># ── Main loop ────────────────────────────────────────────</span>
+<span class="ck">while</span> <span class="ck">True</span>:
+    <span class="ck">try</span>:
+        <span class="cm"># Read sensors</span>
+        dht_sensor.measure()
+        temp    = dht_sensor.temperature()
+        hum     = dht_sensor.humidity()
+        ldr_val = ldr.read_u16()   <span class="cm"># 0–65535</span>
+
+        <span class="cm"># SC7 — update motion timer</span>
+        <span class="ck">if</span> pir.value() == <span class="cn">1</span>:          <span class="cm"># motion detected</span>
+            last_motion_time = time.time()
+        motion_clear = (time.time() - last_motion_time) &gt;= <span class="cn">30</span>
+
+        timestamp = <span class="cs">"{:02d}:{:02d}:{:02d}"</span>.format(
+            *time.localtime()[<span class="cn">3</span>:<span class="cn">6</span>])
+
+        <span class="ck">try</span>:
+            client, addr = server.accept()
+        <span class="ck">except</span>:
+            <span class="ck">continue</span>
+
+        client.recv(<span class="cn">1024</span>)  <span class="cm"># discard request — page is read-only</span>
+
+        page = build_page(temp, hum, ldr_val, motion_clear, timestamp)
+        client.send(<span class="cs">"HTTP/1.1 200 OK\r\n"</span>
+                    <span class="cs">"Content-Type: text/html; charset=UTF-8\r\n\r\n"</span>)
+        client.send(page)
+        client.close()
+
+    <span class="ck">except</span> Exception <span class="ck">as</span> e:
+        <span class="ck">print</span>(<span class="cs">"Error:"</span>, e)
+        time.sleep(<span class="cn">2</span>)</pre>
+  </div>
+
+  <h2>SC8 — sensor offline / stale data detection</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:10px;">If the sensor board stops sending data, Daniel must see a clear error — not stale readings with no warning. Add this to your classification logic:</p>
+  <div class="cw">
+    <div class="ch"><span class="cf">SC8 — stale data flag</span><button class="cb" onclick="cc(this)">Copy</button></div>
+    <pre><span class="cm"># Track time of last successful sensor read</span>
+last_good_read = time.time()
+
+<span class="cm"># Inside your main loop, after sensor.measure():</span>
+<span class="ck">try</span>:
+    dht_sensor.measure()
+    temp = dht_sensor.temperature()
+    hum  = dht_sensor.humidity()
+    last_good_read = time.time()    <span class="cm"># update timestamp on success</span>
+<span class="ck">except</span>:
+    <span class="cm"># sensor failed — check if data is stale (SC8: 15 second threshold)</span>
+    age = time.time() - last_good_read
+    <span class="ck">if</span> age &gt; <span class="cn">15</span>:
+        <span class="cm"># Show error state in the page</span>
+        page = build_error_page(age)
+        client.send(<span class="cs">"HTTP/1.1 200 OK\r\n"</span>
+                    <span class="cs">"Content-Type: text/html; charset=UTF-8\r\n\r\n"</span>)
+        client.send(page)
+        client.close()
+        <span class="ck">continue</span>
+
+<span class="ck">def</span> <span class="cf2">build_error_page</span>(age_seconds):
+    <span class="ck">return</span> <span class="cs">f"""&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta http-equiv="refresh" content="5"&gt;
+  &lt;style&gt;
+    body{{font-family:Arial;background:#1C1C1C;color:#F5F8FC;
+         text-align:center;padding:40px;}}
+    .offline-box{{background:#3D5A78;border-radius:16px;
+                  padding:30px;max-width:480px;margin:0 auto;}}
+    .offline-symbol{{font-size:64px;display:block;}}
+    .offline-label{{font-size:48px;font-weight:700;display:block;margin-top:10px;}}
+  &lt;/style&gt;&lt;/head&gt;&lt;body&gt;
+  &lt;div class="offline-box"&gt;
+    &lt;span class="offline-symbol"&gt;📡&lt;/span&gt;
+    &lt;span class="offline-label"&gt;SENSOR OFFLINE&lt;/span&gt;
+    &lt;p style="font-size:20px;margin-top:16px;"&gt;
+      Last data received {age_seconds:.0f} seconds ago
+    &lt;/p&gt;
+    &lt;p style="font-size:16px;opacity:0.8;"&gt;Check sensor connection&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/body&gt;&lt;/html&gt;"""</span></pre>
+  </div>
+
+  <h2>Code annotation guide — how to annotate for your journal</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:12px;">Your journal requires <strong>2 × A4 pages of annotated code</strong>. Each annotation must link code to a design decision, success criterion, or usability principle. Here are the three annotation types markers expect:</p>
+
+  <div class="ann">
+    <div class="ann-code">motion_clear = (time.time() - last_motion_time) >= 30</div>
+    <div class="ann-explain">
+      <strong>Type 1 — Algorithm annotation (SC7)</strong>
+      This Boolean expression evaluates SC7: it returns True only when 30 or more seconds have elapsed since the last PIR trigger. <code>time.time()</code> returns seconds since boot (monotonic). The ≥30 threshold was determined by desk-checking three test cases. Used in classify_environment() to contribute to the overall status.
+    </div>
+  </div>
+
+  <div class="ann">
+    <div class="ann-code">.status-label {{ font-size: 52px; font-weight: 700; }}</div>
+    <div class="ann-explain">
+      <strong>Type 2 — Design annotation (SC4 + CARP)</strong>
+      52px exceeds the SC4 minimum of 48px. font-weight 700 adds size contrast (CARP: Contrast). Together these allow Daniel to read the status from 2 metres on an older tablet. Contrast ratio for white text on #1B4332 is 8.1:1, exceeding WCAG 2.0 Level AA (4.5:1).
+    </div>
+  </div>
+
+  <div class="ann">
+    <div class="ann-code">return "SUITABLE FOR REST", "✅", "#1B4332", detail</div>
+    <div class="ann-explain">
+      <strong>Type 3 — Usability annotation (SC1 + SC3)</strong>
+      Returns a text label ("SUITABLE FOR REST") paired with a symbol ("✅") to satisfy SC1 — status is never communicated by colour alone. The label contains no numbers (SC3). The bg_color parameter is used for supplementary colour reinforcement only, not as the sole signal.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ UI EXAMPLES ═══════════════════ -->
+<div id="panel-ui" class="panel">
+  <div class="hero">
+    <div class="hero-tag">Generating — UI components</div>
+    <h1>HTML UI Templates<br>for Daniel's Interface</h1>
+    <p>Ready-to-use HTML that you can paste directly into your <code>build_page()</code> function. Each element is annotated with the success criterion it addresses.</p>
+  </div>
+
+  <div class="box box-amber">
+    <div class="bt">⚠️ Remember — Python f-string CSS rule</div>
+    <p>When HTML/CSS is inside a Python <code>f"""..."""</code> string, all CSS curly braces must be <strong>doubled</strong>: write <code>{{</code> and <code>}}</code> instead of <code>{</code> and <code>}</code>. Single braces are reserved for Python variables like <code>{temp}</code>.</p>
+  </div>
+
+  <h2>Complete interface template — paste into build_page()</h2>
+  <div class="cw">
+    <div class="ch"><span class="cf">UI template — all 8 SC addressed, copy into f-string</span><button class="cb" onclick="cc(this)">Copy</button></div>
+    <pre><span class="cm">&lt;!-- SC2: auto-refresh every 5s --&gt;</span>
+<span class="ct">&lt;meta</span> <span class="ca">http-equiv</span>=<span class="cs">"refresh"</span> <span class="ca">content</span>=<span class="cs">"5"</span><span class="ct">&gt;</span>
+<span class="ct">&lt;meta</span> <span class="ca">name</span>=<span class="cs">"viewport"</span> <span class="ca">content</span>=<span class="cs">"width=device-width, initial-scale=1"</span><span class="ct">&gt;</span>
+
+<span class="ct">&lt;style&gt;</span>
+  <span class="cm">/* SC4: base styles — large readable text */</span>
+  body {{ font-family: Arial, sans-serif;
+          background: #F5F8FC;
+          margin: 0; padding: 20px;
+          text-align: center; }}
+
+  <span class="cm">/* SC1 + SC4: status box — big, bold, text+symbol (not colour alone) */</span>
+  .status-box {{
+      background: {bg_color};    <span class="cm">/* supplementary colour */</span>
+      color: #FFFFFF;
+      border-radius: 16px;
+      padding: 30px 20px;
+      margin: 20px auto;
+      max-width: 500px;
+  }}
+  .status-symbol {{ font-size: 72px; display: block; margin-bottom: 8px; }}
+  .status-label  {{ font-size: 52px; font-weight: 700; display: block; line-height: 1.1; }}
+  .status-detail {{ font-size: 22px; margin-top: 14px; opacity: 0.9; }}
+
+  <span class="cm">/* SC3: readings card — below status, not inside it */</span>
+  .readings {{
+      background: #FFFFFF;
+      border: 1px solid #C4D8EE;
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin: 16px auto;
+      max-width: 500px;
+  }}
+  .readings p {{ font-size: 20px; color: #0D1B2A; margin: 10px 0; }}
+
+  <span class="cm">/* SC8: timestamp + stale warning */</span>
+  .timestamp {{ font-size: 14px; color: #3D5A78; margin-top: 8px; }}
+  .stale-warn {{ color: #9E2B22; font-weight: 700; font-size: 16px; }}
+<span class="ct">&lt;/style&gt;</span>
+
+<span class="cm">&lt;!-- SC1+SC4: status — text, symbol, and supplementary colour --&gt;</span>
+<span class="ct">&lt;div</span> <span class="ca">class</span>=<span class="cs">"status-box"</span><span class="ct">&gt;</span>
+  <span class="ct">&lt;span</span> <span class="ca">class</span>=<span class="cs">"status-symbol"</span><span class="ct">&gt;</span>{symbol}<span class="ct">&lt;/span&gt;</span>
+  <span class="ct">&lt;span</span> <span class="ca">class</span>=<span class="cs">"status-label"</span><span class="ct">&gt;</span>{label}<span class="ct">&lt;/span&gt;</span>
+  <span class="ct">&lt;div</span> <span class="ca">class</span>=<span class="cs">"status-detail"</span><span class="ct">&gt;</span>{detail}<span class="ct">&lt;/div&gt;</span>
+<span class="ct">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- SC3: sensor readings kept separate from primary status --&gt;</span>
+<span class="ct">&lt;div</span> <span class="ca">class</span>=<span class="cs">"readings"</span><span class="ct">&gt;</span>
+  <span class="ct">&lt;p&gt;</span>🌡️ Temperature: <span class="ct">&lt;strong&gt;</span>{temp:.1f} °C<span class="ct">&lt;/strong&gt;&lt;/p&gt;</span>
+  <span class="ct">&lt;p&gt;</span>💧 Humidity: <span class="ct">&lt;strong&gt;</span>{hum:.0f} %<span class="ct">&lt;/strong&gt;&lt;/p&gt;</span>
+  <span class="ct">&lt;p&gt;</span>💡 Light level: <span class="ct">&lt;strong&gt;</span>{"Low ✓" if ldr_val &lt; 20000 else "High"}<span class="ct">&lt;/strong&gt;&lt;/p&gt;</span>
+  <span class="ct">&lt;p&gt;</span>👁️ Motion: <span class="ct">&lt;strong&gt;</span>{"None ✓" if motion_clear else "Detected"}<span class="ct">&lt;/strong&gt;&lt;/p&gt;</span>
+<span class="ct">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- SC8: last-update timestamp --&gt;</span>
+<span class="ct">&lt;p</span> <span class="ca">class</span>=<span class="cs">"timestamp"</span><span class="ct">&gt;</span>Last updated: {timestamp}<span class="ct">&lt;/p&gt;</span>
+<span class="ct">&lt;p</span> <span class="ca">class</span>=<span class="cs">"timestamp"</span><span class="ct">&gt;</span>Auto-refreshes every 5 seconds<span class="ct">&lt;/p&gt;</span></pre>
+  </div>
+
+  <h2>Contrast checker — verify your colour choices</h2>
+  <div class="tbl"><table>
+    <tr><th>Status</th><th>Text colour</th><th>Background</th><th>Ratio</th><th>WCAG AA?</th></tr>
+    <tr><td>SUITABLE</td><td>#FFFFFF white</td><td>#1B4332 dark green</td><td>8.1:1</td><td class="ok">✅ Pass</td></tr>
+    <tr><td>MONITOR</td><td>#0D1B2A near-black</td><td>#FFF3CD pale amber</td><td>12.4:1</td><td class="ok">✅ Pass</td></tr>
+    <tr><td>UNSUITABLE</td><td>#FFFFFF white</td><td>#2C1A0E very dark</td><td>14.2:1</td><td class="ok">✅ Pass</td></tr>
+    <tr><td>OFFLINE</td><td>#F5F8FC near-white</td><td>#3D5A78 steel blue</td><td>4.7:1</td><td class="ok">✅ Pass</td></tr>
+    <tr><td>Body text</td><td>#0D1B2A near-black</td><td>#F5F8FC near-white</td><td>15.6:1</td><td class="ok">✅ Pass</td></tr>
+  </table></div>
+</div>
+
+<!-- ═══════════════════ JOURNAL GUIDE ═══════════════════ -->
+<div id="panel-journal" class="panel">
+  <div class="hero">
+    <div class="hero-tag">All criteria — OneNote journal documentation</div>
+    <h1>FIA2 Journal Guide<br>What to Put on Each Page</h1>
+    <p>Your journal is <strong>up to 5 A3 pages</strong> plus <strong>2 A4 pages of annotated code</strong>. Here is exactly what to include on each page to address the marking guide at the 6–7 mark level.</p>
+  </div>
+
+  <div class="box box-red">
+    <div class="bt">📋 Submission requirements</div>
+    <ul>
+      <li>Journal: Class OneNote → submitted via Turnitin by <strong>12 June 3 PM</strong></li>
+      <li>Video: MP4, up to <strong>2 minutes</strong>, low resolution, demonstrates UI + coded components</li>
+      <li>Code: 2 × A4 pages with annotations linking code to design decisions and criteria</li>
+      <li>Reference list not included in video time</li>
+    </ul>
+  </div>
+
+  <h2>Page 1 — Determining and Synthesising (7 marks)</h2>
+  <div class="task-card">
+    <div class="tc-head"><span class="task-badge tb-det">Determining</span><h4>Problem definition + success criteria</h4></div>
+    <p>What markers look for at 6–7 marks: <em>"astute determination of success criteria"</em></p>
+    <ul>
+      <li><strong>User persona summary:</strong> Daniel's key needs — colour-vision deficiency, shift worker, passive viewing, tablet display, cognitive load</li>
+      <li><strong>MoSCoW table</strong> — must/should/could/won't for all 8 success criteria (see SC panel)</li>
+      <li><strong>All 8 success criteria table</strong> — criterion, source (traced to Daniel), measurable threshold</li>
+      <li><strong>Data requirements:</strong> what data the system needs (temp, humidity, LDR, PIR), how it's stored (variables in RAM — no database for this system), why flat file not needed</li>
+      <li><strong>Sources referenced</strong> — textbook (Nelson Digital Solutions for QCE), WebAIM WCAG Checklist, humanrights.gov.au accessibility guidelines</li>
+    </ul>
+  </div>
+
+  <div class="task-card">
+    <div class="tc-head"><span class="task-badge tb-syn">Synthesising</span><h4>UI wireframes + possible solutions</h4></div>
+    <p>What markers look for: <em>"logical synthesis of relevant information and ideas"</em></p>
+    <ul>
+      <li><strong>At least 2 UI wireframe sketches</strong> — hand-drawn or digital, annotated with CARP principles</li>
+      <li><strong>Chosen solution justified</strong> — explain why your final UI design meets Daniel's needs better than your alternatives</li>
+      <li><strong>System diagram</strong> — sensor board → WiFi → display board → browser (even if single-board, show data flow)</li>
+      <li><strong>Algorithm pseudocode</strong> for the classification function (before writing code)</li>
+    </ul>
+  </div>
+
+  <h2>Page 2 — Generating (9 marks)</h2>
+  <div class="task-card">
+    <div class="tc-head"><span class="task-badge tb-gen">Generating</span><h4>Prototype development evidence</h4></div>
+    <p>What markers look for at 8–9 marks: <em>"proficient generation combining UI + data + programmed components"</em></p>
+    <ul>
+      <li><strong>Photos of hardware</strong> — breadboard with sensors wired, Pico W / ESP32 labelled with pin numbers</li>
+      <li><strong>Screenshots of the working interface</strong> — all three status states (SUITABLE / MONITOR / UNSUITABLE) and the OFFLINE state</li>
+      <li><strong>Greyscale screenshot</strong> — proves SC1 compliance (status readable without colour)</li>
+      <li><strong>2 × A4 annotated code pages</strong> — classification function + web server loop, each line annotated linking to SC / CARP / WCAG</li>
+      <li><strong>Thonny Shell output</strong> — screenshot showing "Hotspot ready" and error-free startup</li>
+    </ul>
+  </div>
+
+  <h2>Page 3 — Evaluating (7 marks)</h2>
+  <div class="task-card">
+    <div class="tc-head"><span class="task-badge tb-eval">Evaluating</span><h4>Testing, refinements, and impacts</h4></div>
+    <p>What markers look for at 6–7 marks: <em>"critical evaluation + effective refinements justified by feedback and testing"</em></p>
+    <ul>
+      <li><strong>Testing table</strong> — each SC with test input, expected result, actual result, pass/fail, evidence (screenshot)</li>
+      <li><strong>Desk check tables</strong> — SC5 (5 temperature inputs), SC6 (3 LDR inputs), SC7 (3 PIR timer scenarios)</li>
+      <li><strong>Refinement record</strong> — at least 2 documented changes made after testing, with before/after evidence</li>
+      <li><strong>User feedback</strong> — ask a peer to view the interface from 2 metres (simulating Daniel). Record their feedback.</li>
+      <li><strong>Impact evaluation</strong> — personal (Daniel's health/safety), social (accessibility for colour-blind users), economic (cost of components, reliability)</li>
+    </ul>
+  </div>
+
+  <h2>Testing table template</h2>
+  <div class="tbl"><table>
+    <tr><th>SC</th><th>Test input</th><th>Expected output</th><th>Actual output</th><th>Result</th><th>Evidence</th></tr>
+    <tr><td>SC1</td><td>Greyscale screenshot of SUITABLE state</td><td>Text + symbol readable without colour</td><td></td><td></td><td>Screenshot saved to journal</td></tr>
+    <tr><td>SC2</td><td>Stopwatch timing of page refresh</td><td>Refresh in ≤ 5 seconds</td><td></td><td></td><td>Video of auto-refresh</td></tr>
+    <tr><td>SC4</td><td>WebAIM Contrast Checker — SUITABLE status</td><td>Ratio ≥ 4.5:1</td><td></td><td></td><td>Screenshot of checker result</td></tr>
+    <tr><td>SC5</td><td>Set temp=17 (boundary below)</td><td>UNSUITABLE — too cold</td><td></td><td></td><td>Screenshot of UI</td></tr>
+    <tr><td>SC5</td><td>Set temp=22 (boundary at)</td><td>SUITABLE</td><td></td><td></td><td>Screenshot of UI</td></tr>
+    <tr><td>SC7</td><td>PIR inactive for 30s</td><td>Motion OK — contributes to SUITABLE</td><td></td><td></td><td>Thonny Shell output</td></tr>
+    <tr><td>SC8</td><td>Disconnect sensor — wait 16s</td><td>SENSOR OFFLINE message visible</td><td></td><td></td><td>Screenshot of error state</td></tr>
+  </table></div>
+</div>
+
+<!-- ═══════════════════ CHECKLISTS ═══════════════════ -->
+<div id="panel-checklist" class="panel">
+  <div class="hero">
+    <div class="hero-tag">Task sheets — all three checkpoints</div>
+    <h1>FIA2 Checkpoint Checklists</h1>
+    <p>Tick off each item as you complete it. These track exactly what markers look for at each stage.</p>
+  </div>
+
+  <h2>Checkpoint I — Term 2 Week 5</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:10px;"><em>"Submit exploration of solutions, identification of algorithms and user interface sketches."</em></p>
+  <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+    <ul class="chklist" id="cp1">
+      <li onclick="tc(this)"><div class="ck-box"></div><span>OneNote journal page created with title, date, and student details</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Daniel's user persona summarised in your own words — at least 5 key needs identified</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>All 8 success criteria written in a table — criterion, source traced to Daniel, measurable threshold</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>MoSCoW table completed — features sorted into must/should/could/won't</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>At least 2 UI wireframe sketches (hand-drawn or digital) annotated with CARP principles</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>System diagram showing sensor → processing → display → Daniel</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Pseudocode written for the classification algorithm (temp / light / motion → status)</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Desk check table completed for SC5 (5 temperature test cases)</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Data requirements noted — why variables in RAM are sufficient, no database needed</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>At least 3 sources referenced (textbook, WebAIM, humanrights.gov.au)</span></li>
+    </ul>
+  </div>
+
+  <h2>Checkpoint II — Term 2 Week 7</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:10px;"><em>"Complete draft: journal documentation and draft video script."</em></p>
+  <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+    <ul class="chklist" id="cp2">
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Code working — all sensors reading, web server serving pages on hotspot</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>All three status states visible in the browser (SUITABLE / MONITOR / UNSUITABLE)</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>SENSOR OFFLINE state working — disconnect sensor, error shows within 15 seconds</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Greyscale screenshot taken and added to journal — SC1 evidence</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>WebAIM Contrast Checker used — ratio result screenshot in journal for at least 2 colour pairs</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Testing table started — SC2, SC4, SC5, SC7, SC8 at minimum</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Draft annotated code pages — at least 5 annotations linking code to SC or CARP/WCAG</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Draft video script written — covers: what the system does, how it addresses Daniel's needs, demonstration of each status state</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>At least 1 refinement documented with before/after evidence</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Journal submitted to OneNote for teacher review at Checkpoint II</span></li>
+    </ul>
+  </div>
+
+  <h2>Checkpoint III — Final submission 12 June 3 PM</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:10px;"><em>"Final submission via Turnitin + OneNote."</em></p>
+  <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+    <ul class="chklist" id="cp3">
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Journal: up to 5 A3 pages complete with all annotations, diagrams, screenshots, tables</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>2 × A4 annotated code pages — each annotation links code line to SC + CARP/WCAG reasoning</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>All 8 success criteria tested — testing table complete with pass/fail and evidence column</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Desk check tables complete for SC5, SC6, and SC7</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>User feedback recorded — at least one person viewed the interface and gave feedback</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>At least 2 refinements documented with justification from testing or user feedback</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Impacts evaluated — personal (Daniel's safety), social (accessibility), economic (components, maintenance)</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Video recorded — MP4, ≤2 minutes, demonstrates SUITABLE + UNSUITABLE + OFFLINE states, narrated</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Video shows face/hands only — no other students' faces, not uploaded to social media</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Reference list complete using school referencing style</span></li>
+      <li onclick="tc(this)"><div class="ck-box"></div><span>Submitted to Turnitin AND OneNote by 12 June 3 PM ✅</span></li>
+    </ul>
+  </div>
+
+  <h2>Journal entry log template</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:10px;">Copy this table to your OneNote journal. Add a new row each time you work on the project. This is the log shown on page 7 of your assessment document.</p>
+  <div class="tbl"><table>
+    <tr><th>#</th><th>Activity</th><th>Description</th><th>Duration</th><th>Questions / Comments / Outcomes</th></tr>
+    <tr><td>1</td><td>Planning</td><td>Read assessment, create success criteria table, write MoSCoW</td><td></td><td></td></tr>
+    <tr><td>2</td><td>Designing</td><td>UI wireframe sketches, annotate with CARP, select final design</td><td></td><td></td></tr>
+    <tr><td>3</td><td>Pseudocode</td><td>Write classification algorithm pseudocode, desk check SC5+SC7</td><td></td><td></td></tr>
+    <tr><td>4</td><td>Coding</td><td>MicroPython — hotspot, sensor reads, classification function</td><td></td><td></td></tr>
+    <tr><td>5</td><td>Coding</td><td>HTML web page — status box, readings, SC8 stale detection</td><td></td><td></td></tr>
+    <tr><td>6</td><td>Testing</td><td>Complete testing table, desk checks, greyscale + contrast checks</td><td></td><td></td></tr>
+    <tr><td>7</td><td>Evaluating</td><td>Refinements, user feedback, impacts evaluation</td><td></td><td></td></tr>
+    <tr><td>8</td><td>Video</td><td>Record and edit 2-minute demo video</td><td></td><td></td></tr>
+  </table></div>
+</div>
+
+<!-- ═══════════════════ LEARNING RESOURCES ═══════════════════ -->
+<div id="panel-resources" class="panel">
+  <div class="hero">
+    <div class="hero-tag">UX/UI Design · Icons · AI Tools · Pinout Reference</div>
+    <h1>Learning Resources<br><em style="font-weight:400;opacity:.75">Design your interface, find code snippets, use AI safely</em></h1>
+    <p>Everything you need to go from a wireframe sketch to a working dashboard — W3Schools tutorials, icon libraries, dashboard design patterns, and how to use AI coding tools responsibly as a QLD Year 11/12 student.</p>
+    <div class="hero-chips">
+      <span class="chip">W3Schools HTML/CSS</span>
+      <span class="chip">Dashboard UI patterns</span>
+      <span class="chip">SVG charts + gauges</span>
+      <span class="chip">Font Awesome icons</span>
+      <span class="chip">AI as a learning tool</span>
+      <span class="chip">Pico W pinout reference</span>
+    </div>
+  </div>
+
+  <!-- ── PINOUT REFERENCE ── -->
+  <h2>📌 Raspberry Pi Pico W — GPIO Pinout Reference</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:12px;">The image you uploaded (Figure 5) is the official pinout for the <strong>Raspberry Pi Pico W (2022)</strong> — RP2040 chip, Infineon 43439 WiFi module. The pinout for the newer <strong>Pico 2 W (2024)</strong> — RP2350 — is physically identical but uses a different chip. Both boards use the same GP0–GP28 numbering and physical pin positions, which is why code written for one works almost unchanged on the other.</p>
+
+  <div class="box box-blue">
+    <div class="bt">🔗 Official pinout documentation</div>
+    <p><strong>Pico W (RP2040, 2022):</strong> <a href="https://datasheets.raspberrypi.com/picow/PicoW-A4-Pinout.pdf" target="_blank" style="color:var(--blue);">datasheets.raspberrypi.com/picow/PicoW-A4-Pinout.pdf ↗</a> — official A4 PDF pinout diagram</p>
+    <p style="margin-top:6px;"><strong>Pico 2 W (RP2350, 2024):</strong> <a href="https://datasheets.raspberrypi.com/pico/Pico-2-W-A4-Pinout.pdf" target="_blank" style="color:var(--blue);">datasheets.raspberrypi.com/pico/Pico-2-W-A4-Pinout.pdf ↗</a></p>
+    <p style="margin-top:6px;"><strong>Full series documentation:</strong> <a href="https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html" target="_blank" style="color:var(--blue);">raspberrypi.com/documentation/microcontrollers/pico-series.html ↗</a></p>
+  </div>
+
+  <div class="tbl"><table>
+    <tr><th>Pin / Label</th><th>Function in this project</th><th>Notes</th></tr>
+    <tr><td><code>GP14</code> — Pin 19</td><td>PIR motion sensor SIG wire (yellow)</td><td><code>Pin(14, Pin.IN)</code> — digital input only</td></tr>
+    <tr><td><code>GP15</code> — Pin 20</td><td>DHT22 data wire (yellow)</td><td><code>dht.DHT22(Pin(15))</code></td></tr>
+    <tr><td><code>GP26</code> — Pin 31</td><td>LDR / light sensor (ADC)</td><td><code>ADC(Pin(26))</code> — analogue input, 0–65535</td></tr>
+    <tr><td><code>3V3 OUT</code> — Pin 36</td><td>Power for DHT22 and PIR (red wire)</td><td>3.3V only — do NOT use VBUS (5V)</td></tr>
+    <tr><td><code>GND</code> — Pins 3, 8, 13, 18, 23, 28, 33, 38</td><td>Ground for all sensors (black wire)</td><td>Any GND pin works — use nearest to sensor</td></tr>
+    <tr><td><code>WL_GPIO0</code> — onboard LED</td><td>WiFi activity / status indicator</td><td>Controlled via <code>Pin("LED", Pin.OUT)</code> on Pico W</td></tr>
+  </table></div>
+
+  <div class="box box-amber">
+    <div class="bt">⚠️ Pico W vs Pico 2 W — the one difference that matters</div>
+    <p>The onboard LED pin name changed. On the <strong>Pico W</strong> use <code>Pin("LED")</code>. On the <strong>Pico 2 W</strong> you can also use <code>Pin("LED")</code> but it maps to a different GPIO. All other GP numbers and physical pin positions are identical between the two boards.</p>
+  </div>
+
+  <!-- ── W3SCHOOLS RESOURCES ── -->
+  <h2>🌐 W3Schools — HTML/CSS tutorials for your dashboard</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:12px;">W3Schools is the standard reference for web design at this level. Because Daniel's interface is served directly from the Pico W as a plain HTML page, all the HTML and CSS features below are usable with <strong>zero extra libraries</strong> — they run in any browser.</p>
+
+  <div class="tbl"><table>
+    <tr><th>Topic</th><th>W3Schools link</th><th>Why it's useful for Daniel's interface</th></tr>
+    <tr><td>CSS Flexbox</td><td><a href="https://www.w3schools.com/css/css3_flexbox.asp" target="_blank" style="color:var(--blue);">w3schools.com/css/css3_flexbox.asp ↗</a></td><td>Centre your status box and align sensor tiles in a row — works on Daniel's tablet at any screen size</td></tr>
+    <tr><td>CSS Grid</td><td><a href="https://www.w3schools.com/css/css_grid.asp" target="_blank" style="color:var(--blue);">w3schools.com/css/css_grid.asp ↗</a></td><td>Create a dashboard tile layout (3 tiles: Motion, Temp, Humidity) like a car instrument cluster</td></tr>
+    <tr><td>CSS Variables</td><td><a href="https://www.w3schools.com/css/css3_variables.asp" target="_blank" style="color:var(--blue);">w3schools.com/css/css3_variables.asp ↗</a></td><td>Define <code>--status-colour</code> once and change all status colours from your MicroPython code by injecting one value</td></tr>
+    <tr><td>CSS Borders + Box Shadow</td><td><a href="https://www.w3schools.com/css/css3_borders.asp" target="_blank" style="color:var(--blue);">w3schools.com/css/css3_borders.asp ↗</a></td><td>Add glowing borders to status tiles — useful for drawing attention without relying on colour alone (SC1)</td></tr>
+    <tr><td>CSS Animations / Transitions</td><td><a href="https://www.w3schools.com/css/css3_animations.asp" target="_blank" style="color:var(--blue);">w3schools.com/css/css3_animations.asp ↗</a></td><td>Pulse the status box gently when in UNSUITABLE state — additional non-colour signal for Daniel</td></tr>
+    <tr><td>SVG Tutorial</td><td><a href="https://www.w3schools.com/graphics/svg_intro.asp" target="_blank" style="color:var(--blue);">w3schools.com/graphics/svg_intro.asp ↗</a></td><td>Draw circular gauges and bar charts directly in HTML — no JavaScript library needed (see Dashboard section below)</td></tr>
+    <tr><td>HTML meta refresh</td><td><a href="https://www.w3schools.com/tags/att_meta_http_equiv.asp" target="_blank" style="color:var(--blue);">w3schools.com/tags/att_meta_http_equiv.asp ↗</a></td><td>SC2 — auto-refresh implementation: <code>&lt;meta http-equiv="refresh" content="5"&gt;</code></td></tr>
+    <tr><td>CSS @media queries</td><td><a href="https://www.w3schools.com/css/css_rwd_mediaqueries.asp" target="_blank" style="color:var(--blue);">w3schools.com/css/css_rwd_mediaqueries.asp ↗</a></td><td>Make the dashboard adapt for Daniel's older tablet screen size</td></tr>
+    <tr><td>"Try It Yourself" editor</td><td><a href="https://www.w3schools.com/html/tryit.asp?filename=tryhtml_intro" target="_blank" style="color:var(--blue);">w3schools.com/html/tryit.asp ↗</a></td><td>Paste any HTML snippet here and see it live — great for testing design ideas before putting code into MicroPython strings</td></tr>
+  </table></div>
+
+  <div class="box box-green">
+    <div class="bt">✅ How to search W3Schools effectively</div>
+    <p>Search: <strong>"w3schools css [what you want]"</strong> in Google — e.g. <em>"w3schools css circular progress bar"</em> or <em>"w3schools svg arc"</em>. The W3Schools search bar is less reliable than Google for specific topics. Every page has a "Try it Yourself" button — always use it to test snippets before adapting them.</p>
+  </div>
+
+  <!-- ── DASHBOARD DESIGN ── -->
+  <h2>🚗 Dashboard-style UI — circular gauges and bar charts</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:12px;">Daniel's interface could look like a car instrument panel — circular temperature gauge, horizontal humidity bar, motion indicator. All of the following can be done with <strong>pure HTML + CSS + SVG</strong>, served directly from the Pico W. No JavaScript libraries are needed.</p>
+
+  <h3>Option 1 — SVG circular gauge (like a speedometer)</h3>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">An SVG <code>&lt;circle&gt;</code> with <code>stroke-dasharray</code> creates a gauge arc. You inject the temperature value from MicroPython into the <code>stroke-dashoffset</code> to move the needle. This works perfectly served from a Pico W.</p>
+  <div class="cw">
+    <div class="ch"><span class="cf">temperature_gauge.html — SVG arc gauge snippet</span><button class="cb" onclick="cc(this)">Copy</button></div>
+    <pre><span class="ct">&lt;svg</span> <span class="ca">viewBox</span>=<span class="cs">"0 0 120 120"</span> <span class="ca">width</span>=<span class="cs">"200"</span> <span class="ca">xmlns</span>=<span class="cs">"http://www.w3.org/2000/svg"</span><span class="ct">&gt;</span>
+  <span class="cm">&lt;!-- Background ring --&gt;</span>
+  <span class="ct">&lt;circle</span> <span class="ca">cx</span>=<span class="cs">"60"</span> <span class="ca">cy</span>=<span class="cs">"60"</span> <span class="ca">r</span>=<span class="cs">"50"</span>
+    <span class="ca">fill</span>=<span class="cs">"none"</span> <span class="ca">stroke</span>=<span class="cs">"#1A3A5C"</span> <span class="ca">stroke-width</span>=<span class="cs">"10"</span><span class="ct">/&gt;</span>
+  <span class="cm">&lt;!-- Value arc: stroke-dasharray=circumference(~314), stroke-dashoffset controls fill --&gt;</span>
+  <span class="cm">&lt;!-- MicroPython injects: offset = 314 - (temp/40*314) --&gt;</span>
+  <span class="ct">&lt;circle</span> <span class="ca">cx</span>=<span class="cs">"60"</span> <span class="ca">cy</span>=<span class="cs">"60"</span> <span class="ca">r</span>=<span class="cs">"50"</span>
+    <span class="ca">fill</span>=<span class="cs">"none"</span> <span class="ca">stroke</span>=<span class="cs">"#2B8BE0"</span> <span class="ca">stroke-width</span>=<span class="cs">"10"</span>
+    <span class="ca">stroke-dasharray</span>=<span class="cs">"314"</span>
+    <span class="ca">stroke-dashoffset</span>=<span class="cs">"{offset}"</span>
+    <span class="ca">transform</span>=<span class="cs">"rotate(-90 60 60)"</span><span class="ct">/&gt;</span>
+  <span class="cm">&lt;!-- Centre label --&gt;</span>
+  <span class="ct">&lt;text</span> <span class="ca">x</span>=<span class="cs">"60"</span> <span class="ca">y</span>=<span class="cs">"55"</span> <span class="ca">text-anchor</span>=<span class="cs">"middle"</span>
+    <span class="ca">font-size</span>=<span class="cs">"22"</span> <span class="ca">fill</span>=<span class="cs">"#D6E8FB"</span> <span class="ca">font-weight</span>=<span class="cs">"bold"</span><span class="ct">&gt;</span>{temp:.1f}<span class="ct">&lt;/text&gt;</span>
+  <span class="ct">&lt;text</span> <span class="ca">x</span>=<span class="cs">"60"</span> <span class="ca">y</span>=<span class="cs">"72"</span> <span class="ca">text-anchor</span>=<span class="cs">"middle"</span>
+    <span class="ca">font-size</span>=<span class="cs">"11"</span> <span class="ca">fill</span>=<span class="cs">"#5A7A9A"</span><span class="ct">&gt;</span>°C<span class="ct">&lt;/text&gt;</span>
+<span class="ct">&lt;/svg&gt;</span>
+
+<span class="cm"># In MicroPython — calculate offset before injecting into HTML string:</span>
+<span class="cm"># offset = int(314 - (temp / 40.0 * 314))   # 40°C = full circle</span>
+<span class="cm"># Then use .format(temp=temp, offset=offset) in your build_page() function</span></pre>
+  </div>
+  <div class="box box-navy">
+    <div class="bt">💡 Where to learn more + find snippets</div>
+    <p>Search: <strong>"svg stroke-dasharray circle progress w3schools"</strong> → <a href="https://www.w3schools.com/howto/howto_js_progressbar.asp" target="_blank" style="color:var(--blue);">w3schools.com/howto — Progress Bar ↗</a>. Also try: <strong>"codepen svg circular gauge no javascript"</strong> on <a href="https://codepen.io" target="_blank" style="color:var(--blue);">codepen.io ↗</a> — paste any result into the W3Schools Try It editor to test it.</p>
+  </div>
+
+  <h3>Option 2 — CSS bar chart / horizontal progress bar</h3>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">Simpler than SVG — a <code>&lt;div&gt;</code> with a coloured inner bar, width set by MicroPython as a percentage. Works for humidity, temperature scale, or calm timer. No JavaScript needed.</p>
+  <div class="cw">
+    <div class="ch"><span class="cf">humidity_bar.html — CSS percentage bar</span><button class="cb" onclick="cc(this)">Copy</button></div>
+    <pre><span class="ct">&lt;style&gt;</span>
+  .bar-track {{
+    background: #1A3A5C; border-radius: 8px;
+    width: 100%; height: 20px; overflow: hidden;
+  }}
+  .bar-fill {{
+    background: #2B8BE0; height: 100%;
+    border-radius: 8px; transition: width 0.5s;
+  }}
+<span class="ct">&lt;/style&gt;</span>
+
+<span class="cm">&lt;!-- MicroPython injects humidity value as a percentage --&gt;</span>
+<span class="ct">&lt;p&gt;</span>💧 Humidity: <span class="ct">&lt;strong&gt;</span>{hum:.0f}%<span class="ct">&lt;/strong&gt;&lt;/p&gt;</span>
+<span class="ct">&lt;div</span> <span class="ca">class</span>=<span class="cs">"bar-track"</span><span class="ct">&gt;</span>
+  <span class="ct">&lt;div</span> <span class="ca">class</span>=<span class="cs">"bar-fill"</span> <span class="ca">style</span>=<span class="cs">"width:{hum:.0f}%"</span><span class="ct">&gt;&lt;/div&gt;</span>
+<span class="ct">&lt;/div&gt;</span>
+
+<span class="cm"># MicroPython: .format(hum=hum)  — hum is 0–100 so maps directly to %</span></pre>
+  </div>
+
+  <div class="box box-blue">
+    <div class="bt">💡 How to search for dashboard snippets</div>
+    <p>Use these search phrases to find and test code ideas:</p>
+    <ul>
+      <li><strong>"html css speedometer gauge no javascript"</strong> → finds pure CSS/SVG versions</li>
+      <li><strong>"w3schools how to css progress bar"</strong> → <a href="https://www.w3schools.com/howto/howto_css_skill_bar.asp" target="_blank" style="color:var(--blue);">w3schools.com/howto/howto_css_skill_bar.asp ↗</a></li>
+      <li><strong>"codepen dashboard dark UI"</strong> → visual inspiration and working code examples</li>
+      <li><strong>"svg arc temperature gauge micropython"</strong> → finds examples already adapted for MicroPython</li>
+      <li><strong>"w3schools css card layout"</strong> → for the sensor tile cards</li>
+    </ul>
+    <p style="margin-top:6px;">When you find a snippet: paste it into <a href="https://www.w3schools.com/html/tryit.asp?filename=tryhtml_intro" target="_blank" style="color:var(--blue);">W3Schools Try It ↗</a> first to test it works, then adapt and embed it inside your MicroPython <code>build_page()</code> string. Remember to double curly braces in Python f-strings: <code>&#123;&#123; &#125;&#125;</code> for literal CSS braces, single <code>&#123;var&#125;</code> for Python values.</p>
+  </div>
+
+  <h3>Option 3 — Emoji / Unicode symbols as dashboard indicators</h3>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">The simplest approach — and accessible by default (WCAG SC1). Served directly in the HTML string from MicroPython, no external files needed. Every modern browser renders these.</p>
+  <div class="cw">
+    <div class="ch"><span class="cf">status_symbols.py — symbol reference for Daniel's interface</span><button class="cb" onclick="cc(this)">Copy</button></div>
+    <pre><span class="cm"># Status symbols — inject into HTML via .format()</span>
+STATUS_SYMBOLS = &#123;
+    <span class="cs">'SUITABLE'</span>:   <span class="cs">'✅'</span>,   <span class="cm"># U+2705 — clear, universally recognised</span>
+    <span class="cs">'MONITOR'</span>:    <span class="cs">'⚠️'</span>,   <span class="cm"># U+26A0 — warning, colour-blind safe</span>
+    <span class="cs">'UNSUITABLE'</span>: <span class="cs">'🛑'</span>,   <span class="cm"># U+1F6D1 — stop, shape-distinct from ✅</span>
+    <span class="cs">'OFFLINE'</span>:    <span class="cs">'📡'</span>,   <span class="cm"># U+1F4E1 — clearly different category</span>
+&#125;
+
+<span class="cm"># Condition icons for the sensor tile labels:</span>
+SENSOR_ICONS = &#123;
+    <span class="cs">'temp'</span>:     <span class="cs">'🌡️'</span>,
+    <span class="cs">'humidity'</span>: <span class="cs">'💧'</span>,
+    <span class="cs">'light'</span>:    <span class="cs">'💡'</span>,
+    <span class="cs">'motion'</span>:   <span class="cs">'👁️'</span>,
+&#125;</pre>
+  </div>
+
+  <!-- ── ICONS ── -->
+  <h2>🎨 Using icons in your interface — can you use Font Awesome on a Pico W?</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:10px;">This is an excellent design question. The short answer is: <strong>yes, but only if the Pico W is connected to the internet</strong>. If Daniel's device connects to the Pico W's own hotspot (no router, no internet), then you cannot load external stylesheets. Here are your three options:</p>
+
+  <div class="tbl"><table>
+    <tr><th>Icon approach</th><th>Works on Pico W hotspot?</th><th>How to use</th><th>Journal justification</th></tr>
+    <tr>
+      <td><strong>Unicode / emoji</strong></td>
+      <td class="ok">✅ Always — no files needed</td>
+      <td>Type directly in HTML string: <code>🌡️ 💧 ✅ ⚠️</code></td>
+      <td>Accessible, no external dependency, works offline, renders on all browsers</td>
+    </tr>
+    <tr>
+      <td><strong>SVG icons inline</strong></td>
+      <td class="ok">✅ Always — embedded in HTML</td>
+      <td>Copy SVG code from <a href="https://heroicons.com" target="_blank" style="color:var(--blue);">heroicons.com ↗</a> and paste into your HTML string</td>
+      <td>Professional appearance, scalable, no external files, fully accessible with <code>aria-label</code></td>
+    </tr>
+    <tr>
+      <td><strong>Font Awesome (CDN)</strong></td>
+      <td class="partial">⚠️ Only if on WiFi with internet</td>
+      <td><code>&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"&gt;</code> then <code>&lt;i class="fas fa-thermometer-half"&gt;&lt;/i&gt;</code></td>
+      <td>Requires internet — not suitable for hotspot-only setup. Document this constraint in your journal.</td>
+    </tr>
+    <tr>
+      <td><strong>Font Awesome (downloaded)</strong></td>
+      <td class="partial">⚠️ Would need to be served from Pico W flash</td>
+      <td>Pico W has 2MB flash — the CSS file alone is ~80KB. Technically possible but complicates deployment.</td>
+      <td>Not recommended for this project — over-engineered for the requirements.</td>
+    </tr>
+  </table></div>
+
+  <div class="box box-green">
+    <div class="bt">✅ Recommended approach: inline SVG icons from Heroicons</div>
+    <p><strong>Heroicons</strong> (<a href="https://heroicons.com" target="_blank" style="color:var(--blue);">heroicons.com ↗</a>) provides free, clean SVG icons you can copy directly into your HTML. Search for "thermometer", "eye", "bolt", "wifi" etc. Click an icon → "Copy SVG" → paste directly into your HTML string inside MicroPython. Scale with <code>width="24" height="24"</code>. Add <code>aria-label="Temperature"</code> for accessibility (WCAG 1.1).</p>
+  </div>
+
+  <div class="cw">
+    <div class="ch"><span class="cf">inline_svg_icon_example.html — thermometer icon, no external files</span><button class="cb" onclick="cc(this)">Copy</button></div>
+    <pre><span class="cm">&lt;!-- Heroicons thermometer — paste SVG directly, no CDN needed --&gt;</span>
+<span class="ct">&lt;span</span> <span class="ca">aria-label</span>=<span class="cs">"Temperature"</span><span class="ct">&gt;</span>
+  <span class="ct">&lt;svg</span> <span class="ca">xmlns</span>=<span class="cs">"http://www.w3.org/2000/svg"</span> <span class="ca">width</span>=<span class="cs">"28"</span> <span class="ca">height</span>=<span class="cs">"28"</span>
+    <span class="ca">fill</span>=<span class="cs">"none"</span> <span class="ca">viewBox</span>=<span class="cs">"0 0 24 24"</span> <span class="ca">stroke</span>=<span class="cs">"#2B8BE0"</span> <span class="ca">stroke-width</span>=<span class="cs">"1.5"</span><span class="ct">&gt;</span>
+    <span class="ct">&lt;path</span> <span class="ca">stroke-linecap</span>=<span class="cs">"round"</span> <span class="ca">stroke-linejoin</span>=<span class="cs">"round"</span>
+      <span class="ca">d</span>=<span class="cs">"M12 9v4m0 0v.01M12 6a6 6 0 100 12 6 6 0 000-12z"</span><span class="ct">/&gt;</span>
+  <span class="ct">&lt;/svg&gt;</span>
+<span class="ct">&lt;/span&gt;</span>
+<span class="ct">&lt;strong&gt;</span>{temp:.1f} °C<span class="ct">&lt;/strong&gt;</span>
+
+<span class="cm"># In MicroPython — embed this entire string in your build_page() function</span>
+<span class="cm"># .format(temp=temp) injects the reading — SVG code itself needs no formatting</span></pre>
+  </div>
+
+  <!-- ── AI AS LEARNING TOOL ── -->
+  <h2>🤖 Using AI as a learning tool — QLD Year 11/12 guidelines</h2>
+
+  <div class="box box-red">
+    <div class="bt">⚠️ Important — read this before using any AI tool</div>
+    <p><strong>Academic integrity:</strong> Using AI to generate your FIA2 submission and submitting it as your own work is academic misconduct. Your journal, code annotations, pseudocode, and evaluation must be your own thinking. AI can help you <em>learn</em> — it cannot do the work <em>for</em> you.</p>
+    <p style="margin-top:6px;"><strong>Age requirements in Queensland:</strong> Most general-purpose AI chat tools (Claude, ChatGPT, Gemini, Copilot) require users to be <strong>18 years or older</strong>, or 13+ with parental/guardian consent, under their Terms of Service. As Year 11/12 students (typically 16–17) in Queensland, you must check the age requirements for any tool before using it, and follow your school's Acceptable Use Policy. St Peters will have specific guidance on which tools are approved for student use.</p>
+  </div>
+
+  <div class="tbl"><table>
+    <tr><th>Approved use of AI as a learning tool</th><th>Not approved</th></tr>
+    <tr><td>Ask AI to <strong>explain a concept</strong> you don't understand — e.g. "explain what stroke-dasharray does in SVG"</td><td>Pasting AI-generated code into your journal as your own annotation</td></tr>
+    <tr><td>Use AI to <strong>check your understanding</strong> — explain your code to the AI and ask if it's correct</td><td>Asking AI to write your pseudocode or success criteria</td></tr>
+    <tr><td>Ask AI to <strong>explain an error message</strong> — paste the Thonny error and ask what it means</td><td>Asking AI to write your evaluation or journal entries</td></tr>
+    <tr><td>Use AI to <strong>find alternative approaches</strong> — "what are three ways to show a temperature gauge in HTML?"</td><td>Using AI output in your video without disclosing it</td></tr>
+    <tr><td>Ask AI to <strong>review your code</strong> for bugs after you've written it yourself</td><td>Generating complete working code and submitting it as your solution</td></tr>
+    <tr><td>Use <strong>GitHub Copilot</strong> (if school-approved) for autocomplete suggestions while typing in VS Code</td><td>Using AI to write your CARP/WCAG justifications</td></tr>
+  </table></div>
+
+  <h3>School-appropriate AI coding tools (check age/school policy first)</h3>
+  <div class="tbl"><table>
+    <tr><th>Tool</th><th>Best for</th><th>Age / access notes</th></tr>
+    <tr><td><strong>GitHub Copilot</strong></td><td>Autocomplete while coding in VS Code — suggests the next line as you type</td><td>Free for students via <a href="https://education.github.com" target="_blank" style="color:var(--blue);">education.github.com ↗</a> — requires school email. Check St Peters policy.</td></tr>
+    <tr><td><strong>Thonny AI Assist</strong></td><td>Some Thonny versions have built-in AI help for MicroPython — explains errors in the Shell</td><td>Check Thonny version — feature availability varies. Age-appropriate by design for education.</td></tr>
+    <tr><td><strong>W3Schools AI</strong></td><td>Explains HTML/CSS concepts on the W3Schools site</td><td>Available on the W3Schools website — context-aware for the topic you're reading</td></tr>
+    <tr><td><strong>CS50.ai / Harvard Duck</strong></td><td>Educational AI tutor — designed specifically for students learning to code</td><td><a href="https://cs50.ai" target="_blank" style="color:var(--blue);">cs50.ai ↗</a> — built for student use, explains rather than solves</td></tr>
+  </table></div>
+
+  <div class="box box-purple">
+    <div class="bt">💜 How to use AI as a tutor, not a ghostwriter</div>
+    <p>The most powerful way to use AI for learning is the <strong>"explain it back" method</strong>:</p>
+    <ol style="padding-left:18px;margin-top:6px;">
+      <li style="margin-bottom:4px;color:var(--muted);">Write your code or pseudocode yourself first.</li>
+      <li style="margin-bottom:4px;color:var(--muted);">Ask the AI: <em>"Here is my code — can you explain what each section does?"</em></li>
+      <li style="margin-bottom:4px;color:var(--muted);">Compare the AI's explanation to your own. Where they differ, you've found a learning gap.</li>
+      <li style="margin-bottom:4px;color:var(--muted);">Write your journal annotation in <strong>your own words</strong>, informed by both.</li>
+    </ol>
+    <p style="margin-top:6px;">This approach <strong>improves your understanding</strong>, produces <strong>original journal content</strong>, and is consistent with QCAA's expectations for authentic assessment.</p>
+  </div>
+
+  <!-- ── FINDING SNIPPETS ── -->
+  <h2>🔍 Finding and testing code snippets</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:10px;">The professional way to work is to find working examples, understand them, then adapt them. Here is a systematic process for your FIA2:</p>
+
+  <div class="tbl"><table>
+    <tr><th>Step</th><th>What to do</th><th>Tool</th></tr>
+    <tr><td>1 — Search</td><td>Use a specific search phrase. Include "no javascript" or "pure css" if you want simple, Pico W-compatible results.</td><td>Google, then W3Schools How To section</td></tr>
+    <tr><td>2 — Test</td><td>Copy the snippet and paste it into W3Schools Try It editor or CodePen. Make sure it works before you adapt it.</td><td><a href="https://www.w3schools.com/html/tryit.asp?filename=tryhtml_intro" target="_blank" style="color:var(--blue);">W3Schools Try It ↗</a> or <a href="https://codepen.io/pen" target="_blank" style="color:var(--blue);">codepen.io/pen ↗</a></td></tr>
+    <tr><td>3 — Understand</td><td>Before you adapt it, be able to explain every line. If you can't explain it, you can't annotate it in your journal.</td><td>W3Schools reference page for each property used</td></tr>
+    <tr><td>4 — Adapt</td><td>Change colours, sizes, and labels to match Daniel's design. Replace hardcoded values with <code>{format_placeholders}</code>.</td><td>Your <code>build_page()</code> function in MicroPython</td></tr>
+    <tr><td>5 — Document</td><td>Screenshot the original source, note what you changed and why. This is a design decision for your journal.</td><td>OneNote journal — Generating page</td></tr>
+    <tr><td>6 — Reference</td><td>Add the source URL to your reference list. Even free code snippets should be cited.</td><td>Reference list page in your journal</td></tr>
+  </table></div>
+
+  <h3>Recommended snippet sources</h3>
+  <div class="tbl"><table>
+    <tr><th>Site</th><th>Best for</th><th>Quality notes</th></tr>
+    <tr><td><a href="https://www.w3schools.com/howto/default.asp" target="_blank" style="color:var(--blue);">W3Schools How To ↗</a></td><td>Specific components: cards, progress bars, modals, tooltips</td><td>High quality, well-explained, beginner-appropriate</td></tr>
+    <tr><td><a href="https://codepen.io" target="_blank" style="color:var(--blue);">CodePen ↗</a></td><td>Visual dashboard designs, gauge animations, card layouts</td><td>Variable quality — always test and understand before using</td></tr>
+    <tr><td><a href="https://heroicons.com" target="_blank" style="color:var(--blue);">Heroicons ↗</a></td><td>Inline SVG icons — thermometer, wifi, eye, bell etc.</td><td>MIT licence — free to use, professional quality</td></tr>
+    <tr><td><a href="https://css-tricks.com" target="_blank" style="color:var(--blue);">CSS-Tricks ↗</a></td><td>In-depth CSS explanations — flexbox, grid, SVG paths</td><td>Technical but well-written — use for understanding, not copy-paste</td></tr>
+    <tr><td><a href="https://micropython.org/unichar/" target="_blank" style="color:var(--blue);">MicroPython Unicode Chars ↗</a></td><td>Finding Unicode symbols that MicroPython can output in HTML</td><td>Useful for checking which symbols render correctly from the Pico W</td></tr>
+    <tr><td><a href="https://validator.w3.org" target="_blank" style="color:var(--blue);">W3C HTML Validator ↗</a></td><td>Check your HTML is valid — required for WCAG Robust 4.1</td><td>Official — paste your HTML string here to find errors</td></tr>
+  </table></div>
+
+  <div class="box box-teal">
+    <div class="bt">🔗 Curated links — Daniel's interface specifically</div>
+    <p>These links are directly relevant to building Daniel's rest monitor dashboard:</p>
+    <ul>
+      <li><a href="https://www.w3schools.com/css/css3_flexbox.asp" target="_blank" style="color:var(--blue);">W3Schools Flexbox ↗</a> — layout your 3 sensor tiles side by side</li>
+      <li><a href="https://www.w3schools.com/howto/howto_css_skill_bar.asp" target="_blank" style="color:var(--blue);">W3Schools Skill / Progress Bar ↗</a> — humidity and temperature bar charts</li>
+      <li><a href="https://www.w3schools.com/graphics/svg_circle.asp" target="_blank" style="color:var(--blue);">W3Schools SVG Circle ↗</a> — base for circular gauge</li>
+      <li><a href="https://webaim.org/resources/contrastchecker/" target="_blank" style="color:var(--blue);">WebAIM Contrast Checker ↗</a> — test SC4 colour ratios</li>
+      <li><a href="https://webaim.org/standards/wcag/checklist" target="_blank" style="color:var(--blue);">WebAIM WCAG Checklist ↗</a> — reference for journal WCAG citations</li>
+      <li><a href="https://validator.w3.org/#validate_by_input" target="_blank" style="color:var(--blue);">W3C Validator (direct input) ↗</a> — paste your HTML and validate</li>
+      <li><a href="https://micropython.org/download/RPI_PICO_W/" target="_blank" style="color:var(--blue);">MicroPython Pico W firmware ↗</a> — latest stable <code>RPI_PICO_W</code> .uf2</li>
+      <li><a href="https://datasheets.raspberrypi.com/picow/PicoW-A4-Pinout.pdf" target="_blank" style="color:var(--blue);">Pico W A4 Pinout PDF ↗</a> — print and keep next to your hardware</li>
+    </ul>
+  </div>
+
+</div><!-- /panel-resources -->
+
+<!-- ═══════════════════ TOOLS & SETUP ═══════════════════ -->
+<div id="panel-tools" class="panel">
+  <div class="hero">
+    <div class="hero-tag">Thonny · Naming Conventions · IoT Networking · Web Interface Files</div>
+    <h1>Tools &amp; Setup<br><em style="font-weight:400;opacity:.75">Multiple devices, correct filenames, how IoT WiFi works</em></h1>
+    <p>How to run two Thonny windows on one Mac for two devices simultaneously, why file naming matters critically on microcontrollers, how IoT boards handle networking, and how to structure your web interface as separate HTML + CSS files.</p>
+    <div class="hero-chips">
+      <span class="chip">Two Thonny instances on Mac</span>
+      <span class="chip">Naming conventions</span>
+      <span class="chip">boot.py vs main.py</span>
+      <span class="chip">IoT networking concepts</span>
+      <span class="chip">Separated HTML + CSS files</span>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 1: MULTIPLE THONNY ══ -->
+  <h2>🖥 Running two Thonny windows on one Mac — two devices simultaneously</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:10px;">By default macOS treats Thonny as a single-instance application — clicking the icon a second time just brings the existing window to the front. But you can force macOS to open a completely separate process using the <code>open -n</code> Terminal command. Each instance holds its own serial port connection independently.</p>
+
+  <div class="box box-red">
+    <div class="bt">⚠️ Why this matters — port locking</div>
+    <p>Each serial port (<code>/dev/cu.usbmodem…</code>) can only be held by <strong>one process at a time</strong>. If you try to connect a second Thonny window to a port already held by the first window, you will see: <strong>"Could not exclusively lock port [Errno 35] Resource temporarily unavailable"</strong>. The solution is separate Thonny <em>processes</em> — not just separate windows of the same process.</p>
+  </div>
+
+  <h3>Step-by-step: open a second (or third) Thonny instance on Mac</h3>
+  <div class="tbl"><table>
+    <tr><th>Step</th><th>What to do</th><th>Notes</th></tr>
+    <tr>
+      <td>1</td>
+      <td>Connect your first device via USB</td>
+      <td>Plug in normally — no BOOTSEL held</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Open Thonny normally (from Applications or Dock)</td>
+      <td>This is instance 1 — connect it to the first device in Run → Configure Interpreter</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Connect your second device via USB</td>
+      <td>Each device gets its own port number: <code>usbmodem1101</code>, <code>usbmodem1201</code> etc.</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Open <strong>Terminal</strong> (Spotlight → type Terminal → Enter)</td>
+      <td>Terminal is in Applications → Utilities</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Type the command below and press Enter</td>
+      <td>The <code>-n</code> flag forces a new process — macOS launches a completely separate Thonny</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>In the second Thonny, go to Run → Configure Interpreter → select the <em>second</em> port</td>
+      <td>Choose the port not already in use by instance 1</td>
+    </tr>
+  </table></div>
+
+  <div class="cw">
+    <div class="ch"><span class="cf">Terminal — open a second Thonny instance</span><button class="cb" onclick="cc(this)">Copy</button></div>
+    <pre>open -n /Applications/Thonny.app</pre>
+  </div>
+
+  <div class="box box-blue">
+    <div class="bt">💡 For a third device</div>
+    <p>Run the same command again in Terminal — each <code>open -n</code> launches another separate process. Each instance needs its own port selected. You can check which ports are visible by running <code>ls /dev/cu.usb*</code> in Terminal — each connected device appears as a separate entry.</p>
+  </div>
+
+  <div class="cw">
+    <div class="ch"><span class="cf">Terminal — list all connected USB serial devices</span><button class="cb" onclick="cc(this)">Copy</button></div>
+    <pre>ls /dev/cu.usb*
+
+<span class="cm"># Example output with two devices connected:</span>
+<span class="cm"># /dev/cu.usbmodem1101   ← first Pico W (or ESP32)</span>
+<span class="cm"># /dev/cu.usbmodem1201   ← second Pico W</span>
+<span class="cm"># /dev/cu.usbserial-0001 ← ESP32 via CH340 (if driver installed)</span>
+
+<span class="cm"># To see which app is holding a port (if you get Errno 35):</span>
+lsof /dev/cu.usbmodem1101</pre>
+  </div>
+
+  <div class="box box-amber">
+    <div class="bt">⚠️ Identifying which port belongs to which board</div>
+    <p>When you plug in a board, the new port number that appears in <code>ls /dev/cu.usb*</code> is that board's port. To be certain: run <code>ls /dev/cu.usb*</code> before plugging in, then again after — the new entry is your board. You can also check Thonny's Shell — after connecting, the REPL banner shows the board name: <code>Raspberry Pi PicoW</code> vs <code>ESP module</code>.</p>
+  </div>
+
+  <!-- ══ SECTION 2: NAMING CONVENTIONS ══ -->
+  <h2>📛 Naming conventions on microcontrollers — why this is critical</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:10px;">Microcontrollers are not like a laptop. There is no operating system managing multiple user files, no "open with" dialogue, and no file browser. When a Pico W or ESP32 powers on, it looks for <strong>exactly two filenames</strong> in its root directory: <code>boot.py</code> and <code>main.py</code>. <strong>These names are hardwired into MicroPython.</strong> No other filenames will run automatically.</p>
+
+  <div class="box box-red">
+    <div class="bt">🚨 The problem — students saving files like "billyGoatboot.py" or "billyGoatmain.py"</div>
+    <p>If a student saves their startup code as <code>billyGoatboot.py</code> instead of <code>boot.py</code>, the Pico W <strong>will do nothing when powered on</strong>. The file exists on the board's flash storage but MicroPython will never execute it automatically. This is a silent failure — Thonny won't warn you, the board won't error — it simply runs nothing.</p>
+    <p style="margin-top:6px;">This catches students out constantly because on a laptop, you can name files anything you like. On a microcontroller, the filename <em>is</em> the instruction to the operating system.</p>
+  </div>
+
+  <h3>What the two reserved filenames actually do</h3>
+  <div class="tbl"><table>
+    <tr><th>Filename</th><th>When it runs</th><th>What to put in it</th><th>What NOT to put in it</th></tr>
+    <tr>
+      <td><code>boot.py</code></td>
+      <td>Runs <strong>first</strong>, every time the board powers on or resets — before <code>main.py</code></td>
+      <td>Hardware initialisation, WiFi connection, setting up pins that must be ready before anything else</td>
+      <td>Your main application loop — if <code>boot.py</code> crashes, <code>main.py</code> never runs</td>
+    </tr>
+    <tr>
+      <td><code>main.py</code></td>
+      <td>Runs <strong>second</strong>, automatically after <code>boot.py</code> completes</td>
+      <td>Your main application — sensor reading loop, web server, classification algorithm</td>
+      <td>Anything that only needs to run once at setup — put that in <code>boot.py</code></td>
+    </tr>
+    <tr>
+      <td>Any other name<br>(e.g. <code>test.py</code>, <code>sensor.py</code>)</td>
+      <td><strong>Never runs automatically</strong> — must be explicitly imported or run from Thonny</td>
+      <td>Helper modules you <code>import</code> from <code>main.py</code> — e.g. <code>import sensor</code></td>
+      <td>Your main code if you want it to run without a laptop connected</td>
+    </tr>
+  </table></div>
+
+  <div class="box box-amber">
+    <div class="bt">⚠️ The naming convention rule for this project</div>
+    <p>Your filename convention for <strong>keeping track of your own files on your laptop</strong> (OneNote, Downloads folder, etc.) is sensible — <code>billyGoat_main_v2.py</code> is a great filename for a backup copy on your Mac. But when you <strong>save to the MicroPython device</strong> via Thonny (File → Save as → MicroPython device), the file <strong>must be named <code>main.py</code></strong> — no prefix, no suffix, no version number.</p>
+  </div>
+
+  <h3>Correct file organisation workflow</h3>
+  <div class="cw">
+    <div class="ch"><span class="cf">Correct file organisation — laptop vs board</span><button class="cb" onclick="cc(this)">Copy</button></div>
+    <pre><span class="cm"># ── On your MacBook (keep backups here) ──────────────────</span>
+<span class="cm"># Use descriptive names to track versions:</span>
+Downloads/
+  billyGoat_main_v1.py       <span class="cm"># ← your working copy, saved locally</span>
+  billyGoat_main_v2.py       <span class="cm"># ← updated version after testing</span>
+  billyGoat_boot_wifi.py     <span class="cm"># ← your boot config backup</span>
+
+<span class="cm"># ── On the Pico W / ESP32 (via Thonny → MicroPython device) ─</span>
+<span class="cm"># MUST use these exact names:</span>
+/                          <span class="cm"># root of flash storage</span>
+  boot.py                  <span class="cm"># ← always exactly this name</span>
+  main.py                  <span class="cm"># ← always exactly this name</span>
+  sensor.py                <span class="cm"># ← helper module (imported by main.py)</span>
+
+<span class="cm"># Workflow: edit billyGoat_main_v3.py on Mac → test → </span>
+<span class="cm"># File → Save as → MicroPython device → rename to main.py → Save</span></pre>
+  </div>
+
+  <h3>Execution order — what actually happens when the board powers on</h3>
+  <div class="cw">
+    <div class="ch"><span class="cf">MicroPython boot sequence — Pico W and ESP32</span><button class="cb" onclick="cc(this)">Copy</button></div>
+    <pre><span class="cm"># MicroPython boot sequence (happens automatically on power-on):</span>
+<span class="cm">#</span>
+<span class="cm">#  1. Hardware initialisation (MicroPython internals)</span>
+<span class="cm">#  2. Run boot.py  ← if it exists in root. If not, skip.</span>
+<span class="cm">#  3. Run main.py  ← if it exists in root. If not, drop to REPL.</span>
+<span class="cm">#  4. REPL prompt  ← what you see in Thonny Shell (>>>)</span>
+<span class="cm">#</span>
+<span class="cm"># If boot.py raises an exception → execution STOPS. main.py never runs.</span>
+<span class="cm"># If main.py raises an exception → REPL prompt appears.</span>
+
+<span class="cm"># Example boot.py — WiFi connection only:</span>
+import network, time
+
+SSID = 'RestMonitor'
+PASSWORD = 'rest1234'
+
+wlan = network.WLAN(network.AP_IF)   <span class="cm"># Access Point mode</span>
+wlan.active(True)
+wlan.config(essid=SSID, password=PASSWORD)
+while not wlan.active():
+    time.sleep(0.5)
+print('Boot: WiFi hotspot ready —', wlan.ifconfig()[0])
+
+<span class="cm"># Then main.py handles sensors + web server.</span>
+<span class="cm"># Keeping them separate makes debugging much easier.</span></pre>
+  </div>
+
+  <div class="box box-purple">
+    <div class="bt">📓 Journal entry: naming conventions as a design decision</div>
+    <p>In your FIA2 journal under <em>Generating</em>, you can document file structure as part of your system design: <em>"The application is split across two MicroPython files. <code>boot.py</code> handles WiFi initialisation to ensure the network interface is active before the web server starts. <code>main.py</code> contains the sensor reading loop, classification algorithm, and HTTP server. This separation follows the MicroPython execution model and ensures that a sensor reading error does not prevent the network from starting."</em></p>
+  </div>
+
+  <!-- ══ SECTION 3: IOT NETWORKING ══ -->
+  <h2>📡 How IoT boards handle networking and WiFi</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:10px;">IoT stands for <strong>Internet of Things</strong> — physical devices connected to a network to send or receive data. Understanding how the Pico W and ESP32 handle networking is essential for FIA2, because Daniel's interface is delivered over WiFi.</p>
+
+  <h3>The two WiFi modes — AP vs STA</h3>
+  <div class="tbl"><table>
+    <tr><th>Mode</th><th>Name</th><th>What the board does</th><th>Who connects to whom</th><th>Use case for Daniel</th></tr>
+    <tr>
+      <td><strong>AP</strong></td>
+      <td>Access Point mode</td>
+      <td>The board <em>creates</em> its own WiFi network (like a router). It broadcasts an SSID you can see in your WiFi list.</td>
+      <td>Daniel's tablet connects TO the board's network. Board IP is always <code>192.168.4.1</code>.</td>
+      <td><strong>Recommended for FIA2</strong> — works anywhere, no external router needed. Daniel just connects to "RestMonitor".</td>
+    </tr>
+    <tr>
+      <td><strong>STA</strong></td>
+      <td>Station mode</td>
+      <td>The board <em>joins</em> an existing WiFi network (like your phone or home router).</td>
+      <td>Both the board and Daniel's tablet are on the same network. Board gets a dynamic IP from the router.</td>
+      <td>More realistic for a real deployment but harder to demo — IP address changes. Not recommended for FIA2 unless you set a static IP.</td>
+    </tr>
+  </table></div>
+
+  <div class="cw">
+    <div class="ch"><span class="cf">ap_vs_sta_mode.py — code comparison</span><button class="cb" onclick="cc(this)">Copy</button></div>
+    <pre>import network, time
+
+<span class="cm"># ── AP MODE (Access Point) — board creates its own WiFi ──────</span>
+ap = network.WLAN(network.AP_IF)
+ap.active(True)
+ap.config(essid='RestMonitor', password='rest1234')
+while not ap.active():
+    time.sleep(0.5)
+print('AP mode — connect to RestMonitor')
+print('Open browser: http://192.168.4.1')  <span class="cm"># IP is always this in AP mode</span>
+
+<span class="cm"># ── STA MODE (Station) — board joins existing WiFi ───────────</span>
+sta = network.WLAN(network.STA_IF)
+sta.active(True)
+sta.connect('YOUR_WIFI_SSID', 'YOUR_WIFI_PASSWORD')
+while not sta.isconnected():
+    time.sleep(0.5)
+ip = sta.ifconfig()[0]   <span class="cm"># IP assigned by router — different each time</span>
+print('STA mode — connected, IP:', ip)
+print('Open browser: http://' + ip)</pre>
+  </div>
+
+  <h3>How a request travels from Daniel's tablet to the Pico W</h3>
+  <div class="box box-navy">
+    <div class="bt">🔁 The request-response cycle — what happens every 5 seconds</div>
+    <p>Understanding this explains why <code>&lt;meta http-equiv="refresh" content="5"&gt;</code> gives Daniel live data, and why SC2 works:</p>
+    <ol style="padding-left:18px;margin-top:8px;">
+      <li style="margin-bottom:5px;color:var(--muted);"><strong>Daniel's browser</strong> sends an HTTP GET request to <code>http://192.168.4.1</code> every 5 seconds (triggered by the meta refresh tag)</li>
+      <li style="margin-bottom:5px;color:var(--muted);"><strong>The Pico W's web server</strong> (<code>srv.accept()</code> in your <code>while True</code> loop) receives the connection</li>
+      <li style="margin-bottom:5px;color:var(--muted);"><strong>MicroPython reads the sensors</strong> right at that moment — DHT22, LDR, PIR</li>
+      <li style="margin-bottom:5px;color:var(--muted);"><strong>The classification algorithm</strong> runs: temperature + light + motion → SUITABLE / MONITOR / UNSUITABLE</li>
+      <li style="margin-bottom:5px;color:var(--muted);"><strong>The Pico W builds the HTML page</strong> with current values injected via <code>.format()</code></li>
+      <li style="margin-bottom:5px;color:var(--muted);"><strong>The HTML is sent back</strong> as an HTTP response — Daniel's browser displays it</li>
+    </ol>
+    <p style="margin-top:8px;">This is called a <strong>synchronous poll model</strong> — the page is rebuilt from scratch on every request. It is the simplest possible IoT web server pattern and perfectly suited to MicroPython on a Pico W.</p>
+  </div>
+
+  <div class="tbl"><table>
+    <tr><th>Concept</th><th>What it means</th><th>In your code</th></tr>
+    <tr><td>IP address</td><td>The unique address of the Pico W on the network — like a house number. In AP mode always <code>192.168.4.1</code>.</td><td><code>ap.ifconfig()[0]</code> returns the IP as a string</td></tr>
+    <tr><td>Port 80</td><td>The standard port for HTTP web traffic. Browsers assume port 80 when you type <code>http://</code>.</td><td><code>srv.bind(('', 80))</code> — listens on all interfaces, port 80</td></tr>
+    <tr><td>Socket</td><td>A communication endpoint — the "pipe" the server listens on for incoming browser connections.</td><td><code>socket.socket()</code> then <code>.bind()</code>, <code>.listen()</code>, <code>.accept()</code></td></tr>
+    <tr><td>HTTP GET</td><td>The browser's request for a page. The Pico W reads it (<code>.recv(1024)</code>) and sends back HTML.</td><td><code>conn.recv(1024)</code> — receives the request bytes (we discard them)</td></tr>
+    <tr><td>HTTP response</td><td>The header + HTML that the Pico W sends back. Must include <code>HTTP/1.1 200 OK</code> and Content-Type.</td><td><code>conn.sendall(('HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n' + html).encode())</code></td></tr>
+    <tr><td>Access Point</td><td>A device that creates a WiFi network. In AP mode, the Pico W IS the router.</td><td><code>network.WLAN(network.AP_IF)</code></td></tr>
+    <tr><td>SSID</td><td>The name of the WiFi network that appears in your device's WiFi list.</td><td><code>ap.config(essid='RestMonitor')</code></td></tr>
+    <tr><td>Poll interval</td><td>How often Daniel's browser re-requests the page — set by the meta refresh tag.</td><td><code>&lt;meta http-equiv="refresh" content="5"&gt;</code> — 5 seconds</td></tr>
+  </table></div>
+
+  <div class="box box-green">
+    <div class="bt">✅ Journal entry: system architecture explanation</div>
+    <p><em>"The Pico W operates in Access Point (AP) mode, broadcasting a WiFi network named 'RestMonitor'. Daniel's tablet connects to this network directly — no external router or internet connection is required. The Pico W runs a synchronous HTTP server on port 80 using MicroPython's <code>socket</code> library. On each connection, it reads sensor values, runs the classification algorithm, and returns a complete HTML page with current data injected via Python's <code>.format()</code> method. Daniel's browser uses a <code>&lt;meta http-equiv="refresh" content="5"&gt;</code> tag to re-request the page every 5 seconds (SC2), ensuring the display reflects current environmental conditions without any user interaction (SC3)."</em></p>
+  </div>
+
+  <!-- ══ SECTION 4: SEPARATE HTML + CSS FILES ══ -->
+  <h2>🎨 Designing your web interface — separate HTML and CSS files</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:10px;">Professional web development separates content (HTML) from presentation (CSS). For your FIA2 design work, building Daniel's interface as standalone files first — then embedding it in MicroPython — is the correct workflow. Below are complete template files you can download, edit in VS Code or any text editor, and test in a browser before touching your Pico W.</p>
+
+  <div class="box box-blue">
+    <div class="bt">💡 Recommended workflow for interface design</div>
+    <ol style="padding-left:18px;margin-top:6px;">
+      <li style="margin-bottom:4px;color:var(--muted);">Design your interface as separate <code>dashboard.html</code> + <code>styles.css</code> files on your Mac — open in Chrome/Safari to test</li>
+      <li style="margin-bottom:4px;color:var(--muted);">Once your design is working, copy the HTML into your MicroPython <code>build_page()</code> function as a string</li>
+      <li style="margin-bottom:4px;color:var(--muted);">Inline the CSS (paste the <code>&lt;style&gt;</code> block into the HTML string) — or serve the CSS file separately from the Pico W</li>
+      <li style="margin-bottom:4px;color:var(--muted);">Replace hardcoded test values with <code>{temperature}</code> Python format placeholders</li>
+      <li style="margin-bottom:4px;color:var(--muted);">Test in browser using static values, then deploy to Pico W for live data testing</li>
+    </ol>
+  </div>
+
+  <p style="color:var(--muted);font-size:14px;margin-bottom:8px;">The two companion files below are available as separate downloads. They are designed around Daniel's needs (CARP, WCAG, colour-vision deficiency, dashboard-style layout) and include SVG gauge, CSS bar chart, and proper semantic HTML structure.</p>
+
+  <div class="tbl"><table>
+    <tr><th>File</th><th>Purpose</th><th>Open in</th></tr>
+    <tr><td><code>daniel_dashboard.html</code></td><td>Complete HTML structure — semantic elements, status box, sensor tiles, SVG gauge, WCAG meta tags</td><td>Any browser (Chrome, Safari, Firefox) — double-click the file</td></tr>
+    <tr><td><code>daniel_styles.css</code></td><td>All CSS — CARP-based design, colour variables, responsive layout, status colours, bar and gauge styles</td><td>Any text editor — linked from the HTML file via <code>&lt;link&gt;</code></td></tr>
+  </table></div>
+
+  <div class="box box-teal">
+    <div class="bt">🔗 Can you link an external CSS file from a Pico W?</div>
+    <p><strong>Yes — if you serve it from the Pico W itself.</strong> You can save both <code>dashboard.html</code> and <code>styles.css</code> to the Pico W's flash storage and serve the CSS file as a separate HTTP response when the browser requests it. This requires a slightly more complex server that checks the request URL and serves the correct file. For most FIA2 students, <strong>inlining the CSS</strong> (pasting it into a <code>&lt;style&gt;</code> block in the HTML) is simpler and perfectly acceptable. The separate file approach is documented below for students who want to extend their solution.</p>
+  </div>
+
+  <div class="cw">
+    <div class="ch"><span class="cf">multi_file_server.py — serving HTML + CSS as separate files from Pico W</span><button class="cb" onclick="cc(this)">Copy</button></div>
+    <pre><span class="cm"># ── Multi-file web server — serves dashboard.html and styles.css ──</span>
+<span class="cm"># Save both files to the Pico W root using Thonny → File → Save as → MicroPython device</span>
+import socket, time
+
+def serve_file(conn, path):
+    content_types = {
+        '.html': 'text/html',
+        '.css':  'text/css',
+        '.js':   'application/javascript',
+    }
+    ext = path[path.rfind('.'):]  if '.' in path else ''
+    ctype = content_types.get(ext, 'text/plain')
+    try:
+        with open(path, 'r') as f:
+            body = f.read()
+        conn.sendall(('HTTP/1.1 200 OK\r\nContent-Type: '
+                      + ctype + '\r\nConnection: close\r\n\r\n' + body).encode())
+    except OSError:
+        conn.sendall(b'HTTP/1.1 404 Not Found\r\n\r\nFile not found')
+
+srv = socket.socket()
+srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+srv.bind(('', 80))
+srv.listen(3)
+print('Multi-file server ready')
+
+while True:
+    try:
+        conn, _ = srv.accept()
+        req = conn.recv(1024).decode()
+        <span class="cm"># Extract the requested path from the GET line</span>
+        path = req.split(' ')[1] if ' ' in req else '/'
+        if path == '/' or path == '/index.html':
+            serve_file(conn, 'dashboard.html')
+        elif path == '/styles.css':
+            serve_file(conn, 'styles.css')
+        else:
+            conn.sendall(b'HTTP/1.1 404 Not Found\r\n\r\nNot found')
+        conn.close()
+    except Exception as e:
+        print('Error:', e)
+        try: conn.close()
+        except: pass</pre>
+  </div>
+
+</div><!-- /panel-tools -->
+
+<div class="footer">
+  <p>Year 11 Digital Solutions · FIA2 · Unit 1 · St Peters Lutheran College Springfield · Ms Baessler</p>
+  <p>Due: 12 June 2026 3 PM · MicroPython · ESP8266 / ESP32 / Raspberry Pi Pico W · CARP + WCAG 2 · v3 — Tools, Naming, IoT, Web Files added</p>
+</div>
+
 <script>
+function show(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+function tc(li){
+  const box=li.querySelector('.ck-box');
+  const done=box.classList.toggle('done');
+  li.classList.toggle('ci',done);
+}
 function cc(btn){
   const pre=btn.closest('.cw').querySelector('pre');
   navigator.clipboard.writeText(pre.innerText||pre.textContent).then(()=>{
-    const o=btn.textContent;btn.textContent='Copied!';btn.style.color='#93c5fd';
+    const o=btn.textContent; btn.textContent='Copied!'; btn.style.color='var(--blue)';
     setTimeout(()=>{btn.textContent=o;btn.style.color='';},1800);
   });
 }
