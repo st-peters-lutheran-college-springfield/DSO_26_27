@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pico W Setup Walkthrough — student_name | Digital Solutions Unit 1</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg:#f4f7fb; --surface:#ffffff; --primary:#1d4ed8; --primary-dark:#1e3a8a;
+    --accent:#c8102e; --text:#1f2937; --muted:#6b7280; --border:#dbe2f0;
+    --success-bg:#ecfdf5; --success-border:#a7f3d0; --success-text:#047857;
+    --warn-bg:#fef3c7; --warn-border:#fcd34d; --warn-text:#92400e;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;}
+
+  .site-header{background:var(--primary-dark);color:#fff;padding:0.6rem 1rem;font-size:0.82rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;}
+  .site-header span{opacity:0.55;}
+  .site-header a{color:rgba(255,255,255,0.65);text-decoration:none;margin-left:auto;font-size:0.8rem;}
+
+  .lesson-banner{background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 100%);color:#fff;padding:2.4rem 1rem 2rem;position:relative;overflow:hidden;}
+  .lesson-banner::before{content:'';position:absolute;top:-40px;right:-40px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,0.06);pointer-events:none;}
+  .lesson-banner-inner{max-width:1000px;margin:0 auto;position:relative;z-index:1;}
+  .lesson-eyebrow{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:999px;padding:0.3rem 0.85rem;font-size:0.78rem;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:0.85rem;}
+  .lesson-banner h1{color:#fff;font-size:clamp(1.5rem,4vw,2.5rem);line-height:1.15;margin:0 0 0.55rem;}
+  .lesson-banner p{color:rgba(255,255,255,0.75);font-size:0.96rem;max-width:60ch;margin:0 0 1.1rem;line-height:1.6;}
+  .lesson-meta-row{display:flex;flex-wrap:wrap;gap:0.45rem;}
+  .lmeta{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.22);border-radius:999px;padding:0.22rem 0.7rem;font-size:0.77rem;font-weight:600;color:rgba(255,255,255,0.92);}
+
+  .container{max-width:1000px;margin:0 auto;padding:2rem 1rem 3rem;}
+  .top-nav{margin-bottom:1.25rem;font-size:0.88rem;}
+  .top-nav a{color:var(--primary);text-decoration:none;font-weight:700;}
+
+  .callout{border-radius:10px;padding:0.9rem 1.1rem;margin:0.85rem 0;display:flex;gap:0.75rem;align-items:flex-start;font-size:0.88rem;}
+  .callout .icon{font-size:1.15rem;flex-shrink:0;margin-top:0.05rem;}
+  .callout.green{background:var(--success-bg);border:1px solid var(--success-border);border-left:4px solid var(--success-text);}
+  .callout.blue{background:#eff6ff;border:1px solid #bfdbfe;border-left:4px solid var(--primary);}
+  .callout.amber{background:var(--warn-bg);border:1px solid var(--warn-border);border-left:4px solid #d97706;}
+  .callout.red{background:#fff1f2;border:1px solid #fecdd3;border-left:4px solid var(--accent);}
+  .callout h4{margin:0 0 0.3rem;font-size:0.9rem;font-weight:700;}
+  .callout p,.callout li{margin:0.2rem 0;color:var(--text);}
+  .callout ul,.callout ol{padding-left:1.1rem;}
+
+  .section-label{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:1.75rem 0 0.7rem;display:flex;align-items:center;gap:0.5rem;}
+  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+  .step-list{display:flex;flex-direction:column;gap:0;}
+  .step-item{display:grid;grid-template-columns:52px 1fr;border:1px solid var(--border);border-top:none;background:var(--surface);}
+  .step-item:first-child{border-top:1px solid var(--border);border-radius:12px 12px 0 0;}
+  .step-item:last-child{border-radius:0 0 12px 12px;}
+  .step-num-col{background:#eff6ff;border-right:1px solid var(--border);display:flex;align-items:flex-start;justify-content:center;padding-top:1.1rem;}
+  .step-circle{width:30px;height:30px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;}
+  .step-body{padding:1rem 1.1rem;}
+  .step-body h3{margin:0 0 0.4rem;font-size:1rem;color:var(--primary-dark);}
+  .step-body p{margin:0 0 0.5rem;font-size:0.9rem;color:var(--muted);}
+  .step-body ol,.step-body ul{font-size:0.88rem;color:var(--text);padding-left:1.15rem;margin:0.3rem 0;}
+  .step-body li{margin-bottom:0.3rem;}
+  .step-time{display:inline-block;font-size:0.72rem;font-weight:700;background:#eff6ff;color:var(--primary);border:1px solid #bfdbfe;border-radius:999px;padding:0.1rem 0.6rem;margin-bottom:0.5rem;}
+
+  .wire-table{width:100%;border-collapse:collapse;font-size:0.87rem;margin:0.6rem 0;}
+  .wire-table th{background:#eff6ff;color:var(--primary-dark);text-align:left;padding:0.5rem 0.75rem;font-size:0.74rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--border);}
+  .wire-table td{padding:0.55rem 0.75rem;border-bottom:1px solid var(--bg);color:var(--text);vertical-align:middle;}
+  .ptag{display:inline-block;background:#eff6ff;border:1px solid #bfdbfe;border-radius:4px;padding:1px 7px;font-family:'Courier New',monospace;font-size:0.8rem;color:var(--primary-dark);font-weight:700;}
+  .ptag.gnd{background:#f1f5f9;border-color:#cbd5e1;color:#374151;}
+  .ptag.pwr{background:#fff1f2;border-color:#fecdd3;color:var(--accent);}
+  .wire-dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+
+  /* Pin diagram */
+  .pico-visual{background:#1a1a2e;border-radius:8px;padding:12px 10px;font-family:'Courier New',monospace;font-size:0.62rem;color:#93c5fd;min-width:240px;border:2px solid #1e3a8a;display:inline-block;}
+  .pico-label{text-align:center;color:#3b5fc0;font-size:0.65rem;margin-bottom:6px;letter-spacing:1px;}
+  .pico-row{display:flex;justify-content:space-between;align-items:center;padding:2px 0;}
+  .pico-pin{display:flex;align-items:center;gap:4px;}
+  .pdot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .pd-gnd{background:#374151;border:1px solid #6b7280;}
+  .pd-3v3{background:#dc2626;}
+  .pd-gp{background:#1d4ed8;}
+  .pd-dht{background:#059669;}
+  .pd-pir{background:#7c3aed;}
+  .pd-n{background:#1f2937;border:1px solid #374151;}
+  .pin-hi{background:rgba(5,150,105,0.12);border-radius:3px;}
+  .pin-hi-pir{background:rgba(124,58,237,0.12);border-radius:3px;}
+
+  .cw{background:#0c1a3a;border-radius:12px;overflow:hidden;margin:0.75rem 0;border:1px solid #1e3a8a;}
+  .ch{background:#0a1520;border-bottom:1px solid #1e3a8a;padding:7px 14px;display:flex;align-items:center;justify-content:space-between;}
+  .cf{font-family:'Courier New',monospace;font-size:11px;color:#93c5fd;}
+  .cb{background:none;border:1px solid #1e3a8a;border-radius:4px;color:rgba(255,255,255,0.4);font-size:11px;padding:2px 8px;cursor:pointer;transition:all .15s;}
+  .cb:hover{color:#93c5fd;border-color:#93c5fd;}
+  pre{padding:14px 16px;overflow-x:auto;font-family:'Courier New',monospace;font-size:12px;line-height:1.75;color:#bfdbfe;margin:0;}
+  .ck{color:#79c0a8;font-weight:600;}.cm{color:#5a7a9a;font-style:italic;}
+
+  .tbl{overflow-x:auto;border-radius:9px;border:1px solid var(--border);margin:12px 0;}
+  table.plain{width:100%;border-collapse:collapse;font-size:13px;}
+  table.plain th{background:#eff6ff;color:var(--primary-dark);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:7px 11px;text-align:left;border-bottom:1px solid var(--border);}
+  table.plain td{padding:8px 11px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+
+  footer{margin-top:2rem;text-align:center;color:var(--muted);font-size:0.88rem;padding:1rem;border-top:1px solid var(--border);}
+  @media(max-width:600px){.step-item{grid-template-columns:40px 1fr;}}
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <strong>St Peters Lutheran College Springfield</strong>
+  <span>·</span><span>Digital Solutions — Unit 1</span>
+  <span>·</span><span>Ms Baessler</span>
+  <a href="student_hub.html">← Back to Hub</a>
+</div>
+
+<div class="lesson-banner">
+  <div class="lesson-banner-inner">
+    <div class="lesson-eyebrow">🍓 Pico W Setup Walkthrough · student_name · Mac M4</div>
+    <h1>Pico W — Step by Step <em>Mac M4 Pathway</em></h1>
+    <p>Your personal setup guide for the Raspberry Pi Pico W (2022, RP2040) using your MacBook. DHT22 on GP15, PIR on GP14, standalone WiFi hotspot. Follow every step in order — do not skip ahead.</p>
+    <div class="lesson-meta-row">
+      <span class="lmeta">🍓 Pico W 2022 · RP2040</span>
+      <span class="lmeta">🍎 Mac M4 — no drivers needed</span>
+      <span class="lmeta">🌡️ DHT22 → GP15 (pin 20)</span>
+      <span class="lmeta">👁 PIR → GP14 (pin 19)</span>
+      <span class="lmeta">📡 Hotspot AP mode</span>
+      <span class="lmeta">⏱ ~40 minutes</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <nav class="top-nav">
+    <a href="student_hub.html">FIA2 Project Hub</a> ›
+    <span style="color:var(--muted);font-weight:600;">Pico W Setup — student_name</span>
+  </nav>
+
+  <!-- GPIO24 WARNING — must be first thing they read -->
+  <div class="callout red">
+    <div class="icon">🚨</div>
+    <div>
+      <h4>Important — GPIO24 is NOT available on the Pico W</h4>
+      <p>GPIO24 is used internally by the Pico W's WiFi chip (CYW43439). If you wire the PIR to GPIO24 and call <code>Pin(24, Pin.IN)</code>, it will <strong>not work as a sensor input</strong> and may interfere with your WiFi hotspot.</p>
+      <p style="margin-top:0.4rem;"><strong>Your PIR sensor goes on GP14 (physical pin 19)</strong> — the files generated for you already use <code>Pin(14, Pin.IN)</code>. GP14 is a standard GPIO pin with no internal conflicts. If you have already wired to a different pin, update <code>pir = Pin(14, Pin.IN)</code> in <code>main.py</code> to match.</p>
+    </div>
+  </div>
+
+  <!-- WHAT YOU HAVE -->
+  <div class="section-label">Your setup at a glance</div>
+  <div class="tbl"><table class="plain">
+    <tr><th>Item</th><th>Detail</th><th>Notes</th></tr>
+    <tr><td>Board</td><td>Raspberry Pi Pico W (2022) · RP2040 chip</td><td>Micro-USB connector · no drivers needed on Mac M4</td></tr>
+    <tr><td>Computer</td><td>MacBook (Apple Silicon)</td><td>Thonny ARM64 build required — see Step 3</td></tr>
+    <tr><td>DHT22</td><td>Gravity 3-pin · GP15 (physical pin 20)</td><td>Temperature + humidity · yellow SIG wire → GP15</td></tr>
+    <tr><td>PIR</td><td>Gravity 3-pin · GP14 (physical pin 19)</td><td>Motion detection · yellow SIG wire → GP14</td></tr>
+    <tr><td>WiFi mode</td><td>Access Point (hotspot)</td><td>Board creates its own network · always 192.168.4.1</td></tr>
+    <tr><td>Files</td><td><code>boot.py</code> + <code>main.py</code></td><td>Both saved to MicroPython device · not to MacBook</td></tr>
+  </table></div>
+
+  <!-- PIN DIAGRAM -->
+  <div class="section-label">Pin connections — Pico W (USB at bottom-left)</div>
+
+  <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:flex-start;margin:0.75rem 0;">
+    <div>
+      <div class="pico-visual">
+        <div class="pico-label">RASPBERRY PI PICO W (2022)</div>
+        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP0 (pin 1)</span></div><div class="pico-pin"><span>(pin 40)</span><div class="pdot pd-n"></div></div></div>
+        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP1</span></div><div class="pico-pin"><span style="color:#f59e0b">VBUS 5V</span><div class="pdot" style="background:#f59e0b"></div></div></div>
+        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-gnd"></div><span style="color:#9ca3af">GND</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
+        <div style="border-top:1px dashed #1e3a8a;margin:4px 0;"></div>
+        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP10</span></div><div class="pico-pin"><span style="color:#dc2626">3V3 OUT</span><div class="pdot pd-3v3"></div></div></div>
+        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP11 (pin 15)</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
+        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP12</span></div><div class="pico-pin"><span style="color:#9ca3af">GND (pin 18)</span><div class="pdot pd-gnd"></div></div></div>
+        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP13</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
+        <div class="pico-row pin-hi-pir"><div class="pico-pin"><div class="pdot pd-pir"></div><span style="color:#a78bfa"><strong>GP14 ← PIR SIG</strong></span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
+        <div class="pico-row pin-hi"><div class="pico-pin"><div class="pdot pd-dht"></div><span style="color:#6ee7b7"><strong>GP15 ← DHT22 SIG</strong></span></div><div class="pico-pin"><span style="color:#dc2626">3V3 OUT ← pin 36</span><div class="pdot pd-3v3"></div></div></div>
+        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP16</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
+        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP17</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
+        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP18</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
+        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP19</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
+        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP20</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
+        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP21 (pin 27)</span></div><div class="pico-pin"><span style="color:#9ca3af">GND (pin 28)</span><div class="pdot pd-gnd"></div></div></div>
+        <div class="pico-row"><div class="pico-pin"><div class="pdot pd-n"></div><span>GP22 (pin 29)</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
+        <div style="border-top:1px dashed #1e3a8a;margin:4px 0;"></div>
+        <div class="pico-row" style="opacity:0.65"><div class="pico-pin"><div class="pdot" style="background:#1d4ed8"></div><span style="color:#93c5fd">GP26 ADC ← LDR SIG (optional)</span></div><div class="pico-pin"><span style="color:#9ca3af">GND</span><div class="pdot pd-gnd"></div></div></div>
+      </div>
+      <p style="font-size:0.7rem;color:var(--muted);margin-top:6px;text-align:center">USB (micro) at bottom · highlighted pins in use</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:0.75rem;font-size:0.85rem;">
+      <div style="background:var(--success-bg);border:1px solid var(--success-border);border-radius:8px;padding:0.75rem 1rem;">
+        <div style="font-size:0.72rem;font-weight:700;color:var(--success-text);margin-bottom:6px">🌡️ DHT22 — GP15 (pin 20)</div>
+        <div>Black → <span class="ptag gnd">GND</span> any GND pin</div>
+        <div style="margin-top:3px">Red &nbsp;&nbsp; → <span class="ptag pwr">3V3 OUT</span> pin 36</div>
+        <div style="margin-top:3px">Yellow → <span class="ptag">GP15</span> pin 20</div>
+      </div>
+      <div style="background:#f5f3ff;border:1px solid #ddd6fe;border-radius:8px;padding:0.75rem 1rem;">
+        <div style="font-size:0.72rem;font-weight:700;color:#4d2472;margin-bottom:6px">👁 PIR — GP14 (pin 19)</div>
+        <div>Black → <span class="ptag gnd">GND</span> any GND pin</div>
+        <div style="margin-top:3px">Red &nbsp;&nbsp; → <span class="ptag pwr">3V3 OUT</span> pin 36</div>
+        <div style="margin-top:3px">Yellow → <span class="ptag">GP14</span> pin 19</div>
+      </div>
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:0.75rem 1rem;">
+        <div style="font-size:0.72rem;font-weight:700;color:var(--primary-dark);margin-bottom:4px">⚡ Power notes</div>
+        <div style="font-size:0.82rem;color:var(--text)">Both sensors at <strong>3.3V</strong> — pin 36 only. Share via mini breadboard if needed. Never use VBUS (5V pin 40).</div>
+      </div>
+      <div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:0.75rem 1rem;">
+        <div style="font-size:0.72rem;font-weight:700;color:var(--accent);margin-bottom:4px">🚫 GPIO24 — do not use</div>
+        <div style="font-size:0.82rem;color:var(--text)">Reserved by WiFi chip internally. Not a usable GPIO pin on Pico W.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP BY STEP -->
+  <div class="section-label">Setup steps — follow in order</div>
+
+  <div class="step-list">
+
+    <!-- STEP 1 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">1</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 5 minutes</span>
+        <h3>Download MicroPython firmware for the Pico W</h3>
+        <p>The Pico W (2022) uses the <code>RPI_PICO_W</code> firmware — not Pico 2 W, not plain Pico.</p>
+        <ol>
+          <li>Go to <a href="https://micropython.org/download/RPI_PICO_W/" target="_blank" style="color:var(--primary);font-weight:700">micropython.org/download/RPI_PICO_W/ ↗</a></li>
+          <li>Under <strong>Releases</strong>, click the first <code>.uf2</code> link — latest stable version</li>
+          <li>Save to your Downloads folder</li>
+        </ol>
+        <div class="callout red" style="margin-top:0.6rem">
+          <div class="icon">⚠️</div>
+          <div><p>Download <code>RPI_PICO_W</code> only — not <code>RPI_PICO2_W</code> (Pico 2 W) and not <code>RPI_PICO</code> (no WiFi). Wrong firmware = WiFi won't work.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">2</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 3 minutes</span>
+        <h3>Flash MicroPython onto the Pico W</h3>
+        <ol>
+          <li>Locate the small <strong>BOOTSEL button</strong> on top of the board</li>
+          <li><strong>Hold BOOTSEL down</strong> with your finger</li>
+          <li>While still holding, plug the <strong>micro-USB cable</strong> into your Mac — hold for 2 more seconds, then release</li>
+          <li>A drive called <strong>RPI-RP2</strong> appears on your Mac desktop (in Finder)</li>
+          <li>Drag the <code>.uf2</code> file from Downloads into the <strong>RPI-RP2</strong> drive</li>
+          <li>The drive <strong>disappears automatically</strong> — this means it worked ✅</li>
+        </ol>
+        <div class="callout green" style="margin-top:0.5rem">
+          <div class="icon">✅</div>
+          <div><p>Drive disappears = firmware installed. If the drive stays and the file is still there, you downloaded the wrong firmware — go back to Step 1.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">3</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 4 minutes</span>
+        <h3>Install or check Thonny — Apple Silicon (ARM64) version</h3>
+        <ol>
+          <li>Go to <a href="https://thonny.org" target="_blank" style="color:var(--primary);font-weight:700">thonny.org ↗</a></li>
+          <li>Click the <strong>Mac</strong> download — check the filename contains <strong>arm64</strong> (e.g. <code>thonny-4.x.x-arm64.pkg</code>)</li>
+          <li>Open the <code>.pkg</code> and follow the installer</li>
+          <li>If macOS says "cannot be opened because the developer cannot be verified": <strong>System Settings → Privacy &amp; Security → Open Anyway</strong></li>
+        </ol>
+        <div class="callout amber" style="margin-top:0.5rem">
+          <div class="icon">⚠️</div>
+          <div><p>If you already have Thonny, check <strong>Thonny → About Thonny</strong> — version must be 4.1 or newer and the filename must say <strong>arm64</strong>. The Intel (x86_64) build may not connect correctly on Mac M4.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">4</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 3 minutes</span>
+        <h3>Connect Thonny to the Pico W</h3>
+        <p>Plug in your Pico W normally — <strong>do NOT hold BOOTSEL</strong> this time.</p>
+        <ol>
+          <li>Open <strong>Thonny</strong></li>
+          <li>Click <strong>Run → Configure interpreter…</strong></li>
+          <li>Select <strong>MicroPython (Raspberry Pi Pico)</strong></li>
+          <li>Under <strong>Port</strong>, choose the entry containing <strong>usbmodem</strong> — e.g. <code>/dev/cu.usbmodem1101</code></li>
+          <li>Click <strong>OK</strong></li>
+        </ol>
+        <p style="margin-top:0.5rem;font-size:0.88rem;">You should see <code>MicroPython v1.24.x; Raspberry Pi PicoW with RP2040</code> and a <code>&gt;&gt;&gt;</code> prompt in the Shell. ✅</p>
+        <div class="callout amber" style="margin-top:0.5rem">
+          <div class="icon">⚠️</div>
+          <div>
+            <h4>Port locked / Errno 35 error?</h4>
+            <p>Another Thonny instance may be holding the port. <strong>Cmd+Q Thonny completely</strong>, unplug the Pico W, plug back in, reopen Thonny. To open a second Thonny for a second device: open <strong>Terminal</strong> and run:</p>
+            <div class="cw" style="margin-top:0.5rem">
+              <div class="ch"><span class="cf">Terminal</span></div>
+              <pre>open -n /Applications/Thonny.app</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">5</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 8 minutes</span>
+        <h3>Wire the DHT22 and PIR sensors</h3>
+        <p>Use the wiring table and pin diagram above. Both sensors connect with Gravity 3-pin cables via female-to-male Dupont jumper wires — no IO Shield needed.</p>
+
+        <table class="wire-table">
+          <thead><tr><th>Sensor</th><th>Wire</th><th>Pico W pin</th><th>Physical #</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="3"><strong>DHT22</strong></td>
+                <td><span class="wire-dot" style="background:#1f2937;border:1px solid #6b7280"></span>Black</td>
+                <td><span class="ptag gnd">GND</span></td><td>Pin 38 (or any GND)</td></tr>
+            <tr><td><span class="wire-dot" style="background:#ef4444"></span>Red</td>
+                <td><span class="ptag pwr">3V3 OUT</span></td><td>Pin 36</td></tr>
+            <tr><td><span class="wire-dot" style="background:#d97706"></span>Yellow</td>
+                <td><span class="ptag">GP15</span></td><td>Pin 20</td></tr>
+            <tr style="border-top:2px solid var(--border)">
+                <td rowspan="3"><strong>PIR</strong></td>
+                <td><span class="wire-dot" style="background:#1f2937;border:1px solid #6b7280"></span>Black</td>
+                <td><span class="ptag gnd">GND</span></td><td>Pin 28 (or any GND)</td></tr>
+            <tr><td><span class="wire-dot" style="background:#ef4444"></span>Red</td>
+                <td><span class="ptag pwr">3V3 OUT</span></td><td>Pin 36 (share with DHT22)</td></tr>
+            <tr><td><span class="wire-dot" style="background:#d97706"></span>Yellow</td>
+                <td><span class="ptag">GP14</span></td><td>Pin 19</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout amber">
+          <div class="icon">⚠️</div>
+          <div><p>Both sensors need 3V3 OUT (pin 36) for power. If both red wires need to share pin 36, use a small breadboard to split one 3V3 pin into two connections. Never use VBUS (5V, pin 40).</p></div>
+        </div>
+        <div class="callout blue">
+          <div class="icon">⏱</div>
+          <div><p>The PIR sensor needs <strong>~30 seconds warm-up</strong> after first powering on. It will fire false motion detections during this time — this is normal. Wait 30 s before testing motion detection.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">6</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 5 minutes</span>
+        <h3>Save boot.py to the Pico W</h3>
+        <p>Your generated <code>boot.py</code> file is in the downloaded files. This handles the WiFi hotspot.</p>
+        <ol>
+          <li>In Thonny: <strong>File → Open</strong> → navigate to your downloaded <code>boot.py</code></li>
+          <li>Read the comments — understand what each section does before saving</li>
+          <li><strong>File → Save as…</strong></li>
+          <li>In the dialog, click <strong>"MicroPython device"</strong> (not "This computer")</li>
+          <li>Filename: type exactly <code>boot.py</code> → click <strong>OK</strong></li>
+          <li>Press the <strong>RST button</strong> on the Pico W</li>
+          <li>Watch the Thonny Shell — you should see:</li>
+        </ol>
+        <div class="cw" style="margin-top:0.5rem">
+          <div class="ch"><span class="cf">Thonny Shell — expected output after RST</span></div>
+          <pre><span class="ck">boot.py: starting WiFi hotspot...</span>
+========================================
+Hotspot ready!
+Network name : RestMonitor
+Password     : rest1234
+Dashboard URL: http://192.168.4.1
+========================================
+Connect your MacBook or tablet to "RestMonitor"
+Then open http://192.168.4.1 in a browser</pre>
+        </div>
+        <div class="callout red" style="margin-top:0.5rem">
+          <div class="icon">🚨</div>
+          <div>
+            <h4>Naming convention — critical</h4>
+            <p>Save your working backup on your MacBook as <code>student_name_boot_v1.py</code>. Save to the <strong>board</strong> as exactly <code>boot.py</code> — no prefix, no suffix. MicroPython only runs a file named exactly <code>boot.py</code>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">7</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 5 minutes</span>
+        <h3>Save main.py to the Pico W</h3>
+        <ol>
+          <li>In Thonny: <strong>File → Open</strong> → navigate to your downloaded <code>main.py</code></li>
+          <li>Read the section comments — identify which lines are SELECTION, ITERATION, DATA OUTPUT</li>
+          <li><strong>File → Save as… → MicroPython device</strong></li>
+          <li>Filename: type exactly <code>main.py</code> → <strong>OK</strong></li>
+          <li>Click the green <strong>Run ▶</strong> button</li>
+          <li>Shell should show:</li>
+        </ol>
+        <div class="cw" style="margin-top:0.5rem">
+          <div class="ch"><span class="cf">Thonny Shell — expected output when main.py runs</span></div>
+          <pre>Server ready | DHT22:GP15 | PIR:GP14 | hotspot:RestMonitor
+Open browser: http://192.168.4.1
+<span class="cm">... then after each browser request:</span>
+T:21.4 H:58.0 Calm:12.0s Motion:False → MONITOR CONDITIONS</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">8</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 5 minutes</span>
+        <h3>Connect your MacBook to the Pico W hotspot and open the dashboard</h3>
+        <ol>
+          <li>On your MacBook: click the <strong>WiFi icon</strong> in the menu bar</li>
+          <li>Find <strong>RestMonitor</strong> in the network list — click it</li>
+          <li>Enter password: <code>rest1234</code></li>
+          <li>Open Safari, Chrome, or Firefox</li>
+          <li>Type <strong>exactly</strong>: <code>http://192.168.4.1</code> — include <code>http://</code> not <code>https://</code></li>
+          <li>Daniel's dashboard should appear ✅</li>
+        </ol>
+        <div class="callout blue">
+          <div class="icon">💡</div>
+          <div>
+            <h4>Testing your sensors</h4>
+            <ul>
+              <li><strong>DHT22:</strong> breathe gently on the sensor — temperature or humidity tile should change within 10 s</li>
+              <li><strong>PIR:</strong> wave your hand near the sensor — status should change to MONITOR or NOT SUITABLE. Wait 30 s still — should return to SUITABLE</li>
+              <li><strong>Shell:</strong> every browser refresh prints current readings — watch values change as you test</li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout amber">
+          <div class="icon">⚠️</div>
+          <div><p>While connected to <strong>RestMonitor</strong>, your MacBook has no internet. This is normal — the Pico W hotspot is a local network only. To use the internet, switch back to your normal WiFi. You can swap between them any time.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 9 JOURNAL -->
+    <div class="step-item">
+      <div class="step-num-col"><div class="step-circle">9</div></div>
+      <div class="step-body">
+        <span class="step-time">⏱ 5 minutes</span>
+        <h3>Document in your OneNote journal — do this before the lesson ends</h3>
+        <ol>
+          <li>Screenshot the Thonny Shell showing "Server ready" — paste into OneNote with today's date and duration</li>
+          <li>Screenshot the working dashboard in your browser — paste into OneNote</li>
+          <li>In <code>main.py</code>, identify and label in your journal: one line that is <strong>SELECTION</strong>, one that is <strong>ITERATION</strong>, one that is <strong>DATA OUTPUT</strong></li>
+          <li>Note the IP address (<code>192.168.4.1</code>) and explain in one sentence why it is always the same in AP mode</li>
+          <li>Save backup copies on your MacBook: <code>student_name_boot_v1.py</code> and <code>student_name_main_v1.py</code></li>
+        </ol>
+        <div class="callout blue">
+          <div class="icon">📓</div>
+          <div><p>This is Checkpoint I evidence. The more you document now, the less you have to reconstruct later. A quick screenshot with a one-sentence caption is better than a long write-up done from memory the night before submission.</p></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /step-list -->
+
+  <!-- TROUBLESHOOTING -->
+  <div class="section-label">Troubleshooting — Mac M4 specific</div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:0.6rem 0;">
+    <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+      <thead><tr>
+        <th style="background:#eff6ff;color:var(--primary-dark);text-align:left;padding:0.6rem 0.9rem;font-size:0.74rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--border)">Problem</th>
+        <th style="background:#eff6ff;color:var(--primary-dark);text-align:left;padding:0.6rem 0.9rem;font-size:0.74rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--border)">Fix</th>
+      </tr></thead>
+      <tbody>
+        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">RPI-RP2 drive doesn't appear after holding BOOTSEL</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Try a different cable — must be a <strong>data</strong> micro-USB cable, not charge-only. Try a different USB-A port on your Mac or hub.</td></tr>
+        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">UF2 copies but RPI-RP2 drive stays visible</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Wrong firmware. Re-download <code>RPI_PICO_W</code> — not Pico 2 W, not plain Pico.</td></tr>
+        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Thonny shows no port / "Could not connect" / Errno 35</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Cmd+Q Thonny, unplug, replug (no BOOTSEL), reopen Thonny. Select port with <code>usbmodem</code>.</td></tr>
+        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Shell shows nothing after RST — no "Hotspot ready"</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">boot.py may not be saved to the device. In Thonny: View → Files → check MicroPython device panel shows <code>boot.py</code>.</td></tr>
+        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">DHT22 reads None or raises exception</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Check yellow wire is on <strong>GP15 (pin 20)</strong>. Red wire on 3V3 OUT (pin 36) — not VBUS. DHT22 needs 2 s between reads — <code>time.sleep(2)</code> in server loop handles this.</td></tr>
+        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">PIR never detects / always detects</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Confirm yellow wire is on <strong>GP14 (pin 19)</strong> — not GPIO24. Wait 30 s warm-up. Check code uses <code>Pin(14, Pin.IN)</code>.</td></tr>
+        <tr><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">RestMonitor network not visible on MacBook</td><td style="padding:0.6rem 0.9rem;border-bottom:1px solid var(--bg)">Confirm main.py is running (Shell shows "Server ready"). AP_SSID in boot.py must match what you're searching for. Try turning MacBook WiFi off then on.</td></tr>
+        <tr><td style="padding:0.6rem 0.9rem">Browser can't load 192.168.4.1</td><td style="padding:0.6rem 0.9rem">MacBook must be connected to RestMonitor (not school WiFi). Type <code>http://</code> not <code>https://</code>. Use exact address — no www.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    Digital Solutions Unit 1 · FIA2 Project · St Peters Lutheran College Springfield · Ms Baessler<br>
+    Raspberry Pi Pico W (2022) · RP2040 · MicroPython · DHT22 GP15 · PIR GP14 · Mac M4 Pathway · 
+  </footer>
+
+</div>
+<script>
+function cc(btn){
+  const pre=btn.closest('.cw').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText||pre.textContent).then(()=>{
+    const o=btn.textContent;btn.textContent='Copied!';btn.style.color='#93c5fd';
+    setTimeout(()=>{btn.textContent=o;btn.style.color='';},1800);
+  });
+}
+</script>
+</body>
+</html>
