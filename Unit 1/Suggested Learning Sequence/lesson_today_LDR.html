@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 5 — Light Sensor (LDR) | Extension</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg:#f4f7fb;--surface:#ffffff;--primary:#1d4ed8;--primary-dark:#1e3a8a;
+    --accent:#c8102e;--text:#1f2937;--muted:#6b7280;--border:#dbe2f0;
+    --success-bg:#ecfdf5;--success-border:#a7f3d0;--success-text:#047857;
+    --warn-bg:#fef3c7;--warn-border:#fcd34d;--warn-text:#92400e;
+    --info-bg:#eff6ff;--info-border:#bfdbfe;--info-text:#1d4ed8;
+    --purple-bg:#f5f3ff;--purple-border:#ddd6fe;--purple-text:#4d2472;
+    --teal-bg:#d4edee;--teal-border:#99d6da;--teal-text:#0f5c5c;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;}
+
+  /* ── SITE HEADER ── */
+  .site-header{background:var(--primary-dark);color:#fff;padding:0.6rem 1rem;font-size:0.82rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;}
+  .site-header span{opacity:0.55;}
+  .site-header a{color:rgba(255,255,255,0.65);text-decoration:none;margin-left:auto;font-size:0.8rem;}
+
+  /* ── LESSON BANNER ── */
+  .lesson-banner{background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 100%);color:#fff;padding:2.4rem 1rem 2rem;position:relative;overflow:hidden;}
+  .lesson-banner::before{content:'';position:absolute;top:-40px;right:-40px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,0.06);pointer-events:none;}
+  .lesson-banner-inner{max-width:1000px;margin:0 auto;position:relative;z-index:1;}
+  .lesson-eyebrow{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:999px;padding:0.3rem 0.85rem;font-size:0.78rem;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:0.85rem;}
+  .lesson-banner h1{color:#fff;font-size:clamp(1.6rem,4vw,2.7rem);line-height:1.15;margin:0 0 0.55rem;}
+  .lesson-banner h1 em{opacity:0.72;font-style:normal;font-weight:400;}
+  .lesson-banner p{color:rgba(255,255,255,0.75);font-size:0.96rem;max-width:60ch;margin:0 0 1.1rem;line-height:1.6;}
+  .lesson-meta-row{display:flex;flex-wrap:wrap;gap:0.45rem;}
+  .lmeta{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.22);border-radius:999px;padding:0.22rem 0.7rem;font-size:0.77rem;font-weight:600;color:rgba(255,255,255,0.92);}
+
+  /* ── CONTAINER ── */
+  .container{max-width:1000px;margin:0 auto;padding:2rem 1rem 3rem;}
+  .top-nav{margin-bottom:1.25rem;}
+  .top-nav a{color:var(--primary);text-decoration:none;font-weight:700;}
+  .crumb-sep{color:var(--muted);margin:0 0.3rem;}
+  .crumb-current{color:var(--muted);font-weight:600;}
+
+  /* ── CALLOUTS ── */
+  .callout{border-radius:10px;padding:0.9rem 1.1rem;margin:0.85rem 0;display:flex;gap:0.75rem;align-items:flex-start;font-size:0.88rem;}
+  .callout .icon{font-size:1.15rem;flex-shrink:0;margin-top:0.05rem;}
+  .callout.green{background:var(--success-bg);border:1px solid var(--success-border);border-left:4px solid var(--success-text);}
+  .callout.blue{background:var(--info-bg);border:1px solid var(--info-border);border-left:4px solid var(--primary);}
+  .callout.amber{background:var(--warn-bg);border:1px solid var(--warn-border);border-left:4px solid #d97706;}
+  .callout.red{background:#fff1f2;border:1px solid #fecdd3;border-left:4px solid var(--accent);}
+  .callout.purple{background:var(--purple-bg);border:1px solid var(--purple-border);border-left:4px solid var(--purple-text);}
+  .callout.teal{background:var(--teal-bg);border:1px solid var(--teal-border);border-left:4px solid var(--teal-text);}
+  .callout h4{margin:0 0 0.3rem;font-size:0.9rem;font-weight:700;color:var(--text);}
+  .callout p,.callout li{margin:0.2rem 0;color:var(--text);}
+  .callout ul{padding-left:1.1rem;}
+
+  /* ── SECTION LABEL ── */
+  .section-label{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:1.75rem 0 0.7rem;display:flex;align-items:center;gap:0.5rem;}
+  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+  /* ── PATHWAY TABS ── */
+  .pathway-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin:1rem 0 0;}
+  .ptab{background:none;border:none;padding:0.65rem 1.1rem;font-size:0.88rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;color:var(--muted);transition:color .15s,border-color .15s;}
+  .ptab.active{color:var(--primary);border-bottom-color:var(--primary);}
+  .ptab:hover{color:var(--text);}
+  .pathway-panel{display:none;padding:1.25rem 0;}
+  .pathway-panel.active{display:block;}
+  .pathway-badge{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.75rem;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:0.25rem 0.75rem;border-radius:999px;margin-bottom:0.75rem;}
+  .pb-esp{background:#fff8e6;border:1px solid #fcd34d;color:#92400e;}
+  .pb-pico{background:var(--success-bg);border:1px solid var(--success-border);color:var(--success-text);}
+
+  /* ── STEP CARDS ── */
+  .step-list{display:flex;flex-direction:column;gap:0;}
+  .step-item{display:grid;grid-template-columns:52px 1fr;border:1px solid var(--border);border-top:none;background:var(--surface);}
+  .step-item:first-child{border-top:1px solid var(--border);border-radius:12px 12px 0 0;}
+  .step-item:last-child{border-radius:0 0 12px 12px;}
+  .step-num-col{background:#eff6ff;border-right:1px solid var(--border);display:flex;align-items:flex-start;justify-content:center;padding-top:1.1rem;}
+  .step-circle{width:30px;height:30px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;}
+  .step-body{padding:1rem 1.1rem;}
+  .step-body h3{margin:0 0 0.4rem;font-size:1rem;color:var(--primary-dark);}
+  .step-body p{margin:0 0 0.5rem;font-size:0.9rem;color:var(--muted);}
+  .step-body ol,.step-body ul{font-size:0.88rem;color:var(--text);padding-left:1.15rem;margin:0.3rem 0;}
+  .step-body li{margin-bottom:0.3rem;}
+  .step-time{display:inline-block;font-size:0.72rem;font-weight:700;background:#eff6ff;color:var(--primary);border:1px solid #bfdbfe;border-radius:999px;padding:0.1rem 0.6rem;margin-bottom:0.5rem;}
+
+  /* ── WIRING TABLE ── */
+  .wire-table{width:100%;border-collapse:collapse;font-size:0.87rem;margin:0.6rem 0;}
+  .wire-table th{background:#eff6ff;color:var(--primary-dark);text-align:left;padding:0.5rem 0.75rem;font-size:0.74rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--border);}
+  .wire-table td{padding:0.55rem 0.75rem;border-bottom:1px solid var(--bg);color:var(--text);vertical-align:middle;}
+  .wire-table tr:hover td{background:var(--bg);}
+  .ptag{display:inline-block;background:#eff6ff;border:1px solid #bfdbfe;border-radius:4px;padding:1px 7px;font-family:'Courier New',monospace;font-size:0.8rem;color:var(--primary-dark);font-weight:700;}
+  .ptag.gnd{background:#f1f5f9;border-color:#cbd5e1;color:#374151;}
+  .ptag.v33{background:#fff1f2;border-color:#fecdd3;color:var(--accent);}
+  .wire-dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+
+  /* ── CODE BLOCKS ── */
+  .cw{background:#0c1a3a;border-radius:12px;overflow:hidden;margin:0.75rem 0;border:1px solid #1e3a8a;}
+  .ch{background:#0a1520;border-bottom:1px solid #1e3a8a;padding:7px 14px;display:flex;align-items:center;justify-content:space-between;}
+  .cf{font-family:'Courier New',monospace;font-size:11px;color:#93c5fd;}
+  .clang{font-family:'Courier New',monospace;font-size:10px;color:#3b5fc0;text-transform:uppercase;letter-spacing:1px;}
+  .cb{background:none;border:1px solid #1e3a8a;border-radius:4px;color:rgba(255,255,255,0.4);font-size:11px;padding:2px 8px;cursor:pointer;transition:all .15s;}
+  .cb:hover{color:#93c5fd;border-color:#93c5fd;}
+  pre{padding:16px 18px;overflow-x:auto;font-family:'Courier New',monospace;font-size:12.5px;line-height:1.75;color:#bfdbfe;margin:0;}
+  .ck{color:#79c0a8;font-weight:600;}.cf2{color:#e3b27a;}.cs{color:#a5c8e8;}.cn{color:#c8ddb0;}.cm{color:#5a7a9a;font-style:italic;}.ct{color:#f5e6cc;}
+
+  /* ── CARDS ── */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:0.75rem;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1rem;box-shadow:0 4px 14px rgba(15,23,42,0.04);}
+  .card h3{margin-top:0;margin-bottom:0.5rem;font-size:1.02rem;color:var(--primary-dark);}
+  .card p,.card li{font-size:0.87rem;color:var(--text);}
+  .card ul{padding-left:1.1rem;}
+
+  /* ── SC BADGE ── */
+  .sc-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 8px;border-radius:4px;background:var(--info-bg);color:var(--primary-dark);margin-right:4px;}
+
+  /* ── CONCEPT TAGS ── */
+  .concept-tags{display:flex;flex-wrap:wrap;gap:0.35rem;margin-top:0.5rem;}
+  .ctag{background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:0.15rem 0.55rem;font-size:0.75rem;color:var(--primary);font-weight:600;}
+
+  /* ── THRESHOLD DEMO ── */
+  .threshold-demo{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.1rem;margin:0.75rem 0;}
+  .threshold-row{display:flex;align-items:center;gap:0.75rem;padding:0.4rem 0;border-bottom:1px solid var(--bg);font-size:0.88rem;}
+  .threshold-row:last-child{border-bottom:none;}
+  .th-val{font-family:'Courier New',monospace;font-weight:700;color:var(--primary-dark);min-width:80px;}
+  .th-bar{flex:1;height:12px;background:#eff6ff;border-radius:6px;overflow:hidden;}
+  .th-fill{height:100%;border-radius:6px;}
+  .th-label{font-size:0.82rem;font-weight:600;min-width:90px;}
+
+  /* ── CONTINUE TABLE ── */
+  .continue-table{width:100%;border-collapse:collapse;font-size:0.87rem;margin:0.6rem 0;}
+  .continue-table th{background:#eff6ff;color:var(--primary-dark);text-align:left;padding:0.5rem 0.75rem;font-size:0.74rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--border);}
+  .continue-table td{padding:0.55rem 0.75rem;border-bottom:1px solid var(--bg);color:var(--text);}
+
+  footer{margin-top:2rem;text-align:center;color:var(--muted);font-size:0.88rem;padding:1rem;border-top:1px solid var(--border);}
+
+  @media(max-width:600px){
+    .step-item{grid-template-columns:40px 1fr;}
+    .pathway-tabs{flex-wrap:wrap;}
+  }
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <strong>St Peters Lutheran College Springfield</strong>
+  <span>·</span><span>Digital Solutions — Unit 1</span>
+  <span>·</span><span>Ms Baessler</span>
+  <a href="student_hub.html">← Back to Hub</a>
+</div>
+
+<div class="lesson-banner">
+  <div class="lesson-banner-inner">
+    <div class="lesson-eyebrow">📅 Lesson Today · 60 minutes · Lesson 5 of 6</div>
+    <h1>Light Sensor (LDR) <em>— Rest Monitor</em></h1>
+    <p>Add an ambient light sensor to your existing PIR + temperature dashboard. A dark room is a key condition for rest — now Daniel's monitor can check it automatically. Works with the <strong>Gravity Ambient Light Sensor</strong> from the EEDU kit on both the <strong>FireBeetle 2 ESP32-E</strong> and the <strong>Raspberry Pi Pico W</strong> (Mac M4 pathway).</p>
+    <div class="lesson-meta-row">
+      <span class="lmeta">🧰 EEDU IoT Kit</span>
+      <span class="lmeta">🐍 MicroPython + Thonny</span>
+      <span class="lmeta">💡 LDR → A0 / GPIO36 (ESP32)</span>
+      <span class="lmeta">💡 LDR → GP26 ADC (Pico W)</span>
+      <span class="lmeta">📡 Builds on Lesson 2</span>
+      <span class="lmeta">🌐 4-condition dashboard</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <nav class="top-nav">
+    <a href="student_hub.html">FIA2 Project Hub</a>
+    <span class="crumb-sep">›</span>
+    <a href="lesson_today_pir.html">Lesson 1 — PIR</a>
+    <span class="crumb-sep">›</span>
+    <a href="lesson_today_dhp.html">Lesson 2 — Temp &amp; Humidity</a>
+    <span class="crumb-sep">›</span>
+    <span class="crumb-current">Lesson 3 — Data Logging</span>
+    <span class="crumb-sep">›</span>
+    <span class="crumb-current">Lesson 5 — Light Sensor (LDR)</span>
+  </nav>
+
+  <!-- BUILDS ON -->
+  <div class="callout blue">
+    <div class="icon">🔗</div>
+    <div>
+      <h4>Builds directly on Lesson 3</h4>
+      <p>You need your Lesson 3 code (<code>boot.py</code> + <code>main.py</code> with PIR and DHT working) before starting today. Today you will <strong>replace</strong> <code>main.py</code> with a new version that adds the light sensor alongside your existing sensors. <code>boot.py</code> does not change.</p>
+    </div>
+  </div>
+
+  <!-- WHY LIGHT -->
+  <div class="section-label">Why light matters for Daniel</div>
+  <div class="grid">
+    <div class="card">
+      <h3>👤 Daniel's situation</h3>
+      <p>Daniel is a shift worker who sleeps at irregular times — sometimes in full daylight. A bright room signals "daytime" to the brain and suppresses melatonin, making it harder to sleep even when tired.</p>
+    </div>
+    <div class="card">
+      <h3>💡 What the LDR measures</h3>
+      <p>An LDR (Light Dependent Resistor) changes its resistance based on how much light falls on it. The microcontroller reads this as an analogue voltage — a number from 0 to 65535. Lower = darker. Higher = brighter.</p>
+    </div>
+    <div class="card">
+      <h3><span class="sc-badge">SC6</span> Success criterion</h3>
+      <p><em>"Low light level = suitable for rest."</em> Your algorithm must check the LDR value against a threshold and include light in the combined rest score — alongside motion, temperature, and humidity.</p>
+    </div>
+  </div>
+
+  <div class="callout amber">
+    <div class="icon">⚠️</div>
+    <div>
+      <h4>LDR values vary — calibration is part of the task</h4>
+      <p>Unlike temperature, there is no fixed "correct" threshold for light. A value of 8000 might mean dark in one room and dim in another, depending on the sensor, the room, and the time of day. Part of your FIA2 journal is <strong>documenting the threshold you chose and why</strong> — this is evidence for your Evaluating criterion.</p>
+    </div>
+  </div>
+
+  <!-- PATHWAY SELECTOR -->
+  <div class="section-label">Choose your board pathway</div>
+  <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.5rem;">Select the tab that matches your hardware. The wiring and one line of code differ — everything else stays the same.</p>
+
+  <div class="pathway-tabs">
+    <button class="ptab active" onclick="switchPath('esp32',this)">🔥 FireBeetle 2 ESP32-E <small style="display:block;font-size:0.7rem;opacity:0.7">IO Shield · A0 port · GPIO36</small></button>
+    <button class="ptab" onclick="switchPath('pico',this)">🍓 Raspberry Pi Pico W <small style="display:block;font-size:0.7rem;opacity:0.7">Mac M4 pathway · GP26 · jumper wires</small></button>
+  </div>
+
+  <!-- ══════════ ESP32 PATHWAY ══════════ -->
+  <div id="path-esp32" class="pathway-panel active">
+    <div class="pathway-badge pb-esp">🔥 FireBeetle 2 ESP32-E pathway</div>
+
+    <div class="callout green">
+      <div class="icon">✅</div>
+      <div><h4>Gravity LDR → IO Shield A0 port → GPIO36</h4>
+      <p>The Gravity Ambient Light Sensor uses a 3-pin Gravity cable — same type as your PIR and DHT sensors. It plugs into any <strong>A (analogue) port</strong> on the IO Shield. Use <strong>A0</strong>, which maps to <strong>GPIO36</strong> on the ESP32. GPIO36 is an ADC1 pin — the correct ADC channel for MicroPython on the ESP32-E.</p></div>
+    </div>
+
+    <div class="section-label">Step 1 — Identify your LDR sensor</div>
+    <div class="callout blue">
+      <div class="icon">🔍</div>
+      <div>
+        <h4>Look for the Gravity Ambient Light Sensor in your kit</h4>
+        <p>It is a small PCB module with a light-sensitive window and a <strong>3-pin Gravity connector</strong>. It may be labelled <strong>"Gravity: Ambient Light Sensor"</strong>, <strong>"BH1750"</strong>, or simply have a photoresistor component visible. It uses the same 3-pin cable (black GND, red VCC, yellow SIG) as the PIR and DHT sensors.</p>
+        <p style="margin-top:0.4rem;">If your kit has a <strong>Gravity Analog Ambient Light Sensor (resistive LDR)</strong> — use it on the A0 port. If it has a <strong>digital BH1750</strong> (4-pin I²C) — use the I²C port instead (see the note below).</p>
+      </div>
+    </div>
+
+    <div class="section-label">Step 2 — Wire the LDR to the IO Shield</div>
+    <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.5rem;">Your PIR (D3) and DHT sensor (D2 or I²C) stay plugged in exactly as they were in Lesson 2. You are adding one more sensor today.</p>
+
+    <table class="wire-table">
+      <thead>
+        <tr><th>LDR Wire</th><th>Connect to</th><th>IO Shield port</th><th>ESP32 GPIO</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="wire-dot" style="background:#1f2937;border:1px solid #6b7280"></span>Black</td>
+          <td><span class="ptag gnd">GND</span></td>
+          <td>A0 port — GND pin</td>
+          <td>GND</td>
+          <td>Ground</td>
+        </tr>
+        <tr>
+          <td><span class="wire-dot" style="background:#ef4444"></span>Red</td>
+          <td><span class="ptag v33">VCC</span></td>
+          <td>A0 port — VCC pin</td>
+          <td>3.3V</td>
+          <td>3.3V power — do NOT use 5V</td>
+        </tr>
+        <tr>
+          <td><span class="wire-dot" style="background:#d97706"></span>Yellow</td>
+          <td><span class="ptag">A0 → GPIO36</span></td>
+          <td>A0 port — SIG pin</td>
+          <td>GPIO36 (ADC1_CH0)</td>
+          <td>Analogue signal — ADC reads 0–4095 on ESP32</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout amber">
+      <div class="icon">⚠️</div>
+      <div>
+        <h4>ESP32 ADC — important difference from the Pico W</h4>
+        <p>The ESP32 ADC returns values from <strong>0 to 4095</strong> (12-bit). The Pico W ADC returns <strong>0 to 65535</strong> (16-bit). Your threshold values in code must match your board. The ESP32 A0 port uses <code>ADC(Pin(36))</code> — do not use GPIO34 or GPIO35 which are input-only pins.</p>
+      </div>
+    </div>
+
+    <div class="callout green">
+      <div class="icon">✅</div>
+      <div><h4>Show your teacher your wiring before pressing RST</h4>
+      <p>Three sensors plugged in: PIR on D3, DHT on D2 (or I²C port), LDR on A0. All cables seated firmly. Then plug in USB-C and open Thonny.</p></div>
+    </div>
+
+    <div class="section-label">Step 3 — Test the LDR in the Thonny Shell</div>
+    <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.5rem;">Before writing the full <code>main.py</code>, run this quick test to confirm your LDR is reading values and to find the right threshold for your room.</p>
+
+    <div class="cw">
+      <div class="ch"><span class="cf">Shell test — paste into Thonny Shell (>>> prompt)</span><span class="clang">MicroPython · ESP32</span></div>
+      <pre><span class="ck">from</span> machine <span class="ck">import</span> Pin, ADC
+<span class="ck">import</span> time
+
+ldr = ADC(Pin(<span class="cn">36</span>))          <span class="cm"># A0 port on IO Shield → GPIO36</span>
+ldr.atten(ADC.ATTN_11DB)   <span class="cm"># Full 0–3.3V range (required for ESP32)</span>
+
+<span class="cm"># Cover the sensor with your hand, then uncover — watch values change</span>
+<span class="ck">for</span> _ <span class="ck">in</span> range(<span class="cn">10</span>):
+    print(<span class="cs">'LDR raw value:'</span>, ldr.read())
+    time.sleep(<span class="cn">1</span>)</pre>
+    </div>
+
+    <div class="callout blue">
+      <div class="icon">💡</div>
+      <div>
+        <h4>Finding your threshold — note these values in your journal</h4>
+        <ul>
+          <li>Run the test with the room lights <strong>on</strong> — note the value (e.g. 3200)</li>
+          <li>Run the test with lights <strong>off / curtains closed</strong> — note the value (e.g. 800)</li>
+          <li>Your threshold should sit between these two values — e.g. <code>LIGHT_THRESHOLD = 2000</code></li>
+          <li>Lower value = darker room. If <code>ldr.read() &lt; LIGHT_THRESHOLD</code> → light is suitable for rest</li>
+        </ul>
+        <p style="margin-top:0.4rem;"><strong>Document both readings and your chosen threshold in your OneNote journal</strong> — this is desk-check evidence for SC6.</p>
+      </div>
+    </div>
+
+    <div class="section-label">Step 4 — Update main.py — add LDR to the algorithm</div>
+    <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.5rem;">This replaces your Lesson 2 <code>main.py</code>. The structure is identical — you are adding one sensor, one condition to the algorithm, and one tile to the dashboard. Set <code>SENSOR</code> to match your DHT module as before.</p>
+
+    <div class="cw">
+      <div class="ch"><span class="cf">main.py — save to MicroPython device (replaces Lesson 2)</span><button class="cb" onclick="cc(this)">Copy</button></div>
+      <pre><span class="cm"># main.py — PIR + Temp/Humidity + Light (LDR) Rest Monitor</span>
+<span class="cm"># FireBeetle 2 ESP32-E | EEDU IoT Kit | Lesson 3</span>
+<span class="cm"># Builds on Lesson 2 — adds Gravity LDR on A0 port (GPIO36)</span>
+<span class="cm">#</span>
+<span class="cm"># SENSORS:</span>
+<span class="cm">#   PIR           → D3 port (GPIO26)        ← Lesson 1</span>
+<span class="cm">#   DHT11/22/20   → D2 port / I²C (GPIO25)  ← Lesson 2</span>
+<span class="cm">#   LDR (light)   → A0 port (GPIO36)        ← NEW today</span>
+
+<span class="cm"># ── SET YOUR DHT SENSOR (same as Lesson 2) ─────────────────────</span>
+SENSOR = <span class="cs">'DHT22'</span>   <span class="cm"># options: 'DHT11'  'DHT22'  'DHT20'</span>
+
+<span class="cm"># ── SET YOUR LIGHT THRESHOLD ────────────────────────────────────</span>
+<span class="cm"># Values below this = dark enough for rest (test in Shell first!)</span>
+<span class="cm"># ESP32 ADC range: 0–4095. Start with 2000 and adjust.</span>
+LIGHT_THRESHOLD = <span class="cn">2000</span>
+
+<span class="ck">from</span> machine <span class="ck">import</span> Pin, ADC
+<span class="ck">import</span> socket, time
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════════</span>
+<span class="cm"># SECTION 1 — Hardware setup</span>
+<span class="cm"># ════════════════════════════════════════════════════════════════</span>
+
+<span class="cm"># PIR — from Lesson 1</span>
+pir = Pin(<span class="cn">26</span>, Pin.IN)
+last_motion_ms = time.ticks_add(time.ticks_ms(), -<span class="cn">61000</span>)
+CALM_SECONDS = <span class="cn">60</span>
+
+<span class="cm"># LDR — NEW: Gravity Ambient Light Sensor on A0 port → GPIO36</span>
+ldr = ADC(Pin(<span class="cn">36</span>))
+ldr.atten(ADC.ATTN_11DB)   <span class="cm"># Required on ESP32 — sets full 0–3.3V input range</span>
+
+<span class="cm"># DHT sensor — from Lesson 2</span>
+<span class="ck">if</span> SENSOR <span class="ck">in</span> (<span class="cs">'DHT11'</span>, <span class="cs">'DHT22'</span>):
+    <span class="ck">import</span> dht
+    _dht = dht.DHT11(Pin(<span class="cn">25</span>)) <span class="ck">if</span> SENSOR == <span class="cs">'DHT11'</span> <span class="ck">else</span> dht.DHT22(Pin(<span class="cn">25</span>))
+    <span class="ck">def</span> <span class="cf2">read_dht</span>():
+        <span class="ck">try</span>:
+            _dht.measure()
+            <span class="ck">return</span> _dht.temperature(), _dht.humidity()
+        <span class="ck">except</span>:
+            <span class="ck">return</span> <span class="ck">None</span>, <span class="ck">None</span>
+<span class="ck">else</span>:   <span class="cm"># DHT20 via I²C</span>
+    <span class="ck">from</span> machine <span class="ck">import</span> I2C
+    _i2c = I2C(<span class="cn">0</span>, scl=Pin(<span class="cn">22</span>), sda=Pin(<span class="cn">21</span>))
+    <span class="ck">def</span> <span class="cf2">read_dht</span>():
+        <span class="ck">try</span>:
+            _i2c.writeto(<span class="cn">0x38</span>, bytes([<span class="cn">0xAC</span>, <span class="cn">0x33</span>, <span class="cn">0x00</span>]))
+            time.sleep_ms(<span class="cn">80</span>)
+            d = _i2c.readfrom(<span class="cn">0x38</span>, <span class="cn">7</span>)
+            hum  = ((d[<span class="cn">1</span>] &lt;&lt; <span class="cn">12</span>) | (d[<span class="cn">2</span>] &lt;&lt; <span class="cn">4</span>) | (d[<span class="cn">3</span>] &gt;&gt; <span class="cn">4</span>)) / <span class="cn">1048576.0</span> * <span class="cn">100</span>
+            temp = (((d[<span class="cn">3</span>] &amp; <span class="cn">0x0F</span>) &lt;&lt; <span class="cn">16</span>) | (d[<span class="cn">4</span>] &lt;&lt; <span class="cn">8</span>) | d[<span class="cn">5</span>]) / <span class="cn">1048576.0</span> * <span class="cn">200</span> - <span class="cn">50</span>
+            <span class="ck">return</span> round(temp, <span class="cn">1</span>), round(hum, <span class="cn">1</span>)
+        <span class="ck">except</span>:
+            <span class="ck">return</span> <span class="ck">None</span>, <span class="ck">None</span>
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════════</span>
+<span class="cm"># SECTION 2 — Read all sensors</span>
+<span class="cm"># ════════════════════════════════════════════════════════════════</span>
+
+<span class="ck">def</span> <span class="cf2">read_sensors</span>():
+    <span class="ck">global</span> last_motion_ms
+
+    <span class="cm"># PIR</span>
+    <span class="ck">if</span> pir.value() == <span class="cn">1</span>:
+        last_motion_ms = time.ticks_ms()
+    elapsed_ms = time.ticks_diff(time.ticks_ms(), last_motion_ms)
+    calm_secs  = elapsed_ms // <span class="cn">1000</span>
+    motion_now = pir.value() == <span class="cn">1</span>
+
+    <span class="cm"># LDR — NEW</span>
+    ldr_raw  = ldr.read()                      <span class="cm"># 0–4095 on ESP32</span>
+    light_ok = ldr_raw &lt; LIGHT_THRESHOLD       <span class="cm"># True = dark enough</span>
+
+    <span class="cm"># DHT</span>
+    temp, hum = read_dht()
+
+    <span class="ck">return</span> calm_secs, motion_now, ldr_raw, light_ok, temp, hum
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════════</span>
+<span class="cm"># SECTION 3 — Classification algorithm</span>
+<span class="cm"># Now checks 4 conditions: motion + light + temperature + humidity</span>
+<span class="cm"># SC5 temp · SC6 light · SC7 motion · SC1 symbol+text not colour</span>
+<span class="cm"># ════════════════════════════════════════════════════════════════</span>
+
+<span class="ck">def</span> <span class="cf2">evaluate_rest</span>(calm_secs, motion_now, light_ok, temp, hum):
+    issues = []
+
+    <span class="cm"># SC7 — motion check</span>
+    motion_ok = (<span class="ck">not</span> motion_now) <span class="ck">and</span> calm_secs &gt;= CALM_SECONDS
+    <span class="ck">if</span> motion_now:       issues.append(<span class="cs">'Motion detected'</span>)
+    <span class="ck">elif not</span> motion_ok:  issues.append(<span class="cs">'Settling — {}s of {}s'</span>.format(calm_secs, CALM_SECONDS))
+
+    <span class="cm"># SC6 — light check (NEW)</span>
+    <span class="ck">if not</span> light_ok:     issues.append(<span class="cs">'Room too bright'</span>)
+
+    <span class="cm"># SC5 — temperature check</span>
+    temp_ok = temp <span class="ck">is not None and</span> <span class="cn">16</span> &lt;= temp &lt;= <span class="cn">22</span>
+    <span class="ck">if</span> temp <span class="ck">is None</span>:     issues.append(<span class="cs">'Temp sensor error'</span>)
+    <span class="ck">elif</span> temp &lt; <span class="cn">16</span>:     issues.append(<span class="cs">'Too cold ({:.1f}°C)'</span>.format(temp))
+    <span class="ck">elif</span> temp &gt; <span class="cn">22</span>:     issues.append(<span class="cs">'Too warm ({:.1f}°C)'</span>.format(temp))
+
+    <span class="cm"># Humidity check</span>
+    hum_ok = hum <span class="ck">is not None and</span> hum &lt;= <span class="cn">70</span>
+    <span class="ck">if</span> hum <span class="ck">is not None and not</span> hum_ok:
+        issues.append(<span class="cs">'Humidity high ({:.0f}%)'</span>.format(hum))
+
+    all_ok = motion_ok <span class="ck">and</span> light_ok <span class="ck">and</span> temp_ok <span class="ck">and</span> hum_ok
+
+    <span class="ck">if</span> all_ok:
+        <span class="ck">return</span> <span class="cs">'SUITABLE FOR REST'</span>, <span class="cs">'\u2713'</span>, <span class="cs">'All conditions good'</span>
+    <span class="ck">elif</span> len(issues) == <span class="cn">1</span>:
+        <span class="ck">return</span> <span class="cs">'MONITOR CONDITIONS'</span>, <span class="cs">'~'</span>, issues[<span class="cn">0</span>]
+    <span class="ck">else</span>:
+        <span class="ck">return</span> <span class="cs">'NOT SUITABLE'</span>, <span class="cs">'\u25cf'</span>, <span class="cs">' · '</span>.join(issues)
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════════</span>
+<span class="cm"># SECTION 4 — Build HTML page</span>
+<span class="cm"># ════════════════════════════════════════════════════════════════</span>
+
+<span class="ck">def</span> <span class="cf2">build_page</span>(label, symbol, detail, calm_secs, ldr_raw, light_ok, temp, hum):
+    t_s  = <span class="cs">'{:.1f} °C'</span>.format(temp) <span class="ck">if</span> temp <span class="ck">is not None else</span> <span class="cs">'---'</span>
+    h_s  = <span class="cs">'{:.0f} %'</span>.format(hum)  <span class="ck">if</span> hum  <span class="ck">is not None else</span> <span class="cs">'---'</span>
+    filled = min(<span class="cn">10</span>, calm_secs * <span class="cn">10</span> // CALM_SECONDS)
+    bar    = <span class="cs">'\u2588'</span> * filled + <span class="cs">'\u2591'</span> * (<span class="cn">10</span> - filled)
+    m_ok   = <span class="cs">'[OK]'</span> <span class="ck">if</span> calm_secs &gt;= CALM_SECONDS <span class="ck">else</span> <span class="cs">'[--]'</span>
+    t_ok   = <span class="cs">'[OK]'</span> <span class="ck">if</span> temp <span class="ck">is not None and</span> <span class="cn">16</span> &lt;= temp &lt;= <span class="cn">22</span> <span class="ck">else</span> <span class="cs">'[--]'</span>
+    h_ok   = <span class="cs">'[OK]'</span> <span class="ck">if</span> hum  <span class="ck">is not None and</span> hum &lt;= <span class="cn">70</span> <span class="ck">else</span> <span class="cs">'[--]'</span>
+    l_ok   = <span class="cs">'[OK]'</span> <span class="ck">if</span> light_ok <span class="ck">else</span> <span class="cs">'[--]'</span>  <span class="cm"># SC6 — NEW tile</span>
+
+    <span class="ck">return</span> <span class="cs">"""&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;&lt;meta name="viewport" content="width=device-width,initial-scale=1"&gt;
+&lt;meta http-equiv="refresh" content="5"&gt;&lt;title&gt;Rest Monitor&lt;/title&gt;
+&lt;style&gt;
+*{{box-sizing:border-box;margin:0;padding:0}}
+body{{background:#0a1628;color:#bfdbfe;font-family:Arial,sans-serif;
+     display:flex;flex-direction:column;align-items:center;
+     min-height:100vh;padding:18px 12px;gap:12px}}
+h1{{font-size:.72rem;letter-spacing:4px;color:#1e3a8a;text-transform:uppercase}}
+.card{{background:#0f2044;border-radius:10px;padding:20px 22px;
+       text-align:center;width:100%;max-width:420px}}
+.sym{{font-size:3.8rem;line-height:1.1;color:#bfdbfe}}
+.status{{font-size:1.1rem;font-weight:bold;letter-spacing:1px;color:#bfdbfe;margin:7px 0 4px}}
+.detail{{font-size:.8rem;color:#5a7a9a;line-height:1.55}}
+.bwrap{{background:#0c1a38;border:1px solid #1e3a8a;border-radius:7px;
+        padding:8px 10px;width:100%;max-width:420px}}
+.bl{{font-size:.55rem;letter-spacing:2px;color:#1e3a8a;text-transform:uppercase}}
+.bar{{font-size:1rem;letter-spacing:4px;color:#3b82f6;margin:4px 0 2px}}
+.bs{{font-size:.6rem;color:#1a3566}}
+.grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:100%;max-width:420px}}
+.tile{{background:#0c1a38;border:1px solid #1a3566;border-radius:7px;padding:10px 6px;text-align:center}}
+.tl{{font-size:.54rem;letter-spacing:1.5px;color:#1e3a8a;text-transform:uppercase}}
+.tv{{font-size:.88rem;font-weight:bold;margin:4px 0 2px;color:#93c5fd}}
+.bdg{{font-size:.72rem;padding:1px 5px;border-radius:3px}}
+.ok{{background:#0a2e1a;color:#86efac}}.fail{{background:#2e0a0a;color:#f87171}}
+footer{{font-size:.6rem;color:#1a3566;text-align:center}}
+&lt;/style&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;&amp;#9632; REST ENVIRONMENT MONITOR&lt;/h1&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="sym"&gt;{symbol}&lt;/div&gt;
+    &lt;div class="status"&gt;{label}&lt;/div&gt;
+    &lt;div class="detail"&gt;{detail}&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="bwrap"&gt;
+    &lt;div class="bl"&gt;CALM TIMER&lt;/div&gt;
+    &lt;div class="bar"&gt;{bar}&lt;/div&gt;
+    &lt;div class="bs"&gt;{secs}s / {thresh}s&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="grid"&gt;
+    &lt;div class="tile"&gt;&lt;div class="tl"&gt;Motion&lt;/div&gt;&lt;div class="tv"&gt;&lt;span class="bdg {mc}"&gt;{m_ok}&lt;/span&gt;&lt;/div&gt;&lt;div style="font-size:.55rem;color:#1a3566"&gt;GPIO26&lt;/div&gt;&lt;/div&gt;
+    &lt;div class="tile"&gt;&lt;div class="tl"&gt;Light&lt;/div&gt;&lt;div class="tv"&gt;&lt;span class="bdg {lc}"&gt;{l_ok}&lt;/span&gt;&lt;/div&gt;&lt;div style="font-size:.55rem;color:#1a3566"&gt;{ldr_raw}&lt;/div&gt;&lt;/div&gt;
+    &lt;div class="tile"&gt;&lt;div class="tl"&gt;Temp&lt;/div&gt;&lt;div class="tv"&gt;{t}&lt;/div&gt;&lt;span class="bdg {tc}"&gt;{t_ok}&lt;/span&gt;&lt;/div&gt;
+    &lt;div class="tile"&gt;&lt;div class="tl"&gt;Humidity&lt;/div&gt;&lt;div class="tv"&gt;{h}&lt;/div&gt;&lt;span class="bdg {hc}"&gt;{h_ok}&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;footer&gt;Updates every 5 s · LDR A0/GPIO36 · DHT {sensor} GPIO25 · PIR GPIO26&lt;/footer&gt;
+&lt;/body&gt;&lt;/html&gt;"""</span>.format(
+        symbol=symbol, label=label, detail=detail,
+        bar=bar, secs=min(calm_secs, CALM_SECONDS), thresh=CALM_SECONDS,
+        t=t_s, h=h_s, m_ok=m_ok, t_ok=t_ok, h_ok=h_ok, l_ok=l_ok,
+        ldr_raw=ldr_raw,
+        mc=<span class="cs">'ok'</span> <span class="ck">if</span> calm_secs &gt;= CALM_SECONDS <span class="ck">else</span> <span class="cs">'fail'</span>,
+        lc=<span class="cs">'ok'</span> <span class="ck">if</span> light_ok <span class="ck">else</span> <span class="cs">'fail'</span>,
+        tc=<span class="cs">'ok'</span> <span class="ck">if</span> temp <span class="ck">is not None and</span> <span class="cn">16</span> &lt;= temp &lt;= <span class="cn">22</span> <span class="ck">else</span> <span class="cs">'fail'</span>,
+        hc=<span class="cs">'ok'</span> <span class="ck">if</span> hum  <span class="ck">is not None and</span> hum &lt;= <span class="cn">70</span> <span class="ck">else</span> <span class="cs">'fail'</span>,
+        sensor=SENSOR
+    )
+
+
+<span class="cm"># ════════════════════════════════════════════════════════════════</span>
+<span class="cm"># SECTION 5 — Web server (identical structure to Lessons 1 + 2)</span>
+<span class="cm"># ════════════════════════════════════════════════════════════════</span>
+
+srv = socket.socket()
+srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="cn">1</span>)
+srv.bind((<span class="cs">''</span>, <span class="cn">80</span>)); srv.listen(<span class="cn">3</span>)
+print(<span class="cs">'Server ready | LDR:GPIO36 | DHT:GPIO25 | PIR:GPIO26 | threshold:'</span>, LIGHT_THRESHOLD)
+
+<span class="ck">while True</span>:
+    <span class="ck">try</span>:
+        conn, _ = srv.accept()
+        conn.recv(<span class="cn">1024</span>)
+        calm_secs, motion_now, ldr_raw, light_ok, temp, hum = read_sensors()
+        label, symbol, detail = evaluate_rest(calm_secs, motion_now, light_ok, temp, hum)
+        print(<span class="cs">'LDR:{} Light:{} T:{} H:{} Calm:{}s → {}'</span>.format(
+              ldr_raw, light_ok, temp, hum, calm_secs, label))
+        html = build_page(label, symbol, detail, calm_secs, ldr_raw, light_ok, temp, hum)
+        conn.sendall((<span class="cs">'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n'</span> + html).encode())
+        conn.close()
+        time.sleep(<span class="cn">2</span>)
+    <span class="ck">except</span> Exception <span class="ck">as</span> e:
+        print(<span class="cs">'Error:'</span>, e)
+        <span class="ck">try</span>: conn.close()
+        <span class="ck">except</span>: <span class="ck">pass</span></pre>
+    </div>
+
+  </div><!-- /path-esp32 -->
+
+  <!-- ══════════ PICO W PATHWAY ══════════ -->
+  <div id="path-pico" class="pathway-panel">
+    <div class="pathway-badge pb-pico">🍓 Raspberry Pi Pico W pathway — Mac M4</div>
+
+    <div class="callout green">
+      <div class="icon">✅</div>
+      <div><h4>Gravity LDR → direct jumper wires → GP26 (ADC0)</h4>
+      <p>The Pico W has no IO Shield, so the LDR connects via <strong>female-to-male Dupont jumper wires</strong> directly to the Pico W pins — the same way your DHT22 and PIR are already connected. The LDR signal wire goes to <strong>GP26</strong>, which is ADC channel 0. This is already in your existing Pico W code.</p></div>
+    </div>
+
+    <div class="callout amber">
+      <div class="icon">⚠️</div>
+      <div>
+        <h4>GP26 is already used for the LDR in your existing Pico W code</h4>
+        <p>Looking back at the <code>main.py</code> from the Pico W setup guide, <code>ldr = ADC(Pin(26))</code> was already included. If you have been running that code without the LDR connected, the <code>ldr.read_u16()</code> call still works — it just reads floating/noise values. Today you physically connect the sensor to make SC6 functional.</p>
+      </div>
+    </div>
+
+    <div class="section-label">Step 1 — Wire the LDR to the Pico W</div>
+    <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.5rem;">Your PIR (GP14) and DHT22 (GP15) stay connected as before. You are adding a third sensor.</p>
+
+    <table class="wire-table">
+      <thead>
+        <tr><th>LDR Wire</th><th>Pico W Pin</th><th>Physical Pin #</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="wire-dot" style="background:#1f2937;border:1px solid #6b7280"></span>Black — GND</td>
+          <td><span class="ptag gnd">GND</span></td>
+          <td>Pin 38 (or any GND)</td>
+          <td>Ground — any GND pin works</td>
+        </tr>
+        <tr>
+          <td><span class="wire-dot" style="background:#ef4444"></span>Red — VCC</td>
+          <td><span class="ptag v33">3V3 OUT</span></td>
+          <td>Pin 36</td>
+          <td>3.3V power — share with DHT22 via breadboard</td>
+        </tr>
+        <tr>
+          <td><span class="wire-dot" style="background:#d97706"></span>Yellow — SIG</td>
+          <td><span class="ptag">GP26 (ADC0)</span></td>
+          <td>Pin 31</td>
+          <td>Analogue signal — <code>ADC(Pin(26))</code> · 0–65535</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout blue">
+      <div class="icon">💡</div>
+      <div>
+        <h4>Pico W ADC range is different from the ESP32</h4>
+        <p>The Pico W uses <code>read_u16()</code> which returns <strong>0 to 65535</strong> (16-bit). The ESP32 returns <strong>0 to 4095</strong> (12-bit). Your threshold must match. A good starting point for the Pico W is <code>LIGHT_THRESHOLD = 20000</code>. Test and adjust in the Shell.</p>
+      </div>
+    </div>
+
+    <div class="section-label">Step 2 — Test the LDR in the Thonny Shell</div>
+
+    <div class="cw">
+      <div class="ch"><span class="cf">Shell test — paste into Thonny Shell (>>> prompt)</span><span class="clang">MicroPython · Pico W</span></div>
+      <pre><span class="ck">from</span> machine <span class="ck">import</span> Pin, ADC
+<span class="ck">import</span> time
+
+ldr = ADC(Pin(<span class="cn">26</span>))   <span class="cm"># GP26 — ADC channel 0 on Pico W</span>
+
+<span class="cm"># Cover with hand (dark), then uncover (bright) — watch values</span>
+<span class="ck">for</span> _ <span class="ck">in</span> range(<span class="cn">10</span>):
+    print(<span class="cs">'LDR raw value:'</span>, ldr.read_u16())
+    time.sleep(<span class="cn">1</span>)</pre>
+    </div>
+
+    <div class="callout blue">
+      <div class="icon">💡</div>
+      <div>
+        <h4>Finding your threshold — note in your journal</h4>
+        <ul>
+          <li>Room lights <strong>on</strong>: note the value (e.g. 48000)</li>
+          <li>Lights <strong>off / covered</strong>: note the value (e.g. 5000)</li>
+          <li>Choose a threshold between them — e.g. <code>LIGHT_THRESHOLD = 20000</code></li>
+          <li><code>ldr.read_u16() &lt; LIGHT_THRESHOLD</code> → dark enough for rest ✅</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-label">Step 3 — Update main.py — Pico W version</div>
+    <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.5rem;">This updates your existing Pico W <code>main.py</code>. The LDR line was already in the hardware setup section — you are now making it active in the algorithm and adding a light tile to the dashboard.</p>
+
+    <div class="cw">
+      <div class="ch"><span class="cf">main.py — Pico W version with LDR active (save to MicroPython device)</span><button class="cb" onclick="cc(this)">Copy</button></div>
+      <pre><span class="cm"># main.py — PIR + DHT22 + LDR Rest Monitor</span>
+<span class="cm"># Raspberry Pi Pico W | Mac M4 pathway | Lesson 3</span>
+<span class="cm"># Activates LDR on GP26 — previously wired but not in algorithm</span>
+<span class="cm">#</span>
+<span class="cm"># SENSORS:</span>
+<span class="cm">#   PIR   → GP14 (pin 19)          ← from setup guide</span>
+<span class="cm">#   DHT22 → GP15 (pin 20)          ← from setup guide</span>
+<span class="cm">#   LDR   → GP26 ADC0 (pin 31)     ← NOW ACTIVE</span>
+
+<span class="cm"># ── SET YOUR LIGHT THRESHOLD ────────────────────────────────────</span>
+<span class="cm"># Pico W ADC range: 0–65535. Test in Shell first.</span>
+LIGHT_THRESHOLD = <span class="cn">20000</span>   <span class="cm"># below this = dark enough for rest</span>
+CALM_SECONDS    = <span class="cn">30</span>      <span class="cm"># seconds of no motion required</span>
+
+<span class="ck">import</span> network, socket, dht, time
+<span class="ck">from</span> machine <span class="ck">import</span> Pin, ADC
+
+<span class="cm"># ── Hardware ────────────────────────────────────────────────────</span>
+dht_sensor = dht.DHT22(Pin(<span class="cn">15</span>))
+pir        = Pin(<span class="cn">14</span>, Pin.IN)
+ldr        = ADC(Pin(<span class="cn">26</span>))      <span class="cm"># GP26 ADC0 — NOW connected</span>
+last_motion_time = time.time()
+
+<span class="cm"># ── WiFi hotspot ────────────────────────────────────────────────</span>
+AP_SSID     = <span class="cs">'RestMonitor'</span>
+AP_PASSWORD = <span class="cs">'rest1234'</span>
+ap = network.WLAN(network.AP_IF)
+ap.active(<span class="ck">True</span>)
+ap.config(essid=AP_SSID, password=AP_PASSWORD)
+<span class="ck">while not</span> ap.active(): time.sleep(<span class="cn">0.5</span>)
+ip = ap.ifconfig()[<span class="cn">0</span>]
+print(<span class="cs">'Hotspot ready | Open http://'</span> + ip)
+
+
+<span class="ck">def</span> <span class="cf2">read_sensors</span>():
+    <span class="ck">global</span> last_motion_time
+    <span class="ck">if</span> pir.value():
+        last_motion_time = time.time()
+    calm_secs = time.time() - last_motion_time
+
+    <span class="cm"># LDR — Pico W uses read_u16() → 0–65535</span>
+    ldr_raw  = ldr.read_u16()
+    light_ok = ldr_raw &lt; LIGHT_THRESHOLD
+
+    <span class="ck">try</span>:
+        dht_sensor.measure()
+        temp = dht_sensor.temperature()
+        hum  = dht_sensor.humidity()
+    <span class="ck">except</span>:
+        temp, hum = <span class="ck">None</span>, <span class="ck">None</span>
+
+    <span class="ck">return</span> calm_secs, pir.value(), ldr_raw, light_ok, temp, hum
+
+
+<span class="ck">def</span> <span class="cf2">evaluate_rest</span>(calm_secs, motion_now, light_ok, temp, hum):
+    issues = []
+    motion_ok = (<span class="ck">not</span> motion_now) <span class="ck">and</span> calm_secs &gt;= CALM_SECONDS
+    <span class="ck">if</span> motion_now:      issues.append(<span class="cs">'Motion detected'</span>)
+    <span class="ck">elif not</span> motion_ok: issues.append(<span class="cs">'Settling {}s/{}'</span>.format(int(calm_secs), CALM_SECONDS))
+    <span class="ck">if not</span> light_ok:    issues.append(<span class="cs">'Room too bright'</span>)
+    temp_ok = temp <span class="ck">is not None and</span> <span class="cn">18</span> &lt;= temp &lt;= <span class="cn">22</span>
+    <span class="ck">if</span>   temp <span class="ck">is None</span>: issues.append(<span class="cs">'Sensor error'</span>)
+    <span class="ck">elif</span> temp &lt; <span class="cn">18</span>:    issues.append(<span class="cs">'Too cold'</span>)
+    <span class="ck">elif</span> temp &gt; <span class="cn">22</span>:    issues.append(<span class="cs">'Too warm'</span>)
+    hum_ok = hum <span class="ck">is not None and</span> hum &lt;= <span class="cn">65</span>
+    <span class="ck">if</span> hum <span class="ck">is not None and not</span> hum_ok:
+        issues.append(<span class="cs">'Humidity high'</span>)
+    all_ok = motion_ok <span class="ck">and</span> light_ok <span class="ck">and</span> temp_ok <span class="ck">and</span> hum_ok
+    <span class="ck">if</span> all_ok:           <span class="ck">return</span> <span class="cs">'SUITABLE FOR REST'</span>, <span class="cs">'\u2713'</span>, <span class="cs">'All conditions good'</span>
+    <span class="ck">elif</span> len(issues)==<span class="cn">1</span>: <span class="ck">return</span> <span class="cs">'MONITOR CONDITIONS'</span>, <span class="cs">'~'</span>, issues[<span class="cn">0</span>]
+    <span class="ck">else</span>:               <span class="ck">return</span> <span class="cs">'NOT SUITABLE'</span>, <span class="cs">'\u25cf'</span>, <span class="cs">' | '</span>.join(issues)
+
+
+<span class="ck">def</span> <span class="cf2">build_page</span>(label, symbol, detail, calm_secs, ldr_raw, light_ok, temp, hum):
+    t_s    = <span class="cs">'{:.1f}\u00b0C'</span>.format(temp) <span class="ck">if</span> temp <span class="ck">is not None else</span> <span class="cs">'---'</span>
+    h_s    = <span class="cs">'{:.0f}%'</span>.format(hum)       <span class="ck">if</span> hum  <span class="ck">is not None else</span> <span class="cs">'---'</span>
+    filled = min(<span class="cn">10</span>, int(calm_secs) * <span class="cn">10</span> // CALM_SECONDS)
+    bar    = <span class="cs">'\u2588'</span> * filled + <span class="cs">'\u2591'</span> * (<span class="cn">10</span> - filled)
+    m_ok   = <span class="cs">'[OK]'</span>  <span class="ck">if</span> calm_secs &gt;= CALM_SECONDS <span class="ck">else</span> <span class="cs">'[--]'</span>
+    l_ok   = <span class="cs">'[OK]'</span>  <span class="ck">if</span> light_ok <span class="ck">else</span> <span class="cs">'[--]'</span>
+    t_ok   = <span class="cs">'[OK]'</span>  <span class="ck">if</span> temp <span class="ck">is not None and</span> <span class="cn">18</span> &lt;= temp &lt;= <span class="cn">22</span> <span class="ck">else</span> <span class="cs">'[--]'</span>
+    h_ok   = <span class="cs">'[OK]'</span>  <span class="ck">if</span> hum  <span class="ck">is not None and</span> hum &lt;= <span class="cn">65</span> <span class="ck">else</span> <span class="cs">'[--]'</span>
+
+    <span class="ck">return</span> <span class="cs">"""&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;&lt;meta name="viewport" content="width=device-width,initial-scale=1"&gt;
+&lt;meta http-equiv="refresh" content="5"&gt;&lt;title&gt;Rest Monitor&lt;/title&gt;
+&lt;style&gt;
+*{{box-sizing:border-box;margin:0;padding:0}}
+body{{background:#0a1628;color:#bfdbfe;font-family:Arial,sans-serif;
+     display:flex;flex-direction:column;align-items:center;
+     min-height:100vh;padding:18px 12px;gap:12px}}
+h1{{font-size:.72rem;letter-spacing:4px;color:#1e3a8a;text-transform:uppercase}}
+.card{{background:#0f2044;border-radius:10px;padding:20px 22px;
+       text-align:center;width:100%;max-width:420px}}
+.sym{{font-size:3.8rem;line-height:1.1;color:#bfdbfe}}
+.status{{font-size:1.1rem;font-weight:bold;letter-spacing:1px;margin:7px 0 4px}}
+.detail{{font-size:.8rem;color:#5a7a9a}}
+.bwrap{{background:#0c1a38;border:1px solid #1e3a8a;border-radius:7px;
+        padding:8px 10px;width:100%;max-width:420px}}
+.bl{{font-size:.55rem;letter-spacing:2px;color:#1e3a8a;text-transform:uppercase}}
+.bar{{font-size:1rem;letter-spacing:4px;color:#3b82f6;margin:4px 0 2px}}
+.bs{{font-size:.6rem;color:#1a3566}}
+.grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:100%;max-width:420px}}
+.tile{{background:#0c1a38;border:1px solid #1a3566;border-radius:7px;padding:10px 6px;text-align:center}}
+.tl{{font-size:.54rem;letter-spacing:1.5px;color:#1e3a8a;text-transform:uppercase}}
+.tv{{font-size:.88rem;font-weight:bold;margin:4px 0 2px;color:#93c5fd}}
+.bdg{{font-size:.72rem;padding:1px 5px;border-radius:3px}}
+.ok{{background:#0a2e1a;color:#86efac}}.fail{{background:#2e0a0a;color:#f87171}}
+footer{{font-size:.6rem;color:#1a3566;text-align:center}}
+&lt;/style&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;&amp;#9632; REST ENVIRONMENT MONITOR&lt;/h1&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="sym"&gt;{symbol}&lt;/div&gt;
+    &lt;div class="status"&gt;{label}&lt;/div&gt;
+    &lt;div class="detail"&gt;{detail}&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="bwrap"&gt;
+    &lt;div class="bl"&gt;CALM TIMER&lt;/div&gt;
+    &lt;div class="bar"&gt;{bar}&lt;/div&gt;
+    &lt;div class="bs"&gt;{secs}s / {thresh}s&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="grid"&gt;
+    &lt;div class="tile"&gt;&lt;div class="tl"&gt;Motion&lt;/div&gt;&lt;div class="tv"&gt;&lt;span class="bdg {mc}"&gt;{m_ok}&lt;/span&gt;&lt;/div&gt;&lt;div style="font-size:.55rem;color:#1a3566"&gt;GP14&lt;/div&gt;&lt;/div&gt;
+    &lt;div class="tile"&gt;&lt;div class="tl"&gt;Light&lt;/div&gt;&lt;div class="tv"&gt;&lt;span class="bdg {lc}"&gt;{l_ok}&lt;/span&gt;&lt;/div&gt;&lt;div style="font-size:.55rem;color:#1a3566"&gt;{ldr_raw}&lt;/div&gt;&lt;/div&gt;
+    &lt;div class="tile"&gt;&lt;div class="tl"&gt;Temp&lt;/div&gt;&lt;div class="tv"&gt;{t}&lt;/div&gt;&lt;span class="bdg {tc}"&gt;{t_ok}&lt;/span&gt;&lt;/div&gt;
+    &lt;div class="tile"&gt;&lt;div class="tl"&gt;Humidity&lt;/div&gt;&lt;div class="tv"&gt;{h}&lt;/div&gt;&lt;span class="bdg {hc}"&gt;{h_ok}&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;footer&gt;Updates every 5 s · Pico W · LDR GP26 · DHT22 GP15 · PIR GP14&lt;/footer&gt;
+&lt;/body&gt;&lt;/html&gt;"""</span>.format(
+        symbol=symbol, label=label, detail=detail,
+        bar=bar, secs=int(min(calm_secs, CALM_SECONDS)), thresh=CALM_SECONDS,
+        t=t_s, h=h_s, m_ok=m_ok, l_ok=l_ok, t_ok=t_ok, h_ok=h_ok,
+        ldr_raw=ldr_raw,
+        mc=<span class="cs">'ok'</span> <span class="ck">if</span> calm_secs &gt;= CALM_SECONDS <span class="ck">else</span> <span class="cs">'fail'</span>,
+        lc=<span class="cs">'ok'</span> <span class="ck">if</span> light_ok <span class="ck">else</span> <span class="cs">'fail'</span>,
+        tc=<span class="cs">'ok'</span> <span class="ck">if</span> temp <span class="ck">is not None and</span> <span class="cn">18</span> &lt;= temp &lt;= <span class="cn">22</span> <span class="ck">else</span> <span class="cs">'fail'</span>,
+        hc=<span class="cs">'ok'</span> <span class="ck">if</span> hum  <span class="ck">is not None and</span> hum &lt;= <span class="cn">65</span> <span class="ck">else</span> <span class="cs">'fail'</span>
+    )
+
+
+srv = socket.socket()
+srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="cn">1</span>)
+srv.bind((<span class="cs">''</span>, <span class="cn">80</span>)); srv.listen(<span class="cn">3</span>)
+print(<span class="cs">'Server ready | LDR:GP26 | DHT22:GP15 | PIR:GP14 | threshold:'</span>, LIGHT_THRESHOLD)
+
+<span class="ck">while True</span>:
+    <span class="ck">try</span>:
+        conn, _ = srv.accept()
+        conn.recv(<span class="cn">1024</span>)
+        calm_secs, motion_now, ldr_raw, light_ok, temp, hum = read_sensors()
+        label, symbol, detail = evaluate_rest(calm_secs, motion_now, light_ok, temp, hum)
+        print(<span class="cs">'LDR:{} Light:{} T:{} H:{} Calm:{:.0f}s → {}'</span>.format(
+              ldr_raw, light_ok, temp, hum, calm_secs, label))
+        html = build_page(label, symbol, detail, calm_secs, ldr_raw, light_ok, temp, hum)
+        conn.sendall((<span class="cs">'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n'</span> + html).encode())
+        conn.close()
+        time.sleep(<span class="cn">2</span>)
+    <span class="ck">except</span> Exception <span class="ck">as</span> e:
+        print(<span class="cs">'Error:'</span>, e)
+        <span class="ck">try</span>: conn.close()
+        <span class="ck">except</span>: <span class="ck">pass</span></pre>
+    </div>
+  </div><!-- /path-pico -->
+
+  <!-- THRESHOLD DESK CHECK -->
+  <div class="section-label">SC6 desk check — calibrating your light threshold</div>
+  <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.75rem;">Before you can test SC6, you need to calibrate your threshold. Record these in your journal — they are your desk-check evidence.</p>
+
+  <div class="threshold-demo">
+    <div style="font-size:0.8rem;font-weight:700;color:var(--primary-dark);margin-bottom:0.75rem;">Example readings — your values will differ</div>
+    <div class="threshold-row">
+      <span class="th-val">Lights ON</span>
+      <div class="th-bar"><div class="th-fill" style="width:80%;background:#ef4444"></div></div>
+      <span class="th-label" style="color:#c8102e">Too bright</span>
+      <span style="font-size:0.78rem;color:var(--muted)">ESP32: ~3300 / Pico W: ~52000</span>
+    </div>
+    <div class="threshold-row">
+      <span class="th-val">Threshold</span>
+      <div class="th-bar"><div class="th-fill" style="width:50%;background:#d97706"></div></div>
+      <span class="th-label" style="color:#d97706">Your choice</span>
+      <span style="font-size:0.78rem;color:var(--muted)">ESP32: 2000 / Pico W: 20000</span>
+    </div>
+    <div class="threshold-row">
+      <span class="th-val">Lights OFF</span>
+      <div class="th-bar"><div class="th-fill" style="width:15%;background:#047857"></div></div>
+      <span class="th-label" style="color:#047857">Dark ✓</span>
+      <span style="font-size:0.78rem;color:var(--muted)">ESP32: ~600 / Pico W: ~5000</span>
+    </div>
+  </div>
+
+  <div class="callout purple">
+    <div class="icon">📓</div>
+    <div>
+      <h4>Journal entry — SC6 desk check table</h4>
+      <p>Include a table in your OneNote journal with these columns: <strong>Test condition · LDR raw value · Expected classification · Actual classification · Pass/Fail</strong>. Test at least three conditions: lights on, lights off, curtains half-drawn. This is your testing evidence for SC6 in the Evaluating criterion.</p>
+    </div>
+  </div>
+
+  <!-- CONTINUING WITH CLASS -->
+  <div class="section-label">After this lesson — what changes, what stays the same</div>
+  <table class="continue-table">
+    <thead>
+      <tr><th>Lesson</th><th>Sensors added</th><th>SC addressed</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Lesson 1</strong> PIR</td><td>PIR motion sensor</td><td>SC7 motion timer</td><td><strong>Done ✅</strong></td></tr>
+      <tr><td><strong>Lesson 2</strong> DHT</td><td>Temp + humidity</td><td>SC5 temperature</td><td><strong>Done ✅</strong></td></tr>
+      <tr><td><strong>Lesson 3</strong> LDR</td><td>Ambient light sensor</td><td><strong>SC6 light level</strong></td><td>← <strong>Today</strong></td></tr>
+      <tr><td><strong>Lesson 4</strong> Evaluate</td><td>No new hardware</td><td>All SC — testing + refinement</td><td>Next</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TEACHER NOTES -->
+  <div class="section-label">Teacher notes</div>
+  <div class="callout blue">
+    <div class="icon">👩‍🏫</div>
+    <div>
+      <h4>Before the lesson — checklist</h4>
+      <ul>
+        <li>Confirm which students have a Gravity Analog LDR vs a digital BH1750 — wiring differs</li>
+        <li>Mac M4 students (billyGoat pathway) already have <code>ldr = ADC(Pin(26))</code> in their code — just need to physically wire the sensor and set the threshold</li>
+        <li>Key teaching pause: <em>"Why is there no fixed correct threshold for light, but there is a fixed correct threshold for temperature?"</em> — connects to the difference between sensor calibration (device-dependent) and physiological research (evidence-based)</li>
+        <li>Require students to record two calibration readings in their journal before writing the threshold into code — this turns calibration into assessment evidence</li>
+        <li>Common issue on ESP32: forgetting <code>ldr.atten(ADC.ATTN_11DB)</code> — without it the ADC reads a compressed range and all values cluster near 0</li>
+        <li>Pico W note: <code>read_u16()</code> not <code>read()</code> — students may copy ESP32 code by mistake</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout amber">
+    <div class="icon">⚠️</div>
+    <div>
+      <h4>If students have a BH1750 digital light sensor (I²C, 4-pin) instead of the analog LDR</h4>
+      <p>The BH1750 uses I²C at address <code>0x23</code> and returns lux values directly (no calibration needed). For ESP32: connect to the I²C port (SDA=GPIO21, SCL=GPIO22). The MicroPython driver is a short inline class — no library install needed. Ask Ms Baessler for the BH1750 driver code snippet if you have this sensor. The SC6 logic is simpler: <code>lux &lt; 50</code> = suitable for rest (50 lux is dim indoor lighting).</p>
+    </div>
+  </div>
+
+  <footer>
+    Digital Solutions Unit 1 · FIA2 Project · St Peters Lutheran College Springfield · Ms Baessler<br>
+    Lesson 3 — Light Sensor (LDR) · FireBeetle 2 ESP32-E (A0/GPIO36) · Raspberry Pi Pico W (GP26) · MicroPython
+  </footer>
+
+</div><!-- /container -->
+
+<script>
+function switchPath(id, btn) {
+  document.querySelectorAll('.pathway-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
+  document.getElementById('path-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function cc(btn) {
+  const pre = btn.closest('.cw').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText || pre.textContent).then(() => {
+    const o = btn.textContent;
+    btn.textContent = 'Copied!'; btn.style.color = '#93c5fd';
+    setTimeout(() => { btn.textContent = o; btn.style.color = ''; }, 1800);
+  });
+}
+</script>
+</body>
+</html>
