@@ -1,0 +1,41 @@
+/* Cards in a tidy equal-height grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  align-items: stretch;
+}
+
+/* Each card uses vertical layout */
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 2rem;
+  border: 1px solid #cfd7e6;
+  border-radius: 24px;
+  background: #f7f9ff;
+}
+
+/* Push button to bottom so all buttons align */
+.card .btn {
+  margin-top: auto;
+}
+
+/* Button style (same look as Unit 1) */
+.btn {
+  display: inline-block;
+  background: #1f49d8;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 16px;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.btn:hover {
+  background: #173ab0;
+}
