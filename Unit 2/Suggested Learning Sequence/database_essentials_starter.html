@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Database Essentials Starter Pack | Digital Solutions QLD</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="brand">St Peters Lutheran College Springfield <span class="unit-tag">&middot; Digital Solutions QLD</span></div>
+</header>
+<div class="breadcrumb"><a href="../../index.html">Home</a> &rarr; <a href="../../unit2-application-and-data-solutions.html">Unit 2</a> &rarr; <a href="student_hub.html">Suggested Learning Sequence</a> &rarr; Database Essentials Starter Pack</div>
+<div class="hero">
+  <h1>Database Essentials Starter Pack</h1>
+  <p class="subtitle">Vocabulary, a worked example and a hands-on explore-a-database activity — used in Lessons 2, 3 and 11</p>
+  <div class="tag-row"><span class="tag">Week 1 &amp; Week 3</span><span class="tag">Practice scenario — not your assessment data</span></div>
+</div>
+<div class="start-here"><strong>Start here:</strong> every activity on this page uses a sample <strong>music database</strong> (tracks, downloads, members) — not the devices/events database from your Sunrise Aged Care assessment. Practise the moves here first, then apply them to your own database in Lesson 11.</div>
+<main>
+
+<h2>Why a Different Database?</h2>
+<p>Learning a new skill on unfamiliar data forces you to actually apply the concept, rather than pattern-matching an answer you've already seen. Once you're confident finding a primary key, spotting redundancy, or running a SELECT query on the music database, you'll do the same thinking — with your own reasoning — on the devices/events database for your assessment.</p>
+
+<h2 id="keyterms">1. Database Key Terms Quiz <span style="font-weight:400;font-size:0.85rem;color:var(--muted);">— Lesson 2 starter</span></h2>
+<p>A database is a structured collection of data that can easily be searched and updated. Answer the questions below using what you know so far, then check your answers underneath.</p>
+<table class="lesson-table">
+<tr><th>Term</th><th>Your definition</th></tr>
+<tr><td><strong>Table</strong></td><td>&nbsp;</td></tr>
+<tr><td><strong>Field</strong></td><td>&nbsp;</td></tr>
+<tr><td><strong>Record</strong></td><td>&nbsp;</td></tr>
+</table>
+<p><strong>Question 2:</strong> The music database has a <code>tblTracks</code> table with columns TrackID, Title, Artist and Genre. State the field name you think is the primary key.</p>
+<p><strong>Question 3:</strong> Which statement best describes a flat file database?</p>
+<ul class="focus-list">
+<li>A database that has a single table</li>
+<li>A database that has multiple tables</li>
+<li>A database with a limited number of fields</li>
+<li>A database that doesn't have a primary key</li>
+</ul>
+<p><strong>Question 4:</strong> Select all of the properties of a primary key.</p>
+<ul class="focus-list">
+<li>Each value held must be unique</li>
+<li>The same primary key can be used for multiple entries</li>
+<li>A primary key allows you to identify each unique record</li>
+<li>A primary key must always be a number</li>
+</ul>
+<div class="note">
+<strong>Check your answers:</strong> Table = the whole grid of data for one entity (e.g. all tracks). Field = one column (e.g. Genre). Record = one row (e.g. one track's full details). Q2: TrackID. Q3: "A database that has a single table." Q4: "Each value held must be unique" and "A primary key allows you to identify each unique record" — a primary key does <em>not</em> have to be a number, and it can never repeat.
+</div>
+
+<h2 id="flatfile">2. Inefficient Flat File Database <span style="font-weight:400;font-size:0.85rem;color:var(--muted);">— Lesson 3 worked example</span></h2>
+<p>The table below stores tracks, downloads and members all in one flat file. Look for the problems this causes before you analyse the redundancy issues in your own provided devices/events database.</p>
+<table class="lesson-table">
+<tr><th>TrackID</th><th>Title</th><th>Artist</th><th>Genre</th><th>DloadID</th><th>Date</th><th>Time</th><th>MemberID</th><th>Firstname</th><th>Surname</th></tr>
+<tr><td>1</td><td>Float away</td><td>The Springs</td><td>Pop</td><td>1</td><td>4.6.10</td><td>18:36</td><td>1</td><td>Sara</td><td>Bibi</td></tr>
+<tr><td>2</td><td>In denial</td><td>Rocketts</td><td>Rock</td><td>2</td><td>5.6.11</td><td>19:20</td><td>1</td><td>Sara</td><td>Bibi</td></tr>
+<tr><td>1</td><td>Float away</td><td>The Springs</td><td>Pop</td><td>3</td><td>9.6.12</td><td>09:30</td><td>2</td><td>Danny</td><td>Judd</td></tr>
+<tr><td>2</td><td>In denial</td><td>Rocketts</td><td>Rock</td><td>4</td><td>1.7.14</td><td>08:28</td><td>2</td><td>Danny</td><td>Judd</td></tr>
+<tr><td>1</td><td>Float away</td><td>The <strong>spings</strong></td><td>Pop</td><td>5</td><td>9.1.11</td><td>03:45</td><td>3</td><td>Cara</td><td>Lichfield</td></tr>
+</table>
+<p><strong>Task:</strong> highlight every issue you can see with storing the data this way. Look for: data repeated across rows (redundancy), the same fact spelled two different ways ("The Springs" vs "The spings" — an inconsistency an update in one place won't fix everywhere), and how much bigger this table gets every time an existing track is downloaded again. Note down which of these issues are redundancy, and which are integrity risks — you'll need both terms when you write up your storage-comparison justification in Lesson 9.</p>
+
+<h2 id="explore">3. Explore a Real Relational Database (DB Browser for SQLite) <span style="font-weight:400;font-size:0.85rem;color:var(--muted);">— Lesson 11 warm-up, before you build</span></h2>
+<p>Before building your own database, open a working one and see how a relational structure actually solves the problems above. The music database has been redesigned into three linked tables: <code>tblTracks</code>, <code>tblDownloads</code> and <code>tblMembers</code>.</p>
+<div class="card-grid">
+  <div class="card">
+    <span class="eyebrow key">Step 1</span>
+    <h4>Get the tools</h4>
+    <p>Download DB Browser for SQLite (free, no login) and the sample database below.</p>
+    <a class="btn" href="https://sqlitebrowser.org/dl/" target="_blank" rel="noopener">Download DB Browser</a>
+    <p style="margin-top:10px;"><a class="btn" href="../../assets/downloads/dbMusic.db">Download dbMusic.db</a></p>
+  </div>
+  <div class="card">
+    <span class="eyebrow key">Step 2</span>
+    <h4>Investigate the tables</h4>
+    <p>Open <code>dbMusic.db</code> in DB Browser. On the <em>Database Structure</em> tab, check whether <code>DownlID</code>, <code>TrackID</code> and <code>MemberID</code> in <code>tblDownloads</code> are primary or foreign keys.</p>
+  </div>
+  <div class="card">
+    <span class="eyebrow key">Step 3</span>
+    <h4>View the SQL behind a table</h4>
+    <p>Select <code>tblTracks</code> and choose "Modify Table" to see the exact <code>CREATE TABLE</code> SQL that built it — this is what you'll be writing yourself in Lesson 11.</p>
+  </div>
+  <div class="card">
+    <span class="eyebrow key">Step 4</span>
+    <h4>Browse and query data</h4>
+    <p>Use <em>Browse Data</em> to explore <code>tblMembers</code>, then go to <em>Execute SQL</em> and run the query below.</p>
+  </div>
+</div>
+<p style="margin-top:16px;"><strong>Try this query in the Execute SQL tab:</strong></p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:12px 16px;overflow-x:auto;">SELECT *
+FROM tblDownloads
+WHERE date BETWEEN 2011 AND 2013;</pre>
+<p>Click the play icon to run it, look at what's returned, then modify the year range yourself and re-run it. This is the exact workflow — write SQL, run it, read the result — you'll use with your own database in the next step.</p>
+
+<div class="note blue"><strong>Next step:</strong> once you've explored a working database, move on to the <a href="python_database_tool_guide.html">Python Database Tool Guide</a> to build your own devices/events database from scratch.</div>
+
+<p style="font-size:0.82rem;color:var(--muted);margin-top:28px;">Key terms quiz, flat file worksheet and explore-a-database activity adapted from the National Centre for Computing Education (NCCE), "KS4 &ndash; Databases and SQL", Lesson 1: Database essentials. Licensed under the Open Government Licence v3 (<a href="https://www.ncce.io/ogl" target="_blank" rel="noopener">ncce.io/ogl</a>). Latest version: <a href="https://www.ncce.io/tcc" target="_blank" rel="noopener">ncce.io/tcc</a>.</p>
+
+<div class="pager"><a href="lesson_week1.html">&larr; Week 1</a><a href="python_database_tool_guide.html">Python Database Tool Guide &rarr;</a></div>
+</main>
+<div class="footer">St Peters Lutheran College Springfield &middot; Digital Solutions Unit 2: Application and data solutions &middot; 2026/2027</div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Database Tool Guide | Digital Solutions QLD</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="brand">St Peters Lutheran College Springfield <span class="unit-tag">&middot; Digital Solutions QLD</span></div>
+</header>
+<div class="breadcrumb"><a href="../../index.html">Home</a> &rarr; <a href="../../unit2-application-and-data-solutions.html">Unit 2</a> &rarr; <a href="student_hub.html">Suggested Learning Sequence</a> &rarr; Python Database Tool Guide</div>
+<div class="hero">
+  <h1>Python Database Tool — Build &amp; Test SQL</h1>
+  <p class="subtitle">A lightweight Python + SQLite tool for building and testing your own database before you wrap it in validated code</p>
+  <div class="tag-row"><span class="tag">Lesson 11 onward</span><span class="tag">Practice scenario shown below</span></div>
+</div>
+<div class="start-here"><strong>Start here:</strong> use this tool to write and run SQL against your own database quickly. It is a testing sandbox, not your final submission — your assessment needs a full Python program with validated INSERT logic (see the last section on this page).</div>
+<main>
+
+<h2>What the Tool Does</h2>
+<ul class="focus-list">
+<li>Enter a name and click <strong>Build database</strong> to create a new SQLite <code>.db</code> file in the same folder as the tool.</li>
+<li>Type SQL into the <strong>Add SQL</strong> box and click <strong>Run SQL</strong> to execute it against the database you've selected from the dropdown.</li>
+<li>Click <strong>List Tables</strong> at any time to check what tables currently exist in your database.</li>
+<li><code>SELECT</code> queries are displayed as a neatly formatted table in the <strong>Output</strong> box; other statements (like <code>CREATE</code>, <code>INSERT</code>, <code>UPDATE</code>) show a short confirmation.</li>
+</ul>
+
+<h2>Setup</h2>
+<div class="card-grid">
+  <div class="card">
+    <span class="eyebrow key">Step 1</span>
+    <h4>Download the tool</h4>
+    <p>The download contains <code>database_tool.py</code> plus two logo images it needs — keep all three files in the same folder.</p>
+    <a class="btn" href="../../assets/downloads/PythonDatabaseTool.zip">Download PythonDatabaseTool.zip</a>
+  </div>
+  <div class="card">
+    <span class="eyebrow key">Step 2</span>
+    <h4>Check Python is ready</h4>
+    <p>You need Python 3 with <code>tkinter</code> (already installed on College laptop images). No extra packages required — <code>sqlite3</code> and <code>tkinter</code> are both part of the standard library.</p>
+  </div>
+  <div class="card">
+    <span class="eyebrow key">Step 3</span>
+    <h4>Run it</h4>
+    <p>Unzip the folder, open a terminal inside it, then run:</p>
+    <pre style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:0.85rem;">python database_tool.py</pre>
+  </div>
+</div>
+
+<h2>Worked Example — Library Loan System <span style="font-weight:400;font-size:0.85rem;color:var(--muted);">(practice scenario)</span></h2>
+<p>This walkthrough uses a small Library Loan System — a different scenario from your devices/events database — so you can see the whole workflow before applying it to your own schema.</p>
+
+<p><strong>Step 1 — Build the database.</strong> Type <code>library_practice</code> into the name box and click <strong>Build database</strong>.</p>
+
+<p><strong>Step 2 — Create the tables.</strong> Paste this into the Add SQL box and click <strong>Run SQL</strong>:</p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:12px 16px;overflow-x:auto;">CREATE TABLE books (
+    book_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    author TEXT NOT NULL
+);
+
+CREATE TABLE loans (
+    loan_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    book_id INTEGER NOT NULL,
+    member_name TEXT NOT NULL,
+    loan_date TEXT NOT NULL,
+    FOREIGN KEY (book_id) REFERENCES books(book_id)
+);</pre>
+
+<p><strong>Step 3 — Confirm the schema.</strong> Click <strong>List Tables</strong> — you should see <code>books</code> and <code>loans</code> in the Output box.</p>
+
+<p><strong>Step 4 — Insert some rows.</strong></p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:12px 16px;overflow-x:auto;">INSERT INTO books (title, author) VALUES ('Hyperspace', 'M. Kaku');
+INSERT INTO books (title, author) VALUES ('The Martian', 'A. Weir');
+INSERT INTO loans (book_id, member_name, loan_date) VALUES (1, 'Priya N.', '2026-08-01');</pre>
+
+<p><strong>Step 5 — Query it.</strong></p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:12px 16px;overflow-x:auto;">SELECT loans.loan_id, books.title, loans.member_name, loans.loan_date
+FROM loans
+JOIN books ON loans.book_id = books.book_id;</pre>
+<p>Run it, read the formatted table in the Output box, then try your own <code>WHERE</code> or <code>GROUP BY</code> version. This same CREATE &rarr; INSERT &rarr; SELECT pattern is what you'll use to build your <code>devices</code> and <code>events</code> tables for the assessment in Lesson 11.</p>
+
+<h2>Moving from the Tool into Your Assessment Code</h2>
+<p>The tool runs raw SQL directly — it doesn't check whether the data you type is valid before inserting it. Your Part A submission needs more than that: a Python program using the <code>sqlite3</code> module that <strong>validates data before it is inserted</strong> (for example, rejecting a null value or an out-of-range classification) and gives the user feedback when it does. Use this tool to get your SQL syntax right and see your table structure working, then move that same SQL into <code>cursor.execute()</code> calls inside a validated Python function — the pattern taught in Lesson 11's direct teaching.</p>
+
+<div class="note blue">Practise here first with the Library Loan example above — then apply the same CREATE / INSERT / SELECT pattern to your own devices/events schema. Don't reuse the table or field names from this page in your submission; they're deliberately from a different scenario.</div>
+
+<div class="pager"><a href="database_essentials_starter.html">&larr; Database Essentials Starter Pack</a><a href="lesson_week3.html">Week 3 &rarr;</a></div>
+</main>
+<div class="footer">St Peters Lutheran College Springfield &middot; Digital Solutions Unit 2: Application and data solutions &middot; 2026/2027</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Exemplar — Part B Technical Proposal | Digital Solutions QLD</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="brand">St Peters Lutheran College Springfield <span class="unit-tag">&middot; Digital Solutions QLD</span></div>
+</header>
+<div class="breadcrumb"><a href="../../index.html">Home</a> &rarr; <a href="../../unit2-application-and-data-solutions.html">Unit 2</a> &rarr; Assessment exemplar &rarr; Teacher Proposal Exemplar</div>
+<div class="hero">
+  <h1>Teacher Exemplar — Part B Technical Proposal</h1>
+  <p class="subtitle">A model response using the Library Loan System worked example, structured against the same ISMG sections as your own proposal</p>
+  <div class="tag-row"><span class="tag">Teacher resource</span><span class="tag">Models standard, not content to copy</span></div>
+</div>
+<div class="start-here"><strong>Note for students:</strong> this exemplar is written about the Library Loan System, not the Sunrise Aged Care system you are building. Use it to see what a strong response <em>sounds</em> and <em>looks</em> like at each ISMG criterion — every sentence about the scenario itself must be replaced with your own reasoning about your own system.</div>
+<main>
+
+<h2>5.1 Problem Analysis and Solution Requirements &mdash; Comprehending, Analysing</h2>
+<p><em>Model paragraph:</em> "The library's existing paper loan register stores each loan as a handwritten card, filed alphabetically by member surname. This creates two constraints: staff cannot quickly answer 'which books does this member currently have out?' without checking every card, and there is no reliable way to prevent a book being logged out to two members at once. The proposed system replaces this with a relational SQLite database (see ER diagram, Fig. 1) accessed through a Python interface, addressing the retrieval-speed constraint directly. The 3NF schema separates books, members and loans into three linked tables, which removes the transitive dependency present in a flat-file version — where a member's name would otherwise repeat on every loan row and risk becoming inconsistent if that name were ever updated (e.g. after a spelling correction)."</p>
+<p><em>Success criterion, written in QCAA/ISMG format:</em> "Loan history retrieval — a query joining loans and books returns the correct set of currently-borrowed titles for a given member_id — pass condition: 100% of 10 test member IDs return the expected row set, verified against the paper register."</p>
+<div class="note">What makes this strong: it names a real constraint (concurrent lending), explains <em>why</em> the 3NF design solves it rather than just describing the tables, and states a testable pass condition with a number in it.</div>
+
+<h2>5.2 Solution Design &mdash; Synthesising</h2>
+<p><em>Model paragraph:</em> "A flat-file approach was rejected because member details would repeat on every loan record, creating both wasted storage and an update-anomaly risk (Section 5.1). The relational approach stores each member once and references them by <code>member_id</code>, so a name change requires a single update rather than a search-and-replace across every historical loan."</p>
+<p><em>Pseudocode extract (QCAA format, not Python syntax):</em></p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:12px 16px;overflow-x:auto;">BEGIN insert_loan
+  INPUT book_id, member_id, loan_date
+  IF book_id NOT FOUND IN books THEN
+    OUTPUT "Error: book does not exist"
+  ELSE IF member_id NOT FOUND IN members THEN
+    OUTPUT "Error: member does not exist"
+  ELSE
+    INSERT loan record
+    OUTPUT "Loan recorded"
+  END IF
+END insert_loan</pre>
+
+<h2>5.3 Generated Components &mdash; Generating</h2>
+<p><em>Model annotation style</em> (for the 2&times;A4 code pages): rather than "this line inserts a loan," a strong annotation reads: "Parameterised placeholders (<code>?</code>) are used instead of string-formatted values here specifically to prevent SQL injection (Lesson 18) and because two foreign-key existence checks (lines 14&ndash;18) are required to meet Success Criterion 2 — a loan cannot be created against a member or book that doesn't exist." Every annotation ties the code back to a design decision or success criterion, never a bare description of syntax.</p>
+
+<h2>5.4 Evaluation &mdash; Evaluating</h2>
+<p><em>Model paragraph:</em> "Success Criterion 2 (loan history retrieval) was tested using the structured test table (Appendix C, Test #2), giving an actual result of three correctly joined rows against an expected result of three rows for member_id 2 (Pass). Test #1 confirmed the validated insert correctly rejected a loan with a missing member_id, returning the expected error message rather than inserting a broken record. Based on early testing, the original design allowed <code>return_date</code> to be required at insert time; this was refined to an optional field, since a loan is created before a book is returned — shown by the original schema (all fields <code>NOT NULL</code>) compared with the revised schema (<code>return_date TEXT</code>, nullable)."</p>
+<p><em>Impact evaluation, all three lenses required:</em></p>
+<ul class="focus-list">
+<li><strong>Personal:</strong> "Member email addresses are stored for overdue notifications only and are never displayed in the loan-history query output, limiting unnecessary exposure of personal data to staff performing routine lookups."</li>
+<li><strong>Social:</strong> "A classification or sorting rule based on member surname could disadvantage members with non-alphabetic or unusual name formats if not tested against a varied sample — this was mitigated by testing the query against member names with hyphens and non-English characters."</li>
+<li><strong>Economic:</strong> "A commercial library management system was quoted at approximately $40/month; the proposed SQLite-based solution has no ongoing licence cost, though it requires volunteer/staff time to maintain, which is a fair trade-off recommendation for a small school library's budget."</li>
+</ul>
+<div class="note">What makes this strong: each impact is <em>evaluated</em> with evidence and a judgement, not just named. "This could raise privacy concerns" alone would not meet this standard.</div>
+
+<h2>5.5 Communication &mdash; Communicating</h2>
+<p>Technical vocabulary is used consistently throughout (always "foreign key," never switching to "linking field" partway through). The reference list below shows the expected IEEE format for two source types:</p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:12px 16px;overflow-x:auto;">[1] Python Software Foundation, "sqlite3 — DB-API 2.0 interface for SQLite databases,"
+    Python 3 Documentation, 2026. [Online]. Available: https://docs.python.org/3/library/sqlite3.html
+
+[2] W3Schools, "SQL Injection," W3Schools SQL Tutorial, 2026. [Online].
+    Available: https://www.w3schools.com/sql/sql_injection.asp</pre>
+
+<h2>Rubric-Aligned Reminders</h2>
+<table class="lesson-table">
+<tr><th>Criterion</th><th>Marks</th><th>Top-band keyword</th></tr>
+<tr><td>Comprehending</td><td>4</td><td>Discerning</td></tr>
+<tr><td>Analysing</td><td>6</td><td>Insightful</td></tr>
+<tr><td>Synthesising</td><td>5</td><td>Logical</td></tr>
+<tr><td>Generating</td><td>4</td><td>Proficient</td></tr>
+<tr><td>Evaluating</td><td>4</td><td>Critical</td></tr>
+<tr><td>Communicating</td><td>2</td><td>Effective and fluent</td></tr>
+</table>
+
+<div class="note blue">Compare this exemplar with the <a href="unit2_student_scaffold.html">Student Scaffold</a> while you plan your own proposal — the scaffold gives you the prompts and sentence starters; this page shows what a filled-in, ISMG-aligned response reads like.</div>
+
+<div class="pager"><a href="unit2_teacher_sample_database.html">&larr; Teacher Sample Database</a><a href="unit2_student_scaffold.html">Student Scaffold &rarr;</a></div>
+</main>
+<div class="footer">St Peters Lutheran College Springfield &middot; Digital Solutions Unit 2: Application and data solutions &middot; 2026/2027</div>
+</body>
+</html>

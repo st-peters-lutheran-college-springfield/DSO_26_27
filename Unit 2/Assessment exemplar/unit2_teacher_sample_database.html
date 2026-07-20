@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Sample — Database &amp; Code Build | Digital Solutions QLD</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="brand">St Peters Lutheran College Springfield <span class="unit-tag">&middot; Digital Solutions QLD</span></div>
+</header>
+<div class="breadcrumb"><a href="../../index.html">Home</a> &rarr; <a href="../../unit2-application-and-data-solutions.html">Unit 2</a> &rarr; Assessment exemplar &rarr; Teacher Sample Database</div>
+<div class="hero">
+  <h1>Teacher Sample — Library Loan Database Build</h1>
+  <p class="subtitle">A worked SQL + Python build at the standard your own devices/events solution should reach</p>
+  <div class="tag-row"><span class="tag">Teacher resource</span><span class="tag">Objectives 4&ndash;7</span></div>
+</div>
+<div class="start-here"><strong>Note for students:</strong> this sample uses a Library Loan System — a different scenario from your Sunrise Aged Care devices/events database. It models the standard and structure expected, not the answer to copy. Table names, field names and logic must be your own.</div>
+<main>
+
+<h2>Schema (3NF)</h2>
+<p>Relational schema notation for the worked example:</p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:12px 16px;overflow-x:auto;">books(<u>book_id</u>, title, author)
+members(<u>member_id</u>, first_name, surname, email)
+loans(<u>loan_id</u>, book_id<sup>FK</sup>, member_id<sup>FK</sup>, loan_date, return_date)</pre>
+
+<h2>CREATE TABLE SQL</h2>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:12px 16px;overflow-x:auto;">CREATE TABLE books (
+    book_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    author TEXT NOT NULL
+);
+
+CREATE TABLE members (
+    member_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    first_name TEXT NOT NULL,
+    surname TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE loans (
+    loan_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    book_id INTEGER NOT NULL,
+    member_id INTEGER NOT NULL,
+    loan_date TEXT NOT NULL,
+    return_date TEXT,
+    FOREIGN KEY (book_id) REFERENCES books(book_id),
+    FOREIGN KEY (member_id) REFERENCES members(member_id)
+);</pre>
+
+<h2>Validated INSERT (Python + sqlite3)</h2>
+<p>This is the pattern expected for your <code>insert_event()</code> equivalent — validation happens <em>before</em> the SQL runs, and the function reports back what happened.</p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:12px 16px;overflow-x:auto;">import sqlite3
+from datetime import datetime
+
+def insert_loan(book_id, member_id, loan_date, db_path="library_practice.db"):
+    """Validates and inserts a new loan record. Returns (success, message)."""
+    # Validation before anything touches the database
+    if not book_id or not member_id:
+        return False, "ERROR: book_id and member_id are required."
+    try:
+        datetime.strptime(loan_date, "%Y-%m-%d")
+    except ValueError:
+        return False, "ERROR: loan_date must be in YYYY-MM-DD format."
+
+    with sqlite3.connect(db_path) as db:
+        cursor = db.cursor()
+        # Verify the foreign keys actually exist before inserting
+        cursor.execute("SELECT 1 FROM books WHERE book_id = ?", (book_id,))
+        if cursor.fetchone() is None:
+            return False, f"ERROR: no book with book_id {book_id}."
+        cursor.execute("SELECT 1 FROM members WHERE member_id = ?", (member_id,))
+        if cursor.fetchone() is None:
+            return False, f"ERROR: no member with member_id {member_id}."
+
+        cursor.execute(
+            "INSERT INTO loans (book_id, member_id, loan_date) VALUES (?, ?, ?)",
+            (book_id, member_id, loan_date)
+        )
+        db.commit()
+        return True, f"Loan inserted for member {member_id}."</pre>
+<p>Note the use of parameterised queries (<code>?</code> placeholders) rather than string-formatted SQL — this is also the fix for SQL injection covered in Lesson 18.</p>
+
+<h2>SELECT / JOIN / GROUP BY — three use-case pattern</h2>
+<p>Mirrors the "device filter / date filter / summary count" structure your own three queries need to answer for Jordan Kim.</p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:12px 16px;overflow-x:auto;">-- 1. Filter: all loans for one member
+SELECT * FROM loans WHERE member_id = 2;
+
+-- 2. Join: loan history with readable book titles
+SELECT loans.loan_id, books.title, loans.loan_date, loans.return_date
+FROM loans
+JOIN books ON loans.book_id = books.book_id
+WHERE loans.member_id = 2;
+
+-- 3. Summary: loans per member, busiest borrowers first
+SELECT member_id, COUNT(*) AS total_loans
+FROM loans
+GROUP BY member_id
+ORDER BY total_loans DESC;</pre>
+
+<h2>UPDATE / DELETE — preserving referential integrity</h2>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:12px 16px;overflow-x:auto;">-- Safe UPDATE: record a return date
+UPDATE loans SET return_date = '2026-08-15' WHERE loan_id = 3;
+
+-- Safe DELETE: remove a test record, not a real loan with dependent history
+DELETE FROM loans WHERE loan_id = 99;</pre>
+<p>Before any DELETE, check what else references that row — deleting a <code>books</code> row that still has active <code>loans</code> pointing to it via <code>book_id</code> would break referential integrity. The same check applies to deleting a device that still has logged events.</p>
+
+<h2>Structured Test Table (sample rows)</h2>
+<table class="lesson-table">
+<tr><th>Test #</th><th>Test case</th><th>Input</th><th>Expected output</th><th>Actual output</th><th>Pass/Fail</th></tr>
+<tr><td>1</td><td>INSERT rejects missing member_id</td><td><code>insert_loan(1, None, '2026-08-01')</code></td><td>Insert rejected, error message returned</td><td>Rejected as expected</td><td>Pass</td></tr>
+<tr><td>2</td><td>JOIN returns readable titles</td><td>Query 2 above, member_id = 2</td><td>Rows show book titles, not just book_id</td><td>Titles displayed correctly</td><td>Pass</td></tr>
+<tr><td>3</td><td>Edge case: member with zero loans</td><td>GROUP BY query for a new member_id</td><td>Member does not appear in the summary (0 rows), not an error</td><td>No row returned, no crash</td><td>Pass</td></tr>
+</table>
+
+<div class="note">Apply this same structure — schema, validated insert, three query types, safe UPDATE/DELETE, a 6+ row test table — to your own devices/events database. The field names, thresholds and classification logic must be your own reasoning, developed and evidenced in your OneNote journal.</div>
+
+<div class="pager"><a href="unit2_student_scaffold.html">&larr; Student Scaffold</a><a href="unit2_teacher_technical_proposal_exemplar.html">Teacher Proposal Exemplar &rarr;</a></div>
+</main>
+<div class="footer">St Peters Lutheran College Springfield &middot; Digital Solutions Unit 2: Application and data solutions &middot; 2026/2027</div>
+</body>
+</html>
