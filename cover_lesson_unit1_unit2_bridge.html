@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introduction to SQL — Foundations for Unit 2 | Digital Solutions QLD</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="brand">St Peters Lutheran College Springfield <span class="unit-tag">&middot; Digital Solutions QLD</span></div>
+</header>
+<div class="breadcrumb"><a href="index.html">Home</a> &rarr; Introduction to SQL — Foundations for Unit 2</div>
+<div class="hero">
+  <h1>Introduction to SQL — Foundations for Unit 2</h1>
+  <p class="subtitle">One 60-minute lesson &middot; five core SQL commands, practised hands-on</p>
+</div>
+<main>
+
+<h2>This Lesson</h2>
+<table class="lesson-table">
+<tr><th>Time</th><th>Command</th><th>What it does</th></tr>
+<tr><td>5 min</td><td>Setup</td><td>Get DB Browser for SQLite and the sample database running</td></tr>
+<tr><td>10 min</td><td><code>CREATE TABLE</code></td><td>Build a new table</td></tr>
+<tr><td>10 min</td><td><code>INSERT INTO</code></td><td>Add rows of data</td></tr>
+<tr><td>15 min</td><td><code>SELECT</code></td><td>Retrieve and filter data</td></tr>
+<tr><td>10 min</td><td><code>UPDATE</code></td><td>Change existing data</td></tr>
+<tr><td>10 min</td><td><code>DELETE</code></td><td>Remove data</td></tr>
+</table>
+
+<div class="note blue"><strong>Evidence:</strong> use the <a href="activity_sheet_unit1_unit2_bridge.html">Activity Sheet</a> to record each "Your turn" answer online, then print or save it as a PDF and upload it to your OneNote page.</div>
+
+<h2>What Is SQL?</h2>
+<p>SQL (Structured Query Language) is the standard language used to create, read, update and delete data in a relational database. Every relational database engine — SQLite (used in your Unit 2 build), MySQL, PostgreSQL, SQL Server — understands the same core SQL commands. The syntax you practise below is what you'll use directly when you build your own devices/events database in Lesson 11.</p>
+<div class="note">SQLite vs MySQL: the SQL taught here works in both. A few small differences exist — SQLite uses <code>AUTOINCREMENT</code>, MySQL uses <code>AUTO_INCREMENT</code>; MySQL enforces column data types strictly, SQLite is more flexible. These differences don't affect anything in Unit 2, which uses SQLite.</div>
+
+<h2>Setup (5 min)</h2>
+<div class="card-grid">
+  <div class="card">
+    <span class="eyebrow key">Step 1</span>
+    <h4>Get the tools</h4>
+    <p>Download DB Browser for SQLite and the sample music database.</p>
+    <a class="btn" href="https://sqlitebrowser.org/dl/" target="_blank" rel="noopener">Download DB Browser</a>
+    <p style="margin-top:10px;"><a class="btn" href="assets/downloads/dbMusic.db">Download dbMusic.db</a></p>
+  </div>
+  <div class="card">
+    <span class="eyebrow key">Step 2</span>
+    <h4>Open the Execute SQL tab</h4>
+    <p>Open <code>dbMusic.db</code> in DB Browser, then click the <strong>Execute SQL</strong> tab — this is where you'll type and run every command below.</p>
+  </div>
+</div>
+
+<h2>1. CREATE TABLE (10 min)</h2>
+<p>Creates a new table — a structure to hold rows of data — by naming each column, its data type, and any constraints (such as a primary key).</p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:10px 12px;overflow-x:auto;">CREATE TABLE table_name (
+    column1 datatype constraints,
+    column2 datatype constraints
+);</pre>
+<p><strong>Example</strong> — this is the actual statement that built the <code>tblTracks</code> table already in <code>dbMusic.db</code>:</p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:10px 12px;overflow-x:auto;">CREATE TABLE tblTracks (
+    TrackID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Title TEXT NOT NULL,
+    Artist TEXT NOT NULL,
+    Genre TEXT
+);</pre>
+<p><strong>Your turn:</strong> write a <code>CREATE TABLE</code> statement for a new table called <code>tblPlaylists</code> with columns <code>PlaylistID</code> (primary key), <code>Name</code> and <code>Owner</code>. Run it in DB Browser, then check the <strong>Database Structure</strong> tab to confirm it now exists.</p>
+
+<h2>2. INSERT INTO (10 min)</h2>
+<p>Adds a new row of data into a table.</p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:10px 12px;overflow-x:auto;">INSERT INTO table_name (column1, column2) VALUES (value1, value2);</pre>
+<p><strong>Example:</strong></p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:10px 12px;overflow-x:auto;">INSERT INTO tblPlaylists (PlaylistID, Name, Owner) VALUES (1, 'Road Trip', 'Sara Bibi');</pre>
+<p><strong>Your turn:</strong> insert two more of your own playlists into <code>tblPlaylists</code>.</p>
+
+<h2>3. SELECT (15 min)</h2>
+<p>Retrieves data from a table. <code>WHERE</code> filters which rows come back; <code>ORDER BY</code> sorts the results.</p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:10px 12px;overflow-x:auto;">SELECT column1, column2 FROM table_name WHERE condition ORDER BY column;</pre>
+<p><strong>Examples</strong> using the tables already in <code>dbMusic.db</code>:</p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:10px 12px;overflow-x:auto;">SELECT * FROM tblTracks WHERE Genre = 'Pop';
+
+SELECT Firstname, Surname FROM tblMembers ORDER BY Surname;</pre>
+<p><strong>Your turn:</strong></p>
+<ul class="focus-list">
+<li>Write a <code>SELECT</code> that returns every track in the "Rock" genre.</li>
+<li>Write a <code>SELECT</code> that returns all your own playlists from <code>tblPlaylists</code>, ordered by <code>Name</code>.</li>
+<li>Run this query against <code>tblDownloads</code>, then modify the year range yourself and re-run it: <pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:10px 12px;overflow-x:auto;margin-top:6px;">SELECT * FROM tblDownloads WHERE date BETWEEN 2011 AND 2013;</pre></li>
+</ul>
+
+<h2>4. UPDATE (10 min)</h2>
+<p>Changes existing data in a table. <strong>Always include a <code>WHERE</code> clause</strong> — without one, every row in the table is changed.</p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:10px 12px;overflow-x:auto;">UPDATE table_name SET column = value WHERE condition;</pre>
+<p><strong>Example:</strong></p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:10px 12px;overflow-x:auto;">UPDATE tblPlaylists SET Owner = 'Danny Judd' WHERE PlaylistID = 1;</pre>
+<p><strong>Your turn:</strong> update the <code>Name</code> of one of your playlists to something new. Run <code>SELECT * FROM tblPlaylists;</code> afterwards to confirm the change.</p>
+
+<h2>5. DELETE (10 min)</h2>
+<p>Removes rows from a table. As with <code>UPDATE</code>, always include a <code>WHERE</code> clause — <code>DELETE FROM table_name;</code> with no <code>WHERE</code> removes every row.</p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:10px 12px;overflow-x:auto;">DELETE FROM table_name WHERE condition;</pre>
+<p><strong>Example:</strong></p>
+<pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:10px 12px;overflow-x:auto;">DELETE FROM tblPlaylists WHERE PlaylistID = 2;</pre>
+<p><strong>Your turn:</strong> delete one of the playlists you added earlier, then run <code>SELECT * FROM tblPlaylists;</code> to confirm only the remaining rows are left.</p>
+
+<div class="pager"><a href="unit1-creating-with-code.html">&larr; Unit 1</a><a href="unit2-application-and-data-solutions.html">Unit 2 &rarr;</a></div>
+</main>
+<div class="footer">St Peters Lutheran College Springfield &middot; Digital Solutions &middot; 2026/2027</div>
+</body>
+</html>
