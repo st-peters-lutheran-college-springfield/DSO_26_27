@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Does a JOIN Actually Do? | Digital Solutions QLD</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* Page-specific additions — reuse the site's own palette (see assets/style.css :root) */
+  .analogy-row { display: flex; gap: 16px; align-items: flex-start; }
+  .analogy-icon {
+    flex: none; width: 40px; height: 40px; border-radius: 50%;
+    background: var(--light-blue); display: flex; align-items: center;
+    justify-content: center; font-size: 18px;
+  }
+  .analogy-row p:last-child { margin-bottom: 0; }
+
+  figure { margin: 20px 0; }
+  .diagram-wrap {
+    background: var(--pale); border: 1px solid var(--border); border-radius: 8px;
+    padding: 20px 16px 16px; overflow-x: auto;
+  }
+  svg.diagram { display: block; width: 100%; height: auto; min-width: 620px; }
+  figcaption { margin-top: 10px; font-size: 0.85rem; color: var(--muted); }
+
+  .tbl-title { font-family: 'Courier New', monospace; font-weight: 700; font-size: 13px; fill: var(--navy); }
+  .tbl-header-bg { fill: #fff; stroke: var(--border); stroke-width: 1; }
+  .tbl-cell-bg { fill: #fff; stroke: var(--border); stroke-width: 1; }
+  .tbl-key-bg { fill: var(--light-green); stroke: var(--green); stroke-width: 1; }
+  .tbl-pulled-bg { fill: var(--light-blue); stroke: var(--blue); stroke-width: 1; }
+  .tbl-header-text { font-family: 'Courier New', monospace; font-weight: 700; font-size: 11px; fill: var(--muted); }
+  .tbl-cell-text { font-family: 'Courier New', monospace; font-size: 12px; fill: var(--text); }
+  .key-line { stroke: var(--green); stroke-width: 1.6; fill: none; }
+  .merge-line { stroke: var(--blue); stroke-width: 2; fill: none; }
+  .join-label-bg { fill: var(--light-blue); stroke: var(--blue); stroke-width: 1; }
+  .join-label-text { font-family: 'Courier New', monospace; font-weight: 700; font-size: 12px; fill: var(--blue); }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 620px) { .compare { grid-template-columns: 1fr; } }
+  .compare-card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .compare-head { padding: 10px 14px; font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  .compare-head.no { background: var(--pale); color: var(--muted); }
+  .compare-head.yes { background: var(--light-blue); color: var(--blue); }
+  .compare-body { padding: 14px; background: #fff; overflow-x: auto; }
+  .mini-table { width: 100%; min-width: 260px; border-collapse: collapse; font-family: 'Courier New', monospace; font-size: 0.82rem; }
+  .mini-table th, .mini-table td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--border); }
+  .mini-table th { color: var(--muted); font-weight: 700; font-size: 0.75rem; }
+  .mini-table td.pulled { background: var(--light-blue); }
+
+  code, .code-inline {
+    font-family: 'Courier New', monospace; font-size: 0.92em;
+    background: var(--pale); padding: 0.1em 0.4em; border-radius: 4px;
+  }
+
+  .code-panel {
+    background: var(--navy); color: #E8EEF3; border-radius: 8px; padding: 18px 20px;
+    font-family: 'Courier New', monospace; font-size: 0.88rem; line-height: 1.7;
+    overflow-x: auto; white-space: pre; margin: 14px 0;
+  }
+  .code-panel .kw { color: #7FB3E0; font-weight: 700; }
+  .code-panel .hl { background: rgba(127,179,224,0.18); border-radius: 3px; padding: 1px 3px; }
+
+  .annotations { margin-top: 14px; display: grid; gap: 8px; }
+  .annotation { display: grid; grid-template-columns: 96px 1fr; gap: 10px; font-size: 0.92rem; align-items: baseline; }
+  .annotation .tag2 {
+    font-family: 'Courier New', monospace; font-size: 0.72rem; font-weight: 700;
+    color: var(--blue); background: var(--light-blue); border-radius: 4px;
+    padding: 2px 6px; text-align: center;
+  }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="brand">St Peters Lutheran College Springfield <span class="unit-tag">&middot; Digital Solutions QLD</span></div>
+</header>
+<div class="breadcrumb"><a href="../../index.html">Home</a> &rarr; <a href="../../unit2-application-and-data-solutions.html">Unit 2</a> &rarr; <a href="student_hub.html">Suggested Learning Sequence</a> &rarr; What Does a JOIN Actually Do?</div>
+<div class="hero">
+  <h1>What does a JOIN actually do?</h1>
+  <p class="subtitle">Your <strong>events</strong> table only stores a <strong>device_id</strong> number — not a room name. A JOIN is how a query gets the readable room name back, without storing it twice.</p>
+  <div class="tag-row"><span class="tag">Lesson 12</span><span class="tag">SELECT, JOIN, GROUP BY</span></div>
+</div>
+<div class="start-here"><strong>Where this fits:</strong> Lesson 12 asks you to "write a JOIN query linking events to devices." This page walks through what that actually means before you write your own.</div>
+<main>
+
+<h2>Start with something you already use</h2>
+<div class="note blue">
+  <div class="analogy-row">
+    <div class="analogy-icon">&#128241;</div>
+    <div>
+      <p>Your phone's call log doesn't store people's names — it only stores phone numbers. Your Contacts app is what stores the name that belongs to each number. When you open <em>Recents</em> and see "Mum" instead of a string of digits, your phone quietly matched the number in your call log against the number in your contacts, and stitched the two together.</p>
+      <p>That matching-and-stitching step is exactly what a JOIN does in a database — except instead of phone numbers, our database matches <span class="code-inline">device_id</span>.</p>
+    </div>
+  </div>
+</div>
+
+<h2>The mechanism</h2>
+<figure>
+  <div class="diagram-wrap">
+    <svg class="diagram" viewBox="0 0 920 610" role="img" aria-label="Diagram showing the events table and devices table connected by matching device_id values, merging into a joined result table where room names replace raw device_id numbers.">
+      <defs>
+        <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+          <polygon points="0,0 8,4 0,8" style="fill: var(--green); stroke: none;" />
+        </marker>
+        <marker id="arrowBlue" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+          <polygon points="0,0 9,4.5 0,9" style="fill: var(--blue); stroke: none;" />
+        </marker>
+      </defs>
+
+      <!-- EVENTS table -->
+      <text x="40" y="52" class="tbl-title">events</text>
+      <rect x="40" y="70" width="70" height="34" class="tbl-header-bg"/>
+      <rect x="110" y="70" width="90" height="34" class="tbl-key-bg"/>
+      <rect x="200" y="70" width="110" height="34" class="tbl-header-bg"/>
+      <text x="75" y="91" text-anchor="middle" class="tbl-header-text">event_id</text>
+      <text x="155" y="91" text-anchor="middle" class="tbl-header-text">device_id</text>
+      <text x="255" y="91" text-anchor="middle" class="tbl-header-text">classification</text>
+      <rect x="40" y="104" width="70" height="34" class="tbl-cell-bg"/>
+      <rect x="110" y="104" width="90" height="34" class="tbl-key-bg"/>
+      <rect x="200" y="104" width="110" height="34" class="tbl-cell-bg"/>
+      <text x="75" y="125" text-anchor="middle" class="tbl-cell-text">1</text>
+      <text x="155" y="125" text-anchor="middle" class="tbl-cell-text">1</text>
+      <text x="255" y="125" text-anchor="middle" class="tbl-cell-text">NORMAL</text>
+      <rect x="40" y="138" width="70" height="34" class="tbl-cell-bg"/>
+      <rect x="110" y="138" width="90" height="34" class="tbl-key-bg"/>
+      <rect x="200" y="138" width="110" height="34" class="tbl-cell-bg"/>
+      <text x="75" y="159" text-anchor="middle" class="tbl-cell-text">2</text>
+      <text x="155" y="159" text-anchor="middle" class="tbl-cell-text">2</text>
+      <text x="255" y="159" text-anchor="middle" class="tbl-cell-text">DISTRESS</text>
+      <rect x="40" y="172" width="70" height="34" class="tbl-cell-bg"/>
+      <rect x="110" y="172" width="90" height="34" class="tbl-key-bg"/>
+      <rect x="200" y="172" width="110" height="34" class="tbl-cell-bg"/>
+      <text x="75" y="193" text-anchor="middle" class="tbl-cell-text">3</text>
+      <text x="155" y="193" text-anchor="middle" class="tbl-cell-text">1</text>
+      <text x="255" y="193" text-anchor="middle" class="tbl-cell-text">SILENCE</text>
+
+      <!-- DEVICES table -->
+      <text x="560" y="52" class="tbl-title">devices</text>
+      <rect x="560" y="70" width="90" height="34" class="tbl-key-bg"/>
+      <rect x="650" y="70" width="90" height="34" class="tbl-header-bg"/>
+      <text x="605" y="91" text-anchor="middle" class="tbl-header-text">device_id</text>
+      <text x="695" y="91" text-anchor="middle" class="tbl-header-text">room</text>
+      <rect x="560" y="104" width="90" height="34" class="tbl-key-bg"/>
+      <rect x="650" y="104" width="90" height="34" class="tbl-cell-bg"/>
+      <text x="605" y="125" text-anchor="middle" class="tbl-cell-text">1</text>
+      <text x="695" y="125" text-anchor="middle" class="tbl-cell-text">Room 4</text>
+      <rect x="560" y="138" width="90" height="34" class="tbl-key-bg"/>
+      <rect x="650" y="138" width="90" height="34" class="tbl-cell-bg"/>
+      <text x="605" y="159" text-anchor="middle" class="tbl-cell-text">2</text>
+      <text x="695" y="159" text-anchor="middle" class="tbl-cell-text">Room 9</text>
+
+      <!-- key-match connector lines -->
+      <path d="M310,121 L560,121" class="key-line" marker-end="url(#arrowGreen)"/>
+      <path d="M310,155 L560,155" class="key-line" marker-end="url(#arrowGreen)"/>
+      <path d="M310,189 C420,189 480,121 560,121" class="key-line" marker-end="url(#arrowGreen)"/>
+
+      <text x="380" y="228" text-anchor="middle" class="tbl-header-text" style="fill: var(--green);">matching device_id &#8594;</text>
+
+      <!-- merge arrows down into result -->
+      <path d="M175,206 C175,300 300,330 370,412" class="merge-line" marker-end="url(#arrowBlue)"/>
+      <path d="M650,172 C650,300 480,330 410,412" class="merge-line" marker-end="url(#arrowBlue)"/>
+
+      <rect x="325" y="300" width="170" height="30" rx="6" class="join-label-bg"/>
+      <text x="410" y="320" text-anchor="middle" class="join-label-text">JOIN ON device_id</text>
+
+      <!-- RESULT table -->
+      <text x="255" y="400" class="tbl-title">query result</text>
+      <rect x="255" y="418" width="70" height="34" class="tbl-header-bg"/>
+      <rect x="325" y="418" width="130" height="34" class="tbl-pulled-bg"/>
+      <rect x="455" y="418" width="110" height="34" class="tbl-header-bg"/>
+      <text x="290" y="439" text-anchor="middle" class="tbl-header-text">event_id</text>
+      <text x="390" y="439" text-anchor="middle" class="tbl-header-text">room</text>
+      <text x="510" y="439" text-anchor="middle" class="tbl-header-text">classification</text>
+
+      <rect x="255" y="452" width="70" height="34" class="tbl-cell-bg"/>
+      <rect x="325" y="452" width="130" height="34" class="tbl-pulled-bg"/>
+      <rect x="455" y="452" width="110" height="34" class="tbl-cell-bg"/>
+      <text x="290" y="473" text-anchor="middle" class="tbl-cell-text">1</text>
+      <text x="390" y="473" text-anchor="middle" class="tbl-cell-text">Room 4</text>
+      <text x="510" y="473" text-anchor="middle" class="tbl-cell-text">NORMAL</text>
+
+      <rect x="255" y="486" width="70" height="34" class="tbl-cell-bg"/>
+      <rect x="325" y="486" width="130" height="34" class="tbl-pulled-bg"/>
+      <rect x="455" y="486" width="110" height="34" class="tbl-cell-bg"/>
+      <text x="290" y="507" text-anchor="middle" class="tbl-cell-text">2</text>
+      <text x="390" y="507" text-anchor="middle" class="tbl-cell-text">Room 9</text>
+      <text x="510" y="507" text-anchor="middle" class="tbl-cell-text">DISTRESS</text>
+
+      <rect x="255" y="520" width="70" height="34" class="tbl-cell-bg"/>
+      <rect x="325" y="520" width="130" height="34" class="tbl-pulled-bg"/>
+      <rect x="455" y="520" width="110" height="34" class="tbl-cell-bg"/>
+      <text x="290" y="541" text-anchor="middle" class="tbl-cell-text">3</text>
+      <text x="390" y="541" text-anchor="middle" class="tbl-cell-text">Room 4</text>
+      <text x="510" y="541" text-anchor="middle" class="tbl-cell-text">SILENCE</text>
+
+      <text x="390" y="580" text-anchor="middle" class="tbl-header-text" style="fill: var(--blue);">&#8593; pulled in from devices, not stored in events</text>
+    </svg>
+  </div>
+  <figcaption>Green cells mark <span class="code-inline">device_id</span> — the column both tables share. Two events (1 and 3) both belong to device 1, so both lines point at the same devices row: that's normal, one device logs many events. The result table never had a "room" column of its own — JOIN pulled it in live from devices.</figcaption>
+</figure>
+
+<h2>Without JOIN vs. with JOIN</h2>
+<div class="compare">
+  <div class="compare-card">
+    <div class="compare-head no">Without JOIN</div>
+    <div class="compare-body">
+      <p style="margin:0 0 10px; font-size:0.85rem; color:var(--muted);">Querying <span class="code-inline">events</span> alone only gives you the raw number — meaningless to Jordan Kim.</p>
+      <table class="mini-table">
+        <tr><th>event_id</th><th>device_id</th><th>classification</th></tr>
+        <tr><td>1</td><td>1</td><td>NORMAL</td></tr>
+        <tr><td>2</td><td>2</td><td>DISTRESS</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="compare-card">
+    <div class="compare-head yes">With JOIN</div>
+    <div class="compare-body">
+      <p style="margin:0 0 10px; font-size:0.85rem; color:var(--muted);">Joined to <span class="code-inline">devices</span>, the same rows now read like a room log.</p>
+      <table class="mini-table">
+        <tr><th>event_id</th><th>room</th><th>classification</th></tr>
+        <tr><td>1</td><td class="pulled">Room 4</td><td>NORMAL</td></tr>
+        <tr><td>2</td><td class="pulled">Room 9</td><td>DISTRESS</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<h2>A worked example</h2>
+<p>This is the shape of query you'll write for Lesson 12 — joining <span class="code-inline">events</span> to <span class="code-inline">devices</span> so a room name comes back instead of a raw id:</p>
+<div class="code-panel"><span class="kw">SELECT</span> events.event_id, <span class="hl">devices.room</span>, devices.location_name,
+       events.event_timestamp, events.classification, events.amplitude
+<span class="kw">FROM</span> events
+<span class="kw">JOIN</span> devices <span class="kw">ON</span> <span class="hl">events.device_id = devices.device_id</span>
+<span class="kw">WHERE</span> devices.room = ?
+<span class="kw">ORDER BY</span> events.event_timestamp</div>
+
+<div class="annotations">
+  <div class="annotation"><span class="tag2">SELECT</span><span>Which columns end up in the result — notice <span class="code-inline">devices.room</span> sits right alongside <span class="code-inline">events</span> columns, even though it came from a different table.</span></div>
+  <div class="annotation"><span class="tag2">FROM</span><span>The table you're starting from — the "many" side, one row per event.</span></div>
+  <div class="annotation"><span class="tag2">JOIN &hellip; ON</span><span>The matching rule. <span class="code-inline">events.device_id = devices.device_id</span> is exactly the green lines in the diagram above — pair up rows where these two numbers agree.</span></div>
+  <div class="annotation"><span class="tag2">WHERE</span><span>Filters the joined result, same as it would on a single table — here, only keep rows for one room.</span></div>
+</div>
+
+<h2>Three things to remember</h2>
+<div class="note green">
+  <ol class="focus-list" style="padding-left:1.2rem; margin:0;">
+    <li><strong>events</strong> stores <span class="code-inline">device_id</span> only — never <span class="code-inline">room</span> or <span class="code-inline">location_name</span> directly. That's the 3NF fix: no repeated text.</li>
+    <li>JOIN matches rows using a shared column — here, <span class="code-inline">device_id</span> in both tables has to be equal.</li>
+    <li>The result reads like one table, but the data actually came from two — nothing was duplicated in storage to make that happen.</li>
+  </ol>
+</div>
+
+<div class="pager"><a href="python_database_tool_guide.html">&larr; Python Database Tool Guide</a><a href="lesson_week3.html">Week 3 &rarr;</a></div>
+</main>
+<div class="footer">St Peters Lutheran College Springfield &middot; Digital Solutions Unit 2: Application and data solutions &middot; 2026/2027</div>
+</body>
+</html>
