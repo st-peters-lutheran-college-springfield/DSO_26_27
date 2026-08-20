@@ -16,7 +16,7 @@
   <p class="subtitle">A lightweight Python + SQLite tool for building and testing your own database before you wrap it in validated code</p>
   <div class="tag-row"><span class="tag">Lesson 11 onward</span><span class="tag">Practice scenario shown below</span></div>
 </div>
-<div class="start-here"><strong>Start here:</strong> use this tool to write and run SQL against your own database quickly. It is a testing sandbox, not your final submission — your assessment needs a full Python program with validated INSERT logic (see the last section on this page).</div>
+<div class="start-here"><strong>Start here:</strong> use this tool to write and run SQL against your own database quickly. It is a testing sandbox, not your final submission — your assessment needs structured validation and error handling in Python.</div>
 <main>
 
 <h2>What the Tool Does</h2>
@@ -24,7 +24,7 @@
 <li>Enter a name and click <strong>Build database</strong> to create a new SQLite <code>.db</code> file in the same folder as the tool.</li>
 <li>Type SQL into the <strong>Add SQL</strong> box and click <strong>Run SQL</strong> to execute it against the database you've selected from the dropdown.</li>
 <li>Click <strong>List Tables</strong> at any time to check what tables currently exist in your database.</li>
-<li><code>SELECT</code> queries are displayed as a neatly formatted table in the <strong>Output</strong> box; other statements (like <code>CREATE</code>, <code>INSERT</code>, <code>UPDATE</code>) show a short confirmation.</li>
+<li><code>SELECT</code> queries are displayed as a neatly formatted table in the <strong>Output</strong> box; other statements (like <code>CREATE</code>, <code>INSERT</code>, <code>UPDATE</code>) show a confirmation message.</li>
 </ul>
 
 <h2>Setup</h2>
@@ -38,7 +38,7 @@
   <div class="card">
     <span class="eyebrow key">Step 2</span>
     <h4>Check Python is ready</h4>
-    <p>You need Python 3 with <code>tkinter</code> (already installed on College laptop images). No extra packages required — <code>sqlite3</code> and <code>tkinter</code> are both part of the standard library.</p>
+    <p>You need Python 3 with <code>tkinter</code> (already installed on College laptop images). No extra packages required — <code>sqlite3</code> and <code>tkinter</code> are both part of the standard library / default install.</p>
   </div>
   <div class="card">
     <span class="eyebrow key">Step 3</span>
@@ -79,12 +79,12 @@ INSERT INTO loans (book_id, member_name, loan_date) VALUES (1, 'Priya N.', '2026
 <pre style="background:var(--pale);border:1px solid var(--border);border-radius:6px;padding:12px 16px;overflow-x:auto;">SELECT loans.loan_id, books.title, loans.member_name, loans.loan_date
 FROM loans
 JOIN books ON loans.book_id = books.book_id;</pre>
-<p>Run it, read the formatted table in the Output box, then try your own <code>WHERE</code> or <code>GROUP BY</code> version. This same CREATE &rarr; INSERT &rarr; SELECT pattern is what you'll use to build your <code>devices</code> and <code>events</code> tables for the assessment in Lesson 11.</p>
+<p>Run it, read the formatted table in the Output box, then try your own <code>WHERE</code> or <code>GROUP BY</code> version. This same CREATE &rarr; INSERT &rarr; SELECT pattern is what you'll use in your assessment code.</p>
 
 <h2>Moving from the Tool into Your Assessment Code</h2>
-<p>The tool runs raw SQL directly — it doesn't check whether the data you type is valid before inserting it. Your Part A submission needs more than that: a Python program using the <code>sqlite3</code> module that <strong>validates data before it is inserted</strong> (for example, rejecting a null value or an out-of-range classification) and gives the user feedback when it does. Use this tool to get your SQL syntax right and see your table structure working, then move that same SQL into <code>cursor.execute()</code> calls inside a validated Python function — the pattern taught in Lesson 11's direct teaching.</p>
+<p>The tool runs raw SQL directly — it doesn't check whether the data you type is valid before inserting it. Your Part A submission needs more than that: a Python program using the <code>sqlite3</code> module, validation, error handling, and clear user feedback.</p>
 
-<div class="note blue">Practise here first with the Library Loan example above — then apply the same CREATE / INSERT / SELECT pattern to your own devices/events schema. Don't reuse the table or field names from this page in your submission; they're deliberately from a different scenario.</div>
+<div class="note blue">Practise here first with the Library Loan example above — then apply the same CREATE / INSERT / SELECT pattern to your own devices/events schema. Don't reuse the table or column names directly unless they suit your own design.</div>
 
 <div class="pager"><a href="database_essentials_starter.html">&larr; Database Essentials Starter Pack</a><a href="lesson_week3.html">Week 3 &rarr;</a></div>
 </main>
