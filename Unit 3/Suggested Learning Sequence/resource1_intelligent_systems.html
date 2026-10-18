@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resource 1: Innovation, Emerging Technologies &amp; Intelligent Systems Components | Digital Solutions QLD</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="brand">St Peters Lutheran College Springfield <span class="unit-tag">&middot; Digital Solutions QLD</span></div>
+</header>
+<div class="breadcrumb"><a href="../../index.html">Home</a> &rarr; <a href="../../unit3-digital-innovation.html">Unit 3</a> &rarr; <a href="student_hub.html">Suggested Learning Sequence</a> &rarr; Resource 1</div>
+<div class="hero">
+  <h1>Resource 1: Innovation, Emerging Technologies &amp; Intelligent Systems Components</h1>
+  <p class="subtitle">IA1 direct-teaching resource &middot; Next Bus, Made Simple &middot; Used in Lessons 9 and 12</p>
+  <div class="tag-row"><span class="tag">15&ndash;20 minute segment</span><span class="tag">Concept first, then apply to your device</span></div>
+</div>
+<div class="start-here"><strong>Start here:</strong> learn the concept in general terms first, then use the Next Bus examples to connect it to your own device.</div>
+<main>
+
+<div class="note green"><strong>Syllabus (Digital Solutions 2025 v1.4):</strong> &ldquo;Explore and analyse the meaning and importance of innovation&hellip;&rdquo;; &ldquo;Explore the impact of emerging technologies on innovation, e.g. IoT, intelligent systems, embedded sensing&rdquo;; &ldquo;Recognise and describe components of a digital solution appropriate to the technology context selected&rdquo; (Topic 1).</div>
+
+<h2>1. What Counts as Innovation Here?</h2>
+<p>Innovation in Digital Solutions doesn't mean inventing new hardware. It means applying an existing technology (open transit data, a small embedded device) to solve a real, previously unsolved need for a specific group of people.</p>
+<p>The personal, business, and social opportunity in this task is specific: older Queenslanders with limited smartphone use currently have no non-screen way to check real-time transit information.</p>
+
+<h2>2. The Intelligent Systems Technology Context</h2>
+<p>Unit 3 offers four technology contexts: web applications, mobile applications, interactive media, and intelligent systems. IA1 uses <strong>Intelligent Systems</strong>, which the syllabus defines by a specific set of components &mdash; different from a website or app.</p>
+<table class="lesson-table">
+<tr><th>Component</th><th>In the Next Bus device</th></tr>
+<tr><td>Sensors</td><td>None required for this design. The &lsquo;sensor&rsquo; is the incoming GTFS-realtime data feed itself, not a physical sensor on the device.</td></tr>
+<tr><td>Actuators</td><td>The 1.54&Prime; display and MAX98357A speaker: the components that act on incoming data to produce an output a person can perceive.</td></tr>
+<tr><td>User-interface components</td><td>Display screen, speaker, and any physical buttons used for input (for example, selecting a stop or route).</td></tr>
+<tr><td>Analogue/digital input-output data streams</td><td>The GTFS-realtime feed arriving over Wi-Fi as digital data; the audio/visual output produced for the user.</td></tr>
+<tr><td>Administrative interface components</td><td>Any setup step a carer or user performs once, for example selecting which bus stop or route the device should track.</td></tr>
+<tr><td>Network hardware and protocols</td><td>The ESP32-S3's Wi-Fi module, connecting to Translink's GTFS-realtime feed over HTTP(S).</td></tr>
+<tr><td>Internal data structures</td><td>The way the device stores the fields it needs after reading the feed (for example, route, scheduled time, predicted time, delay, and status).</td></tr>
+</table>
+
+<h2>3. The Real Data Source</h2>
+<ul class="focus-list">
+  <li>Translink publishes a live, public GTFS-realtime feed for South East Queensland. No authentication or account is required.</li>
+  <li>It has three parts: <strong>Vehicle Positions</strong> (live vehicle location), <strong>Trip Updates</strong> (predicted arrival and departure times, delays), and <strong>Service Alerts</strong> (disruption notices).</li>
+  <li>The feed is encoded in Google's <strong>Protobuf</strong> format, following the GTFS-realtime v2.0 specification &mdash; an open standard used by transit agencies worldwide, not something Translink invented.</li>
+  <li>For IA1 you are given a sample CSV extract of this data (<a href="../../assets/downloads/springfield_central_transit_snapshot.csv">springfield_central_transit_snapshot.csv</a>), so you don't need to parse the live feed yourself. Comparing the binary Protobuf feed with a flat-file CSV is a good example of different file formats and data structures suited to different purposes.</li>
+</ul>
+<p style="font-size:0.85rem;">Source: Translink Open Data, GTFS Realtime (<a href="https://translink.com.au/about-translink/open-data/gtfs-rt">translink.com.au/about-translink/open-data/gtfs-rt</a>), accessed September 2026.</p>
+<h2>Check for Understanding</h2>
+<div class="note blue">In one sentence each: what is a <strong>sensor</strong>, an <strong>actuator</strong>, and a <strong>network protocol</strong> doing in the Next Bus device? Add your answers to your OneNote journal.</div>
+
+<div class="pager"><a href="student_hub.html">&larr; Learning Sequence Hub</a><a href="resource2_useability_heuristics.html">Resource 2 &rarr;</a></div>
+</main>
+<div class="footer">St Peters Lutheran College Springfield &middot; Digital Solutions Unit 3: Digital innovation &middot; 2026/2027</div>
+</body>
+</html>
